@@ -1,5 +1,5 @@
 const {promisify} = require('../helpers');
-const {User,Product,Order,Customer} = require('../models/index.js');
+const {User,Product,Order,Customer, Company} = require('../models/index.js');
 const ISODate = require('../scalars/ISODate');
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
@@ -22,9 +22,9 @@ const paramHandler= (qry)  => {
 const resolvers = {
 
   /************ */
-  //     
+  //
   //    products
-  // 
+  //
   /************ */
   product: (_, args) => promisify(Product.findById(args.id)),
   products : (_, args,context)  => new Promise((resolve, reject) => {
@@ -48,9 +48,9 @@ const resolvers = {
   }),
 
   /************ */
-  //    
+  //
   //    Orders
-  // 
+  //
   /************ */
 
   order: (_, args) => promisify(Order.findById(args.id)),
@@ -65,9 +65,9 @@ const resolvers = {
         { 'customer.phone': {'$regex':args.query.search, '$options' : 'i'} },
         { 'customer.city': {'$regex':args.query.search, '$options' : 'i'} },
       ]
-      // 
+      //
     }
-    
+
     Order.find(param,(err, result) => {
         if (err) reject(err);
         else resolve(result);
@@ -91,9 +91,9 @@ const resolvers = {
 
   }),
   /************ */
-  //    
+  //
   //    customers
-  // 
+  //
   /************ */
   customers: async (_, args) => new Promise((resolve, reject) => {
     const param=paramHandler(args.query)
@@ -113,9 +113,9 @@ const resolvers = {
 
   }),
   /************ */
-  //    
+  //
   //    Users
-  // 
+  //
   /************ */
   user: (_, args) => promisify(User.findById(args.id)),
   users: async (_, args, { me })  => new Promise(async (resolve, reject) => {
@@ -125,12 +125,15 @@ const resolvers = {
       else resolve(result);
     }).skip(args.query.offset).limit(args.query.limit)
   }),
-  
+
   userCount: () => promisify(User.count()),
   me: async (_, args, { me })=> {
     if (!me)throw new Error('You are not authenticated!')// make sure user is logged in
     return await User.findById(me.id) // user is authenticated
   },
+
+//Company
+  getCompany: (_, args) => promisify(Company.findOne(args.corporateid)),
 
 };
 

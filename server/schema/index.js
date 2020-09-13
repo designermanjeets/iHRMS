@@ -18,7 +18,8 @@ const typeDefs = `
     user(id: ID!): User
     users(query: Pagination!): [User]
     userCount(query: Pagination!): Int
-    me: User
+    me: User,
+    getCompany(id: ID!): Company
   }
 
   type Mutation {
@@ -42,6 +43,21 @@ const typeDefs = `
       phone: String,
       mobile: String,
       fax: String,
+      email: String,
+      website: String,
+      financialbegindate: String,
+      booksbegindate: String,
+      cinno: String,
+      panno: String,
+      gstin: String,
+      currencyid: String,
+      Createdby: String,
+      createdon: String,
+      createdip: String,
+      modifiedby: String,
+      modifiedon: String,
+      modifiedip: String,
+      alias: String
     ): Company,
     signup (
       username: String!,
@@ -126,7 +142,22 @@ const typeDefs = `
     zipcode: String,
     phone: String,
     mobile: String,
-    fax: String
+    fax: String,
+    email: String,
+    website: String,
+    financialbegindate: String,
+    booksbegindate: String,
+    cinno: String,
+    panno: String,
+    gstin: String,
+    currencyid: String,
+    Createdby: String,
+    createdon: String,
+    createdip: String,
+    modifiedby: String,
+    modifiedon: String,
+    modifiedip: String,
+    alias: String
   }
   type User {
     _id: ID,

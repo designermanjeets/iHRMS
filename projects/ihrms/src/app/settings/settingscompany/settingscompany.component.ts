@@ -1,4 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {Router} from "@angular/router";
+import { GET_COMPANY_QUERY, RegisterCompanyGQL} from "./companysettingGQL";
+import {map} from "rxjs/operators";
+import {Apollo} from 'apollo-angular';
 
 @Component({
   selector: 'app-settingscompany',
@@ -7,36 +12,64 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SettingscompanyComponent implements OnInit {
 
-  public uptC =
-  {
-    'company_name':'Focus Technologies',
-    'contact_person':'Daniel Porter',
-    'address' : '3434 quiet valley lane, sherman oaks ca, 94344',
-    'country' : 'USA',
-    'city' : 'Sherman Oaks',
-    'state' : 'California',
-    'postal_code' : '98988',
-    'email' : 'danielporter@example.com',
-    'phone_number' : '9878187102',
-    'mobile_number' : '7051403258',
-    'fax' : '8189875527',
-    'url' : 'www.wxample.com'
-  };
+  companyForm: FormGroup
 
   uptCompany:boolean = false;
 
-  constructor() { }
+  constructor(
+    private router: Router,
+    private fb: FormBuilder,
+    private registerCompanyGQL: RegisterCompanyGQL,
+    private apollo: Apollo
+  ) { }
 
   ngOnInit() {
+
+    this.companyForm = this.fb.group({
+      companyname: ['', Validators.required],
+      contactperson: [''],
+      address1: [''],
+      address2: [''],
+      countryid: [''],
+      cityid: [''],
+      stateid: [''],
+      zipcode: [''],
+      email: [''],
+      phone: [''],
+      mobile: [''],
+      fax: [''],
+      website: ['']
+    });
   }
 
-  updateCompany(f)
-  {
-    //console.log(f.form.value);
-    let json = JSON.stringify(f.form.value);
-    json = json.replace(/,/g,', ');
-    //console.log(json);
-    // $('#json_string').html(json);
-    this.uptCompany = true;
+  updateCompany(){
+    console.log(this.companyForm.value);
+    const form = this.companyForm.value;
+    this.registerCompanyGQL
+      .mutate({
+        "companyname": form.companyname,
+        "address1": form.address1,
+        "address2": form.address2,
+        "countryid": form.countryid,
+      })
+      .subscribe( val => {
+        if(val.data.createCompany.companyname) {
+          // this.router.navigateByUrl('/dashboard');
+          this.uptCompany = true;
+        }
+      }, error => console.log(error));
+
+  }
+
+
+  getCompany() {
+    this.apollo.watchQuery({
+      query: GET_COMPANY_QUERY,
+      variables: {
+        "id": "123"
+      },
+    }).valueChanges.subscribe((response) => {
+      console.log(response)
+    });
   }
 }

@@ -16,6 +16,22 @@ const companySchema = new Schema({
   phone: String,
   mobile: String,
   fax: String,
+  email: String,
+  website: String,
+  financialbegindate: String,
+  booksbegindate: String,
+  cinno: String,
+  panno: String,
+  gstin: String,
+  currencyid: String,
+  Createdby: String,
+  createdon: String,
+  createdip: String,
+  modifiedby: String,
+  modifiedon: String,
+  modifiedip: String,
+  alias: String
+
 }, {collection:'Company'});
 
 module.exports = mongoose.model('Company', companySchema);
