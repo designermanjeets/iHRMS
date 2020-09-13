@@ -1,7 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
-import { GET_COMPANY_QUERY, RegisterCompanyGQL} from "./companysettingGQL";
+import {
+  DeleteCompanyGQL,
+  GET_COMPANIES_QUERY,
+  GET_COMPANY_QUERY,
+  RegisterCompanyGQL,
+  UpdateCompanyGQL
+} from "./companysettingGQL";
 import {map} from "rxjs/operators";
 import {Apollo} from 'apollo-angular';
 
@@ -20,6 +26,8 @@ export class SettingscompanyComponent implements OnInit {
     private router: Router,
     private fb: FormBuilder,
     private registerCompanyGQL: RegisterCompanyGQL,
+    private updateCompanyGQL: UpdateCompanyGQL,
+    private deleteCompanyGQL: DeleteCompanyGQL,
     private apollo: Apollo
   ) { }
 
@@ -45,15 +53,17 @@ export class SettingscompanyComponent implements OnInit {
   updateCompany(){
     console.log(this.companyForm.value);
     const form = this.companyForm.value;
-    this.registerCompanyGQL
+    this.updateCompanyGQL
       .mutate({
         "companyname": form.companyname,
         "address1": form.address1,
         "address2": form.address2,
         "countryid": form.countryid,
+        "corporateid": "1231"
       })
       .subscribe( val => {
-        if(val.data.createCompany.companyname) {
+        if(val.data) {
+          console.log(val)
           // this.router.navigateByUrl('/dashboard');
           this.uptCompany = true;
         }
@@ -66,7 +76,20 @@ export class SettingscompanyComponent implements OnInit {
     this.apollo.watchQuery({
       query: GET_COMPANY_QUERY,
       variables: {
-        "id": "123"
+        "corporateid": "123"
+      },
+    }).valueChanges.subscribe((response) => {
+      console.log(response)
+    });
+  }
+
+  getCompanies() {
+    this.apollo.watchQuery({
+      query: GET_COMPANIES_QUERY,
+      variables: {
+        "pagination": {
+          "limit": 100
+        }
       },
     }).valueChanges.subscribe((response) => {
       console.log(response)

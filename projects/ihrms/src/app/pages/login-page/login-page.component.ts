@@ -12,7 +12,8 @@ import {throwError} from "rxjs";
 })
 export class LoginPageComponent implements OnInit {
 
-  loginForm: FormGroup
+  loginForm: FormGroup;
+  isloggedin: boolean;
 
   constructor(
     private registerGQL: RegisterGQL,
@@ -50,10 +51,11 @@ export class LoginPageComponent implements OnInit {
         }
       })
       .subscribe( val => {
-        if(val.data.signup.username) {
+        if(val.data['signup'].username) {
+          this.isloggedin = true;
           this.router.navigateByUrl('/dashboard');
         }
-      }, error => console.log(error));
+      }, error => this.isloggedin = false);
   }
 
   login() {
@@ -65,16 +67,17 @@ export class LoginPageComponent implements OnInit {
       })
       .subscribe( val => {
         console.log(val)
-        if(val.data.login.user) {
-          sessionStorage.setItem('JWT_TOKEN', val.data.login.token);
+        if(val.data['login'].user) {
+          this.isloggedin = true;
+          sessionStorage.setItem('JWT_TOKEN', val.data['login'].token);
           sessionStorage.setItem('user', JSON.stringify({
-            email: val.data.login.user.email,
-            role: val.data.login.user.role,
-            username: val.data.login.user.username
+            email: val.data['login'].user.email,
+            role: val.data['login'].user.role,
+            username: val.data['login'].user.username
           }));
           this.router.navigateByUrl('/dashboard');
         }
-      }, error => console.log(error));
+      }, error => this.isloggedin = true);
   }
 
 }

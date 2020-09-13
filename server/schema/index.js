@@ -15,11 +15,12 @@ const typeDefs = `
     orders(query: Pagination!): [Order]
     orderCount(query: Pagination!):Int
     customers(query: Pagination!): [Customer]
-    user(id: ID!): User
+    user(email: String!): User
     users(query: Pagination!): [User]
     userCount(query: Pagination!): Int
     me: User,
-    getCompany(id: ID!): Company
+    getCompany(corporateid: String!): Company
+    getCompanies(query: Pagination!): [Company]
   }
 
   type Mutation {
@@ -29,8 +30,21 @@ const typeDefs = `
     updateOrder(id:ID!,input: OrderInput!): Order,
     deleteOneOrder(id:ID!): Order,
     deleteManyOrder(ids:[ID]): Int,
+    signup (
+      username: String!,
+      email: String!,
+      password: String!,
+      role: String,
+      firstname: String,
+      lastname: String,
+      role: String,
+      emmpid:String,
+      company: String,
+      permissions: PermissionsInput
+    ): User,
+    login (email: String!, password: String!): customUser,
+    deleteUser (email: String!): User,
     createCompany (
-      id: String,
       companyname: String,
       printname: String,
       corporateid: String,
@@ -59,20 +73,35 @@ const typeDefs = `
       modifiedip: String,
       alias: String
     ): Company,
-    signup (
-      username: String!,
-      email: String!,
-      password: String!,
-      role: String,
-      firstname: String,
-      lastname: String,
-      role: String,
-      emmpid:String,
-      company: String,
-      permissions: PermissionsInput
-    ): User,
-    login (email: String!, password: String!): customUser,
     updateUser(id:ID,username: String!, email: String!, password: String,role: String,space:String): String,
+    updateCompany(
+      companyname: String,
+      printname: String,
+      corporateid: String,
+      address1: String,
+      address2: String,
+      countryid: String,
+      stateid: String,
+      cityid: String,
+      zipcode: String,
+      phone: String,
+      mobile: String,
+      fax: String,
+      email: String,
+      website: String,
+      financialbegindate: String,
+      booksbegindate: String,
+      cinno: String,
+      panno: String,
+      gstin: String,
+      currencyid: String,
+      Createdby: String,
+      modifiedby: String,
+      modifiedon: String,
+      modifiedip: String,
+      alias: String
+    ): Company,
+    deleteCompany( corporateid: String ): Company
   }
   type meta {
     createdAt:String
@@ -130,7 +159,36 @@ const typeDefs = `
     user:User
   },
   type Company {
-    id: String,
+    _id: ID!,
+    companyname: String,
+    printname: String,
+    corporateid: String,
+    address1: String,
+    address2: String,
+    countryid: String,
+    stateid: String,
+    cityid: String,
+    zipcode: String,
+    phone: String,
+    mobile: String,
+    fax: String,
+    email: String,
+    website: String,
+    financialbegindate: String,
+    booksbegindate: String,
+    cinno: String,
+    panno: String,
+    gstin: String,
+    currencyid: String,
+    Createdby: String,
+    createdon: String,
+    createdip: String,
+    modifiedby: String,
+    modifiedon: String,
+    modifiedip: String,
+    alias: String
+  }
+  input CompanyInput {
     companyname: String,
     printname: String,
     corporateid: String,

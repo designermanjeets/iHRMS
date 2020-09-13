@@ -29,12 +29,72 @@ export class RegisterCompanyGQL extends Mutation {
   `;
 }
 
+
+@Injectable({
+  providedIn: 'root',
+})
+export class UpdateCompanyGQL extends Mutation {
+  document = gql`
+    mutation updateCompany(
+      $companyname: String,
+      $address1: String,
+      $address2: String,
+      $countryid: String,
+      $corporateid: String
+    ) {
+    updateCompany(
+      companyname: $companyname,
+      address1: $address1,
+      address2: $address2,
+      countryid: $countryid,
+      corporateid: $corporateid
+    ) {
+        companyname,
+        address1,
+        address2,
+        countryid,
+        corporateid
+      }
+  }
+  `;
+}
+
+
+@Injectable({
+  providedIn: 'root',
+})
+export class DeleteCompanyGQL extends Mutation {
+  document = gql`
+    mutation deleteCompany(
+      $corporateid: String
+    ) {
+    deleteCompany(
+      corporateid: $corporateid
+    ) {
+        corporateid
+      }
+  }
+  `;
+}
+
 export const GET_COMPANY_QUERY = gql`
    query getCompany(
-      $id: ID!
+      $corporateid: String!
     ) {
     getCompany(
-      id: $id
+      corporateid: $corporateid
+    ) {
+        corporateid
+      }
+  }
+`;
+
+export const GET_COMPANIES_QUERY = gql`
+   query getCompanies(
+      $pagination: Pagination!
+    ) {
+    getCompanies(
+      query: $pagination,
     ) {
         corporateid
       }

@@ -117,7 +117,15 @@ const resolvers = {
   //    Users
   //
   /************ */
-  user: (_, args) => promisify(User.findById(args.id)),
+  // user: (_, args) => promisify(User.findById(args.id)),
+  user: async (_, args, { me })  => new Promise(async (resolve, reject) => {
+    const user = await User.findOne({ "email": args.email });
+    if(user) {
+      return resolve(user);
+    } else {
+      return reject({data: 'User Not Found!'})
+    }
+  }),
   users: async (_, args, { me })  => new Promise(async (resolve, reject) => {
     const param=paramHandler(args.query)
     User.find(param,(err, result) => {
@@ -132,8 +140,23 @@ const resolvers = {
     return await User.findById(me.id) // user is authenticated
   },
 
-//Company
-  getCompany: (_, args) => promisify(Company.findOne(args.corporateid)),
+  // Company
+  getCompany: async (_, args, { me })  => new Promise(async (resolve, reject) => {
+    const comp = await Company.findOne({ "corporateid": args.corporateid });
+    if(comp) {
+      return resolve(comp);
+    } else {
+      return reject({data: 'Company Not Found!'})
+    }
+  }),
+
+  getCompanies: async (_, args, { me })  => new Promise(async (resolve, reject) => {
+    const param=paramHandler(args.query)
+    Company.find(param,(err, result) => {
+      if (err) reject(err);
+      else resolve(result);
+    }).skip(args.query.offset).limit(args.query.limit)
+  }),
 
 };
 

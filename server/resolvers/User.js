@@ -69,6 +69,21 @@ const mutation ={
     }catch(error){
         reject(error);
     }
+  }),
+  deleteUser:(_, { email },{me,secret}) => new Promise(async (resolve, reject) => {
+    try{
+      let param = { email }
+      const comp = await User.findOne({ "email": email });
+      if (!comp)throw new Error('User not found!!')
+      if(comp) {
+        await User.deleteOne({ "email": email }, {new: true})
+          .then((result) => {
+            resolve(result);
+          })
+      }
+    } catch(error){
+      reject(error);
+    }
   })
 }
 
