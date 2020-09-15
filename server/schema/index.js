@@ -38,8 +38,8 @@ const typeDefs = `
       firstname: String,
       lastname: String,
       role: String,
-      emmpid:String,
-      corporateid: String,
+      emmpid:String!,
+      corporateid: String!,
       mobile: String,
       joiningdate: ISODate,
       permissions: PermissionsInput

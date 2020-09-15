@@ -59,8 +59,8 @@ export class CreateUserGQL extends Mutation {
       $role: String
       $firstname: String
       $lastname: String
-      $emmpid: String
-      $corporateid: String
+      $emmpid: String!
+      $corporateid: String!
       $joiningdate: ISODate
       $mobile: String
       $permissions: PermissionsInput
