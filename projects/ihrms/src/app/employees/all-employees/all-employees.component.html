@@ -14,32 +14,14 @@
     </div>
   </div>
   <div class="row filter-row">
-    <div class="col-sm-3 col-xs-6">
+    <div class="col-sm-9 col-xs6">
       <div class="form-group form-focus">
-        <label class="control-label">Employee ID</label>
-        <input type="text" class="form-control floating" (input)="searchID($event.target.value)"/>
+        <label class="control-label">Employee Name or ID</label>
+        <input type="text" class="form-control floating" [(ngModel)]="filtertextbox" name="filtertextbox" (ngModelChange)="onFilterTextBoxChanged(filtertextbox)"/>
       </div>
     </div>
     <div class="col-sm-3 col-xs-6">
-      <div class="form-group form-focus">
-        <label class="control-label">Employee Name</label>
-        <input type="text" class="form-control floating" (input)="searchName($event.target.value)"/>
-      </div>
-    </div>
-    <div class="col-sm-3 col-xs-6">
-      <div class="form-group form-focus select-focus">
-        <label class="control-label">Designation</label>
-        <select class="select floating select-designation" (input)="searchDesg($event.target.value)">
-          <option value="">All Designations</option>
-          <option value="Web Developer">Web Developer</option>
-          <option value="Web Designer">Web Designer</option>
-          <option value="Android Developer">Android Developer</option>
-          <option value="Ios Developer">Ios Developer</option>
-        </select>
-      </div>
-    </div>
-    <div class="col-sm-3 col-xs-6">
-      <a href="javascript:" class="btn btn-success btn-block"> Search </a>
+      <a href="javascript:" class="btn btn-success btn-block" [attr.disabled]="filtertextbox ? null : true"> Search </a>
     </div>
   </div>
   <div class="row" *ngIf="allEmployees">
@@ -55,7 +37,7 @@
     </div>
   </div>
   <div class="row staff-grid-row" *ngIf="!allEmployees">
-    <div class="col-md-4 col-sm-4 col-xs-6 col-lg-3" *ngFor="let item of rows">
+    <div class="col-md-4 col-sm-4 col-xs-6 col-lg-3" *ngFor="let item of rowData">
       <div class="profile-widget">
         <div class="profile-img">
           <a href="javascript:"><img class="avatar" src="assets/img/user.jpg" alt=""></a>
@@ -68,8 +50,8 @@
                 Delete</a></li>
           </ul>
         </div>
-        <h4 class="user-name m-t-10 m-b-0 text-ellipsis"><a href="javascript:">{{item.firstName}} {{item.lastName}}</a></h4>
-        <div class="small text-muted">{{item.designation}}</div>
+        <h4 class="user-name m-t-10 m-b-0 text-ellipsis"><a href="javascript:">{{item.firstname}} {{item.lastname}}</a></h4>
+        <div class="small text-muted">{{item.role}}</div>
       </div>
     </div>
   </div>

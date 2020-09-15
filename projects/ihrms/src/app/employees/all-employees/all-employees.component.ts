@@ -1,14 +1,15 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {IMyDpOptions} from 'mydatepicker';
 import { Router } from '@angular/router';
-import { AppService } from './../../app.service';
-import {ActionComponent} from './../../shared/agrid/components/action/action.component';
+import { AppService } from '../../app.service';
+import {ActionComponent} from '../../shared/agrid/components/action/action.component';
 import {GET_COMPANIES_QUERY} from "../../settings/settingscompany/companysettingGQL";
 import {EmployeeGQLService, GET_USERS_QUERY} from "./employee-gql.service";
 import {Apollo} from "apollo-angular";
 import {FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators} from "@angular/forms";
 import {CreateUserGQL, DeleteUserGQL} from "../employee-details/empdetail-gql.service";
 import { ErrorStateMatcher } from '@angular/material/core';
+import {GridOptions} from "ag-grid-community";
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -44,6 +45,7 @@ export class AllEmployeesComponent implements OnInit {
   public allEmployees:boolean = true;
   public modules = [];
   public addEmp:any = {};
+  filtertextbox: any;
 
   uptEmployeeValidation:boolean = false;
   editForm: FormGroup;
@@ -55,7 +57,9 @@ export class AllEmployeesComponent implements OnInit {
   public model: any = {date: {year: this.date.getFullYear(), month: this.date.getMonth() + 1, day: this.date.getDate()}};
 
   columnDefs = [
-        {headerName: 'Name', field: 'firstname' },
+        {headerName: 'Name', field: 'firstname',
+          getQuickFilterText: (params) => params.value,
+        },
         {headerName: 'Employee ID', field: 'emmpid' },
         {headerName: 'Email', field: 'email'},
         {headerName: 'Mobile', field: 'mobile'},
@@ -70,6 +74,7 @@ export class AllEmployeesComponent implements OnInit {
 
   private gridApi;
   private gridColumnApi;
+  private gridOptions: GridOptions;
 
   constructor(
     private appService:AppService,
@@ -87,6 +92,7 @@ export class AllEmployeesComponent implements OnInit {
 
   ngOnInit() {
 
+    console.log(this.filtertextbox);
     $('.floating').on('focus blur', function (e) {
       $(this).parents('.form-focus').toggleClass('focused', (e.type === 'focus' || this.value.length > 0));
     }).trigger('blur');
@@ -280,8 +286,15 @@ export class AllEmployeesComponent implements OnInit {
     //console.log(this.rows);
   }
 
-  onGridReady($event) {
-    console.log($event);
+  onGridReady(params: any) {
+    console.log(params);
+    this.gridOptions = params.gridOptions;
+    this.gridApi = params.gridApi;
+    this.gridColumnApi = params.gridColumnApi;
+  }
+
+  onFilterTextBoxChanged(filtertextbox) {
+    this.gridOptions.api.setQuickFilter(filtertextbox);
   }
 
 }

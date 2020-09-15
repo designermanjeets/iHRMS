@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {ColumnApi, GridApi} from "ag-grid-community";
+import {ColumnApi, GridApi, GridOptions} from "ag-grid-community";
 
 @Component({
   selector: 'app-agrid',
@@ -27,7 +27,8 @@ export class AgridComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onGridReady(params) {
+  onGridReady(params: GridOptions) {
+    this.gridOptions = params;
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;
     this.sizeToFit();
@@ -40,6 +41,7 @@ export class AgridComponent implements OnInit {
 
   sizeToFit() {
     this.onGridApiCreated.emit({
+      gridOptions: this.gridOptions,
       gridApi: this.gridApi,
       gridColumnApi: this.gridColumnApi
     })
