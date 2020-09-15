@@ -11,3 +11,4 @@
 }
 .formpicker { position: absolute; right: 0; top: 23px }
 .datecolor { background-color: #ffffff }
+.form-group { min-height: 65px }
