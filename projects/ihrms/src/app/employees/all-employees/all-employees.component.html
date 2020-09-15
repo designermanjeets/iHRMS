@@ -131,10 +131,10 @@
             <div class="col-sm-6">
               <div class="form-group" [class.has-error]="editForm.hasError('notSame')">
                 <label class="control-label">Confirm Password<span class="text-danger m-l-5">*</span></label>
-                  <input class="form-control" type="password" matInput formControlName="password2" [errorStateMatcher]="matcher">
-                  <span class="help-block" *ngIf="editForm.hasError('notSame')">
-                      Passwords do not match
-                  </span>
+                <input class="form-control" type="password" matInput formControlName="password2" [errorStateMatcher]="matcher">
+                <span class="help-block" *ngIf="editForm.hasError('notSame')">
+                        Passwords do not match
+                </span>
               </div>
             </div>
             <div class="col-sm-6">

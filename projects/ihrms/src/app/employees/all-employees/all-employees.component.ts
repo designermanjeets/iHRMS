@@ -2,7 +2,7 @@ import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {IMyDpOptions} from 'mydatepicker';
 import { Router } from '@angular/router';
 import { AppService } from './../../app.service';
-import { ActionComponent } from './../../shared/agrid/components/action/action.component';
+import {ActionComponent} from './../../shared/agrid/components/action/action.component';
 import {GET_COMPANIES_QUERY} from "../../settings/settingscompany/companysettingGQL";
 import {EmployeeGQLService, GET_USERS_QUERY} from "./employee-gql.service";
 import {Apollo} from "apollo-angular";

@@ -3,11 +3,11 @@ import {IMyDpOptions} from 'mydatepicker';
 import { Router,ActivatedRoute } from '@angular/router';
 import { AppService } from './../../app.service';
 import {EmployeeGQLService} from "../all-employees/employee-gql.service";
-import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormArray, FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators} from "@angular/forms";
 import {EmpdetailGQLService} from "./empdetail-gql.service";
 import {GET_COMPANIES_QUERY} from "../../settings/settingscompany/companysettingGQL";
 import {Apollo} from "apollo-angular";
-import { ErrorStateMatcher } from '@angular/material/core';
+import {ErrorStateMatcher} from "@angular/material/core";
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {

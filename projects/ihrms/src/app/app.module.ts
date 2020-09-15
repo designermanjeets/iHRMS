@@ -18,6 +18,7 @@ import { AgGridModule } from 'ag-grid-angular';
 import { SharedModule } from './shared/shared.module';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatInputModule } from '@angular/material/input';
 
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -339,7 +340,8 @@ const routes: Routes = [
     GraphQLModule,
     HttpClientModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatInputModule
   ],
   providers: [
     EventService,
