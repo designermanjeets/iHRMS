@@ -12,6 +12,7 @@ export class EmpdetailGQLService extends Mutation{
       $id: ID!
       $username: String!
       $email: String!
+      $password: String
       $firstname: String
       $lastname: String
       $role:String
@@ -19,18 +20,21 @@ export class EmpdetailGQLService extends Mutation{
       $emmpid: String
       $mobile: String
       $joiningdate: ISODate
+      $permissions:PermissionsInput
     ) {
     updateUser(
         id: $id,
         username: $username,
         email: $email,
+        password: $password,
         firstname: $firstname,
         lastname: $lastname,
         role: $role,
         corporateid: $corporateid,
         emmpid: $emmpid,
         mobile: $mobile,
-        joiningdate: $joiningdate
+        joiningdate: $joiningdate,
+        permissions: $permissions
     ) {
         username,
         email,
@@ -40,8 +44,14 @@ export class EmpdetailGQLService extends Mutation{
         lastname,
         corporateid,
         emmpid,
-        mobile
-        joiningdate
+        mobile,
+        joiningdate,
+        permissions {
+          holiday {
+            read
+            write
+          }
+        }
       }
   }
   `;
@@ -94,6 +104,24 @@ export class CreateUserGQL extends Mutation {
             write
           }
         }
+      }
+  }
+  `;
+}
+
+
+@Injectable({
+  providedIn: 'root'
+})
+export class DeleteUserGQL extends Mutation {
+  document = gql`
+    mutation DeleteMutation(
+      $email: String!
+    ) {
+    deleteUser(
+        email: $email
+    ) {
+        email
       }
   }
   `;

@@ -41,6 +41,7 @@ export const GET_USERS_QUERY = gql`
         emmpid,
         corporateid,
         mobile,
+        password,
         joiningdate,
         _id,
         permissions {

@@ -87,8 +87,8 @@
           <div class="row">
             <div class="col-sm-6">
               <div class="form-group">
-                <label class="control-label">First Name <span class="text-danger">*</span></label>
-                <input class="form-control" type="text" formControlName="firstname" required>
+                <label class="control-label">First Name</label>
+                <input class="form-control" type="text" formControlName="firstname">
               </div>
             </div>
             <div class="col-sm-6">
@@ -98,7 +98,12 @@
               </div>
             </div>
             <div class="col-sm-6">
-              <div class="form-group">
+              <div class="form-group"
+                   [class.has-error]="
+                    editForm.controls['username'].invalid &&
+                    editForm.controls['username'].touched"
+                   [class.has-success]="editForm.controls['username'].valid"
+              >
                 <label class="control-label">Username <span class="text-danger m-l-5">*</span></label>
                 <input class="form-control" type="text" formControlName="username" required>
               </div>
@@ -109,38 +114,61 @@
                 <input class="form-control" type="email" pattern="([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})" formControlName="email" required>
                 <span class="help-block" *ngIf="editForm.controls['email'].errors && editForm.controls['email'].touched">
                         Email is invalid
-                      </span>
+                </span>
               </div>
             </div>
             <div class="col-sm-6">
-              <div class="form-group">
+              <div class="form-group"
+                   [class.has-error]="
+                    editForm.controls['password'].invalid &&
+                    editForm.controls['password'].touched"
+                   [class.has-success]="editForm.controls['password'].valid"
+              >
                 <label class="control-label">Password<span class="text-danger m-l-5">*</span></label>
-                <input class="form-control" type="password" formControlName="password">
+                <input class="form-control" type="password" formControlName="password" required>
               </div>
             </div>
             <div class="col-sm-6">
-              <div class="form-group">
+              <div class="form-group" [class.has-error]="editForm.hasError('notSame')">
                 <label class="control-label">Confirm Password<span class="text-danger m-l-5">*</span></label>
-                <input class="form-control" type="password" formControlName="password2">
+                  <input class="form-control" type="password" matInput formControlName="password2" [errorStateMatcher]="matcher">
+                  <span class="help-block" *ngIf="editForm.hasError('notSame')">
+                      Passwords do not match
+                  </span>
               </div>
             </div>
             <div class="col-sm-6">
-              <div class="form-group">
+              <div class="form-group"
+                   [class.has-error]="
+                    editForm.controls['emmpid'].invalid &&
+                    editForm.controls['emmpid'].touched"
+                   [class.has-success]="editForm.controls['emmpid'].valid"
+              >
                 <label class="control-label">Employee ID <span class="text-danger m-l-5">*</span></label>
-                <input type="text" class="form-control" formControlName="emmpid">
+                <input type="text" class="form-control" formControlName="emmpid" required>
               </div>
             </div>
             <div class="col-sm-6">
-              <div class="form-group pos-rel">
+              <div class="form-group pos-rel"
+                   [class.has-error]="
+                    editForm.controls['joiningdate'].invalid &&
+                    editForm.controls['joiningdate'].touched"
+                   [class.has-success]="editForm.controls['joiningdate'].valid"
+              >
                 <label class="control-label">Joining Date <span class="text-danger m-l-5">*</span></label>
-                <input type="text" class="form-control" formControlName="joiningdate" [matDatepicker]="picker2">
+                <input readonly type="text" class="form-control datecolor" formControlName="joiningdate" [matDatepicker]="picker2" required>
                 <mat-datepicker-toggle class="formpicker" matSuffix [for]="picker2"></mat-datepicker-toggle>
                 <mat-datepicker #picker2></mat-datepicker>
               </div>
             </div>
             <div class="col-sm-6">
-              <div class="form-group">
-                <label class="control-label">Company</label>
+              <div class="form-group"
+                   [class.has-error]="
+                    editForm.controls['corporateid'].invalid &&
+                    editForm.controls['corporateid'].touched"
+                   [class.has-success]="editForm.controls['corporateid'].valid"
+              >
+                <label class="control-label">Company <span class="text-danger">*</span></label>
                 <select class="select form-control" formControlName="corporateid" required>
                   <option value="">--Select--</option>
                   <option *ngFor="let cmp of companies" [value]=cmp.corporateid>{{cmp.corporateid}}</option>
@@ -148,9 +176,15 @@
               </div>
             </div>
             <div class="col-sm-6">
-              <div class="form-group">
+              <div class="form-group"
+                   [class.has-error]="
+                    editForm.controls['role'].invalid &&
+                    editForm.controls['role'].touched"
+                   [class.has-success]="editForm.controls['role'].valid"
+              >
                 <label class="control-label">Roles<span class="text-danger m-l-5">*</span></label>
                 <select class="select form-control" formControlName="role" required>
+                  <option value="">--Select--</option>
                   <option value="Admin">Admin</option>
                   <option value="Management">Management</option>
                   <option value="Employee">Employee</option>
@@ -159,7 +193,7 @@
             </div>
             <div class="col-sm-6">
               <div class="form-group" [class.has-error]="editForm.controls['mobile'].invalid && editForm.controls['mobile'].touched" [class.has-success]="editForm.controls['mobile'].valid">
-                <label class="control-label">Phone <span class="text-danger">*</span></label>
+                <label class="control-label">Mobile</label>
                 <input class="form-control unit-cost" type="text" formControlName="mobile" pattern="(\d{10}|\d{12})">
                 <span class="help-block" *ngIf="editForm.controls['mobile'].errors && editForm.controls['mobile'].touched">
                         Mobile Number is invalid
@@ -253,7 +287,7 @@
             <div *ngIf="uptEmployeeValidation" class="alert alert-info m-t-10">
               <strong>Warning!</strong> Must Fill all Mandatory Fields.
             </div>
-            <button class="btn btn-primary" type="submit">Save Changes</button>
+            <button class="btn btn-primary" type="submit" [disabled]="editForm.invalid">Save Changes</button>
           </div>
         </form>
       </div>

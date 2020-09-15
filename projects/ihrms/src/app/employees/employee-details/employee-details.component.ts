@@ -7,6 +7,16 @@ import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {EmpdetailGQLService} from "./empdetail-gql.service";
 import {GET_COMPANIES_QUERY} from "../../settings/settingscompany/companysettingGQL";
 import {Apollo} from "apollo-angular";
+import { ErrorStateMatcher } from '@angular/material/core';
+
+export class MyErrorStateMatcher implements ErrorStateMatcher {
+  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+    const invalidCtrl = !!(control && control.invalid && control.parent.dirty);
+    const invalidParent = !!(control && control.parent && control.parent.invalid && control.parent.dirty);
+
+    return (invalidCtrl || invalidParent);
+  }
+}
 
 @Component({
   selector: 'app-employee-details',
@@ -85,6 +95,7 @@ export class EmployeeDetailsComponent implements OnInit {
   uptEmployeeValidation:boolean = false;
   editForm: FormGroup;
   companies: [];
+  matcher = new MyErrorStateMatcher();
 
 
   constructor(
@@ -105,17 +116,17 @@ export class EmployeeDetailsComponent implements OnInit {
     this.getCompanies();
 
     this.editForm = this.fb.group({
-      firstname: ['', Validators.required],
+      firstname: [''],
       lastname: [''],
       username: ['', Validators.required],
       email: ['', Validators.required],
-      password: [''],
-      password2: [''],
+      password: ['', Validators.required],
+      password2: ['', Validators.required],
       emmpid: ['', Validators.required],
       joiningdate: ['', Validators.required],
       corporateid: ['', Validators.required],
       role: ['', Validators.required],
-      mobile: ['', Validators.required],
+      mobile: [''],
       permissions: this.fb.group({
         holiday: this.fb.group({
           read: [''],
@@ -142,7 +153,7 @@ export class EmployeeDetailsComponent implements OnInit {
           export: ['']
         }),
       }),
-    });
+    }, { validator: this.checkPasswords });
 
     this.route.queryParams.subscribe(params => {
       this.uptEmp =  { };
@@ -153,11 +164,19 @@ export class EmployeeDetailsComponent implements OnInit {
         } else {
           this.uptEmp = user;
           this.editForm.patchValue(this.uptEmp);
+          this.editForm.get('password2').patchValue(this.uptEmp.password);
           }
         } else {
         this.router.navigate(['employees/all-employees']);
       }
     });
+  }
+
+  checkPasswords(group: FormGroup) { // here we have the 'passwords' group
+    let pass = group.controls.password.value;
+    let confirmPass = group.controls.password2.value;
+
+    return pass === confirmPass ? null : { notSame: true }
   }
 
   getCompanies() {
@@ -170,7 +189,6 @@ export class EmployeeDetailsComponent implements OnInit {
       },
     }).valueChanges.subscribe((response: any) => {
       this.companies = response.data.getCompanies;
-      console.log(this.companies);
     });
   }
 
@@ -187,6 +205,8 @@ export class EmployeeDetailsComponent implements OnInit {
         "corporateid": f.value.corporateid,
         "firstname": f.value.firstname,
         "lastname": f.value.lastname,
+        "joiningdate": f.value.joiningdate,
+        "mobile": f.value.mobile,
         "permissions": {
           "holiday": {
             "read": f.value.permissions.holiday.read,
@@ -194,9 +214,9 @@ export class EmployeeDetailsComponent implements OnInit {
           }
         }
       })
-      .subscribe( val => {
-        if(val) {
-          console.log(val);
+      .subscribe( (val: any) => {
+        if(val.data.updateUser) {
+          window.location.reload();
         }
       }, error => console.log(error));
   }

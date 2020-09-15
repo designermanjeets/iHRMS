@@ -63,15 +63,15 @@ const mutation ={
   }),
   updateUser:(_, { id,username, email, password,role, firstname, lastname, emmpid, corporateid, mobile, joiningdate, permissions},{me,secret}) => new Promise(async (resolve, reject) => {
     try{
-      // const matchuseremail = await User.findOne({email})
-      // if(!matchuseremail) {
-        let param ={username, email, password,role, firstname, lastname, emmpid, corporateid, mobile, joiningdate, permissions}
-        if(password)param.password=await bcrypt.hash(password, 10)
+      const getuser = await User.findOne({email });
+      let param ={username, email, password,role, firstname, lastname, emmpid, corporateid, mobile, joiningdate, permissions}
+      if(getuser) {
+        if(password !== getuser.password) {
+          param.password= await bcrypt.hash(password, 10)
+        }
+      }
         const user = await User.findByIdAndUpdate(id,{$set:{...param}},{new: true})
           .then((result) => { resolve(result) })
-      // } else {
-      //   reject({data: 'User with email exists!'})
-      // }
     } catch(error){
         reject(error);
     }
@@ -83,9 +83,7 @@ const mutation ={
       if (!comp)throw new Error('User not found!!')
       if(comp) {
         await User.deleteOne({ "email": email }, {new: true})
-          .then((result) => {
-            resolve(result);
-          })
+          resolve({User});
       }
     } catch(error){
       reject(error);

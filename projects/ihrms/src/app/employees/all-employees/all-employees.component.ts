@@ -6,8 +6,18 @@ import { ActionComponent } from './../../shared/agrid/components/action/action.c
 import {GET_COMPANIES_QUERY} from "../../settings/settingscompany/companysettingGQL";
 import {EmployeeGQLService, GET_USERS_QUERY} from "./employee-gql.service";
 import {Apollo} from "apollo-angular";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {CreateUserGQL} from "../employee-details/empdetail-gql.service";
+import {FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators} from "@angular/forms";
+import {CreateUserGQL, DeleteUserGQL} from "../employee-details/empdetail-gql.service";
+import { ErrorStateMatcher } from '@angular/material/core';
+
+export class MyErrorStateMatcher implements ErrorStateMatcher {
+  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+    const invalidCtrl = !!(control && control.invalid && control.parent.dirty);
+    const invalidParent = !!(control && control.parent && control.parent.invalid && control.parent.dirty);
+
+    return (invalidCtrl || invalidParent);
+  }
+}
 
 declare const $: any;
 
@@ -39,6 +49,7 @@ export class AllEmployeesComponent implements OnInit {
   editForm: FormGroup;
   companies: [];
   isModal: boolean;
+  matcher = new MyErrorStateMatcher();
 
   public date: Date = new Date();
   public model: any = {date: {year: this.date.getFullYear(), month: this.date.getMonth() + 1, day: this.date.getDate()}};
@@ -67,7 +78,8 @@ export class AllEmployeesComponent implements OnInit {
     private employeeGQLService: EmployeeGQLService,
     private fb: FormBuilder,
     private createUserGQL: CreateUserGQL,
-    private cdref: ChangeDetectorRef
+    private cdref: ChangeDetectorRef,
+    private deleteUserGQL: DeleteUserGQL
   ) {
     this.srch = [];
     this.modules = appService.employee_modules;
@@ -83,17 +95,17 @@ export class AllEmployeesComponent implements OnInit {
     this.getCompanies();
 
     this.editForm = this.fb.group({
-      firstname: ['', Validators.required],
+      firstname: [''],
       lastname: [''],
       username: ['', Validators.required],
       email: ['', Validators.required],
-      password: [''],
-      password2: [''],
+      password: ['', Validators.required],
+      password2: ['', Validators.required],
       emmpid: ['', Validators.required],
       joiningdate: ['', Validators.required],
       corporateid: ['', Validators.required],
       role: ['', Validators.required],
-      mobile: ['', Validators.required],
+      mobile: [''],
       permissions: this.fb.group({
         holiday: this.fb.group({
           read: [false],
@@ -120,7 +132,14 @@ export class AllEmployeesComponent implements OnInit {
           export: [false]
         }),
       }),
-    });
+    }, { validator: this.checkPasswords });
+  }
+
+  checkPasswords(group: FormGroup) { // here we have the 'passwords' group
+    let pass = group.controls.password.value;
+    let confirmPass = group.controls.password2.value;
+
+    return pass === confirmPass ? null : { notSame: true }
   }
 
 
@@ -141,6 +160,9 @@ export class AllEmployeesComponent implements OnInit {
   actionClick(params) {
     if(params.type === 'edit') {
       this.onEdit(params.rowData.data);
+    }
+    if(params.type === 'delete') {
+      this.onDelete(params.rowData.data.email);
     }
   }
 
@@ -169,9 +191,6 @@ export class AllEmployeesComponent implements OnInit {
   }
 
   createSubmit(f){
-    // $('#add_employee').modal('hide');
-    console.log(f.value);
-
     this.createUserGQL
       .mutate({
         "firstname": f.value.firstname,
@@ -191,9 +210,10 @@ export class AllEmployeesComponent implements OnInit {
           }
         }
       })
-      .subscribe( val => {
-        if(val) {
-          console.log(val);
+      .subscribe( (val: any) => {
+        if(val.data.signup.username) {
+          $('#add_employee').modal('hide');
+          window.location.reload();
         }
       }, error => console.log(error));
   }
@@ -202,19 +222,16 @@ export class AllEmployeesComponent implements OnInit {
     this.router.navigate(['employees/all-employees/edit'], { queryParams: { 'id': item.emmpid } });
   }
 
-  onDelete(id){
-    //console.log("="+id+"=");
-    // var index = this.rows.findIndex(function(item, i){
-    //   return item.employeeID === id
-    // });
-
-    //console.log(index);
-    // if (index > -1) {
-    //     this.rows.splice(index, 1);
-    //     this.srch.splice(index, 1);
-    // }
-    //console.log(this.rows);
-    // this.rows = this.rows;
+  onDelete(email){
+    this.deleteUserGQL
+    .mutate({
+      "email": email
+    })
+    .subscribe( (val: any) => {
+      if(!val.data.deleteUser.email) {
+        window.location.reload();
+      }
+    }, error => console.log(error));
   }
 
   searchID(val) {

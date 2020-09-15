@@ -6,6 +6,7 @@ import { AgridComponent } from './agrid/agrid.component';
 import { ActionComponent } from './agrid/components/action/action.component';
 import { AgGridModule } from "ag-grid-angular";
 
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { AgGridModule } from "ag-grid-angular";
     AgGridModule.withComponents([
       ActionComponent
     ]),
-    SharedRoutingModule
+    SharedRoutingModule,
+    MatInputModule
   ],
   exports: [
     ActionComponent,
