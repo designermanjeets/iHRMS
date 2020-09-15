@@ -1,8 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {IMyDpOptions} from 'mydatepicker';
 import { Router } from '@angular/router';
 import { AppService } from './../../app.service';
 import { ActionComponent } from './../../shared/agrid/components/action/action.component';
+import {GET_COMPANIES_QUERY} from "../../settings/settingscompany/companysettingGQL";
+import {EmployeeGQLService, GET_USERS_QUERY} from "./employee-gql.service";
+import {Apollo} from "apollo-angular";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {CreateUserGQL} from "../employee-details/empdetail-gql.service";
 
 declare const $: any;
 
@@ -10,7 +15,7 @@ declare const $: any;
   selector: 'app-all-employees',
   templateUrl: './all-employees.component.html',
   styleUrls: ['./all-employees.component.css']
-}) 
+})
 export class AllEmployeesComponent implements OnInit {
 
   public myDatePickerOptions: IMyDpOptions = {
@@ -21,53 +26,50 @@ export class AllEmployeesComponent implements OnInit {
     inline: false,
     height: '38px'
   };
-  
-  rows = [];
+
   public updateEmp = [];
   public createEmp:any = {};
   public srch = [];
   addEmployeeValidation:boolean = false;
-
-  public columns:Array<any> = [
-    {title: 'Name', name: 'name', sort: true},
-    {title: 'Employee ID', name: 'employeeID', sort: true},
-    {title: 'Email', name: 'email', sort: true},
-    {title: 'Mobile', name: 'mobile', sort: true},
-    {title: 'Join Date', name: 'joinDate', sort: true},
-    {title: 'Role', name: 'role', sort: true},
-    {title: 'Action', name: 'action', sort: true}
-  ];
-
   public allEmployees:boolean = true;
-
   public modules = [];
-
   public addEmp:any = {};
+
+  uptEmployeeValidation:boolean = false;
+  editForm: FormGroup;
+  companies: [];
+  isModal: boolean;
 
   public date: Date = new Date();
   public model: any = {date: {year: this.date.getFullYear(), month: this.date.getMonth() + 1, day: this.date.getDate()}};
 
   columnDefs = [
-        {headerName: 'Name', field: 'name' },
-        {headerName: 'Employee ID', field: 'employeeID' },
+        {headerName: 'Name', field: 'firstname' },
+        {headerName: 'Employee ID', field: 'emmpid' },
         {headerName: 'Email', field: 'email'},
         {headerName: 'Mobile', field: 'mobile'},
-        {headerName: 'Join Date', field: 'joinDate'},
+        {headerName: 'Join Date', field: 'joiningdate'},
         {headerName: 'Role', field: 'role'},
         {headerName: 'Action', field: 'action', cellRendererFramework: ActionComponent, cellRendererParams: {
           clicked: (params) => this.actionClick(params)
         }},
     ];
 
-  rowData = [];
-  
+  rowData;
+
   private gridApi;
   private gridColumnApi;
 
-  constructor(private appService:AppService,private router:Router) { 
-    this.rows = appService.employees;
-    this.rowData = appService.employees;
-    this.srch = [...this.rows];
+  constructor(
+    private appService:AppService,
+    private router:Router,
+    private apollo: Apollo,
+    private employeeGQLService: EmployeeGQLService,
+    private fb: FormBuilder,
+    private createUserGQL: CreateUserGQL,
+    private cdref: ChangeDetectorRef
+  ) {
+    this.srch = [];
     this.modules = appService.employee_modules;
   }
 
@@ -77,10 +79,84 @@ export class AllEmployeesComponent implements OnInit {
       $(this).parents('.form-focus').toggleClass('focused', (e.type === 'focus' || this.value.length > 0));
     }).trigger('blur');
 
+    this.getUsers();
+    this.getCompanies();
+
+    this.editForm = this.fb.group({
+      firstname: ['', Validators.required],
+      lastname: [''],
+      username: ['', Validators.required],
+      email: ['', Validators.required],
+      password: [''],
+      password2: [''],
+      emmpid: ['', Validators.required],
+      joiningdate: ['', Validators.required],
+      corporateid: ['', Validators.required],
+      role: ['', Validators.required],
+      mobile: ['', Validators.required],
+      permissions: this.fb.group({
+        holiday: this.fb.group({
+          read: [false],
+          write: [false],
+          create: [false],
+          delete: [false],
+          import: [false],
+          export: [false]
+        }),
+        leave: this.fb.group({
+          read: [false],
+          write: [false],
+          create: [false],
+          delete: [false],
+          import: [false],
+          export: [false]
+        }),
+        assets: this.fb.group({
+          read: [false],
+          write: [false],
+          create: [false],
+          delete: [false],
+          import: [false],
+          export: [false]
+        }),
+      }),
+    });
+  }
+
+
+  getCompanies() {
+    this.apollo.watchQuery({
+      query: GET_COMPANIES_QUERY,
+      variables: {
+        "pagination": {
+          "limit": 100
+        }
+      },
+    }).valueChanges.subscribe((response: any) => {
+      this.companies = response.data.getCompanies;
+      console.log(this.companies);
+    });
   }
 
   actionClick(params) {
-    console.log(params);
+    if(params.type === 'edit') {
+      this.onEdit(params.rowData.data);
+    }
+  }
+
+  getUsers() {
+    this.apollo.watchQuery({
+      query: GET_USERS_QUERY,
+      variables: {
+        "pagination": {
+          "limit": 100
+        }
+      },
+    }).valueChanges.subscribe((response: any) => {
+      console.log(response)
+      this.rowData = response.data.users;
+      this.employeeGQLService.setUsers(response.data.users);
+    });
   }
 
   public empUpt = {};
@@ -88,62 +164,64 @@ export class AllEmployeesComponent implements OnInit {
 
   addReset(){
     let randomnumber = Math.floor(Math.random() * 99);
-    //this.createEmp = {'employeeID':randomnumber};
-    //console.log(randomnumber)
-    this.addEmp = {
-      firstName: '',
-      lastName:  '',
-      employeeID: randomnumber,
-      email: '',
-      phone:'',
-      company:'',
-      designation:'',
-      userName:'',
-      password:'',
-      cPassword:'',
-      joinDate:{formatted : ""}
-    }
     $('#add_employee').modal('show');
+    this.cdref.detectChanges();
   }
 
-  addSubmit(f)
-  {
-    if (f.invalid === true)
-      this.addEmployeeValidation = true;
-    else {
-      this.addEmployeeValidation = false;
-    //console.log(f.form.value);
-    this.rows.unshift(f.form.value);
-    this.srch.unshift(f.form.value);
-    this.rows = this.rows;
-    $('#add_employee').modal('hide');
-    }
+  createSubmit(f){
+    // $('#add_employee').modal('hide');
+    console.log(f.value);
+
+    this.createUserGQL
+      .mutate({
+        "firstname": f.value.firstname,
+        "lastname": f.value.lastname,
+        "username": f.value.username,
+        "email": f.value.email,
+        "password": f.value.password,
+        "role": f.value.role,
+        "emmpid": f.value.emmpid,
+        "corporateid": f.value.corporateid,
+        "joiningdate": f.value.joiningdate,
+        "mobile":f.value.mobile,
+        "permissions": {
+          "holiday": {
+            "read": f.value.permissions.holiday.read,
+            "write": f.value.permissions.holiday.write
+          }
+        }
+      })
+      .subscribe( val => {
+        if(val) {
+          console.log(val);
+        }
+      }, error => console.log(error));
   }
 
   onEdit(item){
-    this.router.navigate(['employees/all-employees/edit'], { queryParams: { 'id': item.employeeID } });
+    this.router.navigate(['employees/all-employees/edit'], { queryParams: { 'id': item.emmpid } });
   }
 
   onDelete(id){
     //console.log("="+id+"=");
-    var index = this.rows.findIndex(function(item, i){
-      return item.employeeID === id
-    });
+    // var index = this.rows.findIndex(function(item, i){
+    //   return item.employeeID === id
+    // });
 
     //console.log(index);
-    if (index > -1) {
-        this.rows.splice(index, 1);
-        this.srch.splice(index, 1);
-    }        
+    // if (index > -1) {
+    //     this.rows.splice(index, 1);
+    //     this.srch.splice(index, 1);
+    // }
     //console.log(this.rows);
-    this.rows = this.rows;
+    // this.rows = this.rows;
   }
 
   searchID(val) {
     //console.log(val);
     val = val.toString();
     //console.log(this.srch);
-    this.rows.splice(0, this.rows.length);
+    // this.rows.splice(0, this.rows.length);
     //console.log(this.rows);
     let temp = this.srch.filter(function(d) {
       //console.log(d.employeeID);
@@ -151,14 +229,14 @@ export class AllEmployeesComponent implements OnInit {
       return d.employeeID.toLowerCase().indexOf(val) !== -1 || !val;
     });
     //console.log(temp);
-    this.rows.push(...temp);
+    // this.rows.push(...temp);
     //console.log(this.rows);
   }
 
   searchName(val) {
     //console.log(val);
     //console.log(this.srch);
-    this.rows.splice(0, this.rows.length);
+    // this.rows.splice(0, this.rows.length);
     //console.log(this.rows);
     let temp = this.srch.filter(function(d) {
       //console.log(d.userName);
@@ -166,14 +244,14 @@ export class AllEmployeesComponent implements OnInit {
       return d.userName.toLowerCase().indexOf(val) !== -1 || !val;
     });
     //console.log(temp);
-    this.rows.push(...temp);
+    // this.rows.push(...temp);
     //console.log(this.rows);
   }
 
   searchDesg(val) {
     //console.log(val);
     //console.log(this.srch);
-    this.rows.splice(0, this.rows.length);
+    // this.rows.splice(0, this.rows.length);
     //console.log(this.rows);
     let temp = this.srch.filter(function(d) {
       //console.log(d.designation);
@@ -181,26 +259,12 @@ export class AllEmployeesComponent implements OnInit {
       return d.designation.toLowerCase().indexOf(val) !== -1 || !val;
     });
     //console.log(temp);
-    this.rows.push(...temp);
+    // this.rows.push(...temp);
     //console.log(this.rows);
   }
 
-  sizeToFit() {
-    this.gridApi.sizeColumnsToFit();
-  }
-
-  autoSizeAll(skipHeader) {
-    var allColumnIds = [];
-    this.gridColumnApi.getAllColumns().forEach(function (column) {
-      allColumnIds.push(column.colId);
-    });
-    this.gridColumnApi.autoSizeColumns(allColumnIds, skipHeader);
-  }
-
-  onGridReady(params) {
-    this.gridApi = params.api;
-    this.gridColumnApi = params.columnApi;
-    this.sizeToFit();
+  onGridReady($event) {
+    console.log($event);
   }
 
 }

@@ -20,7 +20,9 @@ const mutation ={
       lastname,
       role,
       emmpid,
-      company,
+      corporateid,
+      mobile,
+      joiningdate,
       permissions
     },{me,secret}) => new Promise(async (resolve, reject) => {
       const user = await User.findOne({$or:[ { email},{username} ]})
@@ -35,7 +37,9 @@ const mutation ={
               lastname,
               role,
               emmpid,
-              company,
+              corporateid,
+              mobile,
+              joiningdate,
               permissions
             }
           )
@@ -57,16 +61,18 @@ const mutation ={
         }
       }
   }),
-  updateUser:(_, { id,username, email, password,role},{me,secret}) => new Promise(async (resolve, reject) => {
+  updateUser:(_, { id,username, email, password,role, firstname, lastname, emmpid, corporateid, mobile, joiningdate, permissions},{me,secret}) => new Promise(async (resolve, reject) => {
     try{
-        let param ={username,email,role}
+      // const matchuseremail = await User.findOne({email})
+      // if(!matchuseremail) {
+        let param ={username, email, password,role, firstname, lastname, emmpid, corporateid, mobile, joiningdate, permissions}
         if(password)param.password=await bcrypt.hash(password, 10)
-        const user = await User.findByIdAndUpdate(id,{$set:{...param}})
-        createToken({ id: user.id,role:user.role,username:user.username},secret,'1y')
-        .then((result) => {
-            resolve(result);
-        })
-    }catch(error){
+        const user = await User.findByIdAndUpdate(id,{$set:{...param}},{new: true})
+          .then((result) => { resolve(result) })
+      // } else {
+      //   reject({data: 'User with email exists!'})
+      // }
+    } catch(error){
         reject(error);
     }
   }),

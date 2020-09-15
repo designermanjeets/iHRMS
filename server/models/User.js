@@ -10,7 +10,9 @@ const userSchema = new Schema({
   password: String,
   role: String,
   emmpid:String,
-  company: String,
+  corporateid: String,
+  mobile: String,
+  joiningdate: Date,
   permissions:{
     employee: {
       read: Boolean,

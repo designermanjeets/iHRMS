@@ -43,6 +43,7 @@ export class LoginPageComponent implements OnInit {
         "role": "Admin",
         "emmpid": "EMP1",
         "company": "ABCCOMPANY",
+        "corporateid": "default",
         "permissions": {
           "holiday": {
             "read": true,
@@ -73,7 +74,8 @@ export class LoginPageComponent implements OnInit {
           sessionStorage.setItem('user', JSON.stringify({
             email: val.data['login'].user.email,
             role: val.data['login'].user.role,
-            username: val.data['login'].user.username
+            username: val.data['login'].user.username,
+            userid: val.data['login'].user._id
           }));
           this.router.navigateByUrl('/dashboard');
         }

@@ -1,1 +1,9 @@
-<p>agrid works!</p>
+<ag-grid-angular
+  class="ag-theme-alpine"
+  [rowData]="rowData"
+  [columnDefs]="columnDefs"
+  [gridOptions]="gridOptions"
+  (gridReady)="onGridReady($event)"
+  (rowSelected)="onRowSelected($event)"
+>
+</ag-grid-angular>

@@ -16,7 +16,7 @@ export class RegisterGQL extends Mutation {
       $firstname: String
       $lastname: String
       $emmpid: String
-      $company: String
+      $corporateid: String
       $permissions: PermissionsInput
     ) {
     signup(
@@ -27,7 +27,7 @@ export class RegisterGQL extends Mutation {
         firstname: $firstname
         lastname: $lastname,
         emmpid: $emmpid,
-        company: $company,
+        corporateid: $corporateid,
         permissions: $permissions,
     ) {
         username,
@@ -37,7 +37,7 @@ export class RegisterGQL extends Mutation {
         firstname,
         lastname,
         emmpid,
-        company,
+        corporateid,
         permissions {
           holiday {
             read
@@ -64,6 +64,7 @@ export class LoginGQL extends Mutation {
           email
           role,
           username
+          _id
         },
         token
       }

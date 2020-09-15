@@ -16,6 +16,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { enableProdMode } from '@angular/core';
 import { AgGridModule } from 'ag-grid-angular';
 import { SharedModule } from './shared/shared.module';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -103,6 +105,7 @@ import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { ForgetPageComponent } from './pages/forget-page/forget-page.component';
 import { GraphQLModule } from './graphql.module';
 import { HttpClientModule } from '@angular/common/http';
+import {ActionComponent} from "./shared/agrid/components/action/action.component";
 // import { ProfilePageComponent } from './pages/profile-page/profile-page.component';
 // import { JobsListComponent } from './career/jobs-list/jobs-list.component';
 // import { JobsDetailsComponent } from './career/jobs-details/jobs-details.component';
@@ -330,9 +333,13 @@ const routes: Routes = [
     TooltipModule.forRoot(),
     RouterModule.forRoot(routes),
     SharedModule,
-    AgGridModule.withComponents([]),
+    AgGridModule.withComponents([
+      ActionComponent
+    ]),
     GraphQLModule,
-    HttpClientModule
+    HttpClientModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   providers: [
     EventService,

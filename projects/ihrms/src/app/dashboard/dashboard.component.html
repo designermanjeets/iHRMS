@@ -1,39 +1,30 @@
 <div class="page-wrapper" id="dashboard_wrapper">
   <div class="content container-fluid">
     <div class="row">
-      <div class="col-md-6 col-sm-6 col-lg-3">
+      <div class="col-md-4 col-sm-4 col-lg-4">
         <div class="dash-widget clearfix card-box">
-          <span class="dash-widget-icon"><i class="fa fa-cubes" aria-hidden="true"></i></span>
+          <span class="dash-widget-icon"><i class="fa fa-user" aria-hidden="true"></i></span>
           <div class="dash-widget-info">
             <h3>{{dash.projects}}</h3>
-            <span>Projects</span>
+            <span>Employees</span>
           </div>
         </div>
       </div>
-      <div class="col-md-6 col-sm-6 col-lg-3">
+      <div class="col-md-4 col-sm-4 col-lg-4">
         <div class="dash-widget clearfix card-box">
           <span class="dash-widget-icon"><i class="fa fa-usd" aria-hidden="true"></i></span>
           <div class="dash-widget-info">
             <h3>{{dash.clients}}</h3>
-            <span>Clients</span>
+            <span>Leaves</span>
           </div>
         </div>
       </div>
-      <div class="col-md-6 col-sm-6 col-lg-3">
+      <div class="col-md-4 col-sm-4 col-lg-4">
         <div class="dash-widget clearfix card-box">
           <span class="dash-widget-icon"><i class="fa fa-diamond"></i></span>
           <div class="dash-widget-info">
             <h3>{{dash.tasks}}</h3>
-            <span>Tasks</span>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6 col-sm-6 col-lg-3">
-        <div class="dash-widget clearfix card-box">
-          <span class="dash-widget-icon"><i class="fa fa-user" aria-hidden="true"></i></span>
-          <div class="dash-widget-info">
-            <h3>{{dash.employees}}</h3>
-            <span>Employees</span>
+            <span>Events and Ceremonies</span>
           </div>
         </div>
       </div>
@@ -41,19 +32,19 @@
     <div class="row">
       <div class="col-md-6 outer-barchart text-center">
         <div class="card-box" id="card_barchart">
-          <h4 class="card-title barchart-title">Total Revenue</h4>
+          <h4 class="card-title barchart-title">Total Employees</h4>
           <div id="bar-charts"></div>
         </div>
       </div>
       <div class="col-md-6 text-center">
         <div class="card-box">
-          <h4 class="card-title">Sales Overview</h4>
+          <h4 class="card-title">Employee Overview</h4>
           <div id="line-charts"></div>
         </div>
       </div>
       <div class="col-md-6 text-center">
         <div class="card-box">
-          <h4 class="card-title">Invoice Status</h4>
+          <h4 class="card-title">Leave Status</h4>
           <div id="area-charts"></div>
         </div>
       </div>

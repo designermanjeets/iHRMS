@@ -39,7 +39,9 @@ const typeDefs = `
       lastname: String,
       role: String,
       emmpid:String,
-      company: String,
+      corporateid: String,
+      mobile: String,
+      joiningdate: ISODate,
       permissions: PermissionsInput
     ): User,
     login (email: String!, password: String!): customUser,
@@ -73,7 +75,20 @@ const typeDefs = `
       modifiedip: String,
       alias: String
     ): Company,
-    updateUser(id:ID,username: String!, email: String!, password: String,role: String,space:String): String,
+    updateUser(
+      id:ID,
+      username: String!,
+      email: String,
+      password: String,
+      role: String,
+      firstname: String,
+      lastname: String,
+      role: String,
+      emmpid:String,
+      corporateid: String,
+      mobile: String,
+      joiningdate: ISODate,
+      permissions: PermissionsInput): User,
     updateCompany(
       companyname: String,
       printname: String,
@@ -226,7 +241,9 @@ const typeDefs = `
     password: String,
     role: String,
     emmpid:String,
-    company: String,
+    corporateid: String,
+    mobile: String,
+    joiningdate: ISODate,
     permissions: permissions
   }
   type permissions {

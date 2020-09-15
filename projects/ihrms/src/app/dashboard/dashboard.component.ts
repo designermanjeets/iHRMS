@@ -58,7 +58,7 @@ export class DashboardComponent implements OnInit, AfterContentInit {
     $(".panel-eqHeight-invoices").height(pay_maxHeight);
 
     // Area Chart
-	
+
     Morris.Area({
       element: 'area-charts',
       data: [
@@ -72,15 +72,15 @@ export class DashboardComponent implements OnInit, AfterContentInit {
       ],
       xkey: 'y',
       ykeys: ['a', 'b'],
-      labels: ['Total Invoice', 'Pending Invoice'],
-      lineColors: ['#f43b48','#453a94'],
+      labels: ['Pending Leaves', 'Total Leaves'],
+      lineColors: ['#8d88b2','#f43b48'],
       lineWidth: '3px',
       resize: true,
       redraw: true
       });
-  
+
     // Bar Chart
-    
+
     Morris.Bar({
       element: 'bar-charts',
       data: [
@@ -94,16 +94,16 @@ export class DashboardComponent implements OnInit, AfterContentInit {
       ],
       xkey: 'y',
       ykeys: ['a', 'b'],
-      labels: ['Total Income', 'Total Outcome'],
-      lineColors: ['#f43b48','#453a94'],
+      labels: ['Previous Employees', 'New Employees'],
+      lineColors: ['#f8878e','#08e4ec'],
       lineWidth: '3px',
-      barColors: ['#f43b48','#453a94'],
+      barColors: ['#FF9900','#08e4ec'],
       resize: true,
       redraw: true
     });
-    
+
     // Line Chart
-    
+
     Morris.Line({
       element: 'line-charts',
       data: [
@@ -118,14 +118,14 @@ export class DashboardComponent implements OnInit, AfterContentInit {
       xkey: 'y',
       ykeys: ['a', 'b'],
       labels: ['Total Sales', 'Total Revenue'],
-      lineColors: ['#f43b48','#453a94'],
+      lineColors: ['#FF9900','#08e4ec'],
       lineWidth: '3px',
       resize: true,
       redraw: true
     });
-    
+
     // Donut Chart
-      
+
     Morris.Donut({
       element: 'pie-charts',
       colors: [

@@ -17,6 +17,11 @@ export class AppComponent implements OnInit {
   forgotPage:Boolean = false;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute) {
+
+    if(!sessionStorage.getItem(('JWT_TOKEN'))) {
+      this.router.navigateByUrl('./pages/login');
+    }
+
     router.events.subscribe((event: Event) => {
 
       if (event instanceof NavigationEnd) {
@@ -90,10 +95,10 @@ export class AppComponent implements OnInit {
     });
 
 
-    var height = $(window).height();	
+    var height = $(window).height();
     $(".page-wrapper").css("min-height", height);
-  
-    
+
+
     $(window).resize(function(){
       if($('.page-wrapper').length > 0 ){
         var height = $(window).height();

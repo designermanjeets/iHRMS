@@ -33,6 +33,7 @@
               "./node_modules/line-awesome/dist/line-awesome/css/line-awesome.css",
               "./node_modules/fullcalendar/dist/fullcalendar.min.css",
               "./node_modules/morris.js/morris.css",
+              "./node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css",
               "projects/ihrms/src/styles.scss"
             ],
             "scripts": [
@@ -104,6 +105,7 @@
               "projects/ihrms/src/assets"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css",
               "projects/ihrms/src/styles.scss"
             ],
             "scripts": []

@@ -2,6 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import {IMyDpOptions} from 'mydatepicker';
 import { Router,ActivatedRoute } from '@angular/router';
 import { AppService } from './../../app.service';
+import {EmployeeGQLService} from "../all-employees/employee-gql.service";
+import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {EmpdetailGQLService} from "./empdetail-gql.service";
+import {GET_COMPANIES_QUERY} from "../../settings/settingscompany/companysettingGQL";
+import {Apollo} from "apollo-angular";
 
 @Component({
   selector: 'app-employee-details',
@@ -18,7 +23,7 @@ export class EmployeeDetailsComponent implements OnInit {
     inline: false,
     height: '38px'
   };
-  
+
   // public model: any = { date: { year: 2018, month: 10, day: 9 } };
   // public model1: any = { date: { year: 2018, month: 10, day: 9 } };
 
@@ -78,65 +83,121 @@ export class EmployeeDetailsComponent implements OnInit {
   };
 
   uptEmployeeValidation:boolean = false;
+  editForm: FormGroup;
+  companies: [];
 
-  constructor(private appService:AppService,private router:Router,private route:ActivatedRoute) { 
+
+  constructor(
+    private appService:AppService,
+    private router:Router,
+    private route:ActivatedRoute,
+    private fb: FormBuilder,
+    private employeeGQLService: EmployeeGQLService,
+    private empdetailGQLService: EmpdetailGQLService,
+    private apollo: Apollo
+  ) {
     this.rows = appService.employees;
     this.srch = [...this.rows];
   }
 
   ngOnInit() {
-    this.route.queryParams.subscribe(params => {
-      //console.log(params);
-      this.uptEmp = [];
-      if(params.id)
-      {
-        var id = params.id;
-        var arr = this.rows.find(function(item, i){
-          return item.employeeID == id;
-        });
 
-        if(!arr)
-        {
+    this.getCompanies();
+
+    this.editForm = this.fb.group({
+      firstname: ['', Validators.required],
+      lastname: [''],
+      username: ['', Validators.required],
+      email: ['', Validators.required],
+      password: [''],
+      password2: [''],
+      emmpid: ['', Validators.required],
+      joiningdate: ['', Validators.required],
+      corporateid: ['', Validators.required],
+      role: ['', Validators.required],
+      mobile: ['', Validators.required],
+      permissions: this.fb.group({
+        holiday: this.fb.group({
+          read: [''],
+          write: [''],
+          create: [''],
+          delete: [''],
+          import: [''],
+          export: ['']
+        }),
+        leave: this.fb.group({
+          read: [''],
+          write: [''],
+          create: [''],
+          delete: [''],
+          import: [''],
+          export: ['']
+        }),
+        assets: this.fb.group({
+          read: [''],
+          write: [''],
+          create: [''],
+          delete: [''],
+          import: [''],
+          export: ['']
+        }),
+      }),
+    });
+
+    this.route.queryParams.subscribe(params => {
+      this.uptEmp =  { };
+      if(params.id) {
+        const user = this.employeeGQLService.getUser(params.id);
+        if(!user) {
           this.router.navigate(['employees/all-employees']);
-        }
-        else
-        {
-        this.uptEmp.push(arr);
-        this.uptEmp = this.uptEmp[0];
-        //console.log(this.uptEmp);
-        }
-      }
-      else{
+        } else {
+          this.uptEmp = user;
+          this.editForm.patchValue(this.uptEmp);
+          }
+        } else {
         this.router.navigate(['employees/all-employees']);
       }
-      
-      
     });
   }
-  
-    
-  updateSubmit(f)
-  {
-    //console.log(f.form.value);
-    if (f.invalid === true)
-      this.uptEmployeeValidation = true;
-    else {
-      this.uptEmployeeValidation = false;
-    var id = f.form.value.employeeID;
-    //console.log(id);
-    var index = this.rows.findIndex(function(item, i){
-      return item.employeeID === id
-    });
 
-    //console.log(index);
-    if (index > -1) {
-        this.rows.splice(index, 1);
-    }
-    
-    this.rows.unshift(f.form.value);
-    this.srch.unshift(f.form.value);
-    this.rows = this.rows;
-    this.router.navigate(['employees/all-employees']);
-    }
+  getCompanies() {
+    this.apollo.watchQuery({
+      query: GET_COMPANIES_QUERY,
+      variables: {
+        "pagination": {
+          "limit": 100
+        }
+      },
+    }).valueChanges.subscribe((response: any) => {
+      this.companies = response.data.getCompanies;
+      console.log(this.companies);
+    });
+  }
+
+  updateSubmit(f){
+    console.log(f.value);
+    this.empdetailGQLService
+      .mutate({
+        "id": this.uptEmp._id,
+        "username": f.value.username,
+        "email": f.value.email,
+        "password": f.value.password,
+        "role": f.value.role,
+        "emmpid": f.value.emmpid,
+        "corporateid": f.value.corporateid,
+        "firstname": f.value.firstname,
+        "lastname": f.value.lastname,
+        "permissions": {
+          "holiday": {
+            "read": f.value.permissions.holiday.read,
+            "write": f.value.permissions.holiday.write
+          }
+        }
+      })
+      .subscribe( val => {
+        if(val) {
+          console.log(val);
+        }
+      }, error => console.log(error));
   }
 }

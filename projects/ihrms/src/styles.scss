@@ -1,5 +1,6 @@
 @import "~node_modules/ag-grid-community/src/styles/ag-grid.scss";
 @import "~node_modules/ag-grid-community/src/styles/ag-theme-alpine/sass/ag-theme-alpine-mixin.scss";
+
 .ag-theme-alpine {
 	@include ag-theme-alpine();
 }
@@ -9,6 +10,18 @@
 	.ag-header-container {
 		width: 100% !important;
 	}
+  .ag-root-wrapper-body.ag-layout-normal {
+    height: auto;
+    min-height: 250px;
+  }
+}
+
+a { cursor: pointer }
+.pos-rel {
+  position: relative;
+}
+.cdk-overlay-container {
+  z-index: 1099 !important;
 }
 
 /* You can add global styles to this file, and also import other style files */
@@ -4938,3 +4951,6 @@ table.table-inbox tbody tr.checked {
 	}
 }
 
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
