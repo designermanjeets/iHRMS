@@ -75,7 +75,8 @@ export class LoginPageComponent implements OnInit {
             email: val.data['login'].user.email,
             role: val.data['login'].user.role,
             username: val.data['login'].user.username,
-            userid: val.data['login'].user._id
+            userid: val.data['login'].user._id,
+            corporateid: val.data['login'].user.corporateid
           }));
           this.router.navigateByUrl('/dashboard');
         }

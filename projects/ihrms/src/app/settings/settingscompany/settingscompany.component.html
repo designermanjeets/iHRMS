@@ -5,15 +5,25 @@
         <h3 class="page-title">Company Details</h3>
         <div class="row">
           <div class="col-sm-6">
-            <div class="form-group">
+            <div class="form-group"
+                 [class.has-error]="
+                  companyForm.controls['companyname'].invalid &&
+                  companyForm.controls['companyname'].touched"
+                 [class.has-success]="companyForm.controls['companyname'].valid"
+            >
               <label>Company Name <span class="text-danger">*</span></label>
               <input class="form-control" type="text" formControlName="companyname">
             </div>
           </div>
           <div class="col-sm-6">
-            <div class="form-group">
-              <label>Contact Person</label>
-              <input class="form-control" type="text" formControlName="contactperson">
+            <div class="form-group"
+                 [class.has-error]="
+                  companyForm.controls['corporateid'].invalid &&
+                  companyForm.controls['corporateid'].touched"
+                 [class.has-success]="companyForm.controls['corporateid'].valid"
+            >
+              <label>Corporate ID <span class="text-danger">*</span></label>
+              <input class="form-control" type="text" formControlName="corporateid">
             </div>
           </div>
         </div>
@@ -31,7 +41,12 @@
             </div>
           </div>
           <div class="col-sm-6 col-md-6 col-lg-3">
-            <div class="form-group">
+            <div class="form-group"
+               [class.has-error]="
+                companyForm.controls['countryid'].invalid &&
+                companyForm.controls['countryid'].touched"
+               [class.has-success]="companyForm.controls['countryid'].valid"
+            >
               <label>Country</label>
               <select class="form-control select" formControlName="countryid">
                 <option value="IN">INDIA</option>
@@ -39,13 +54,12 @@
             </div>
           </div>
           <div class="col-sm-6 col-md-6 col-lg-3">
-            <div class="form-group">
-              <label>City</label>
-              <input class="form-control" type="text" formControlName="cityid">
-            </div>
-          </div>
-          <div class="col-sm-6 col-md-6 col-lg-3">
-            <div class="form-group">
+            <div class="form-group"
+                [class.has-error]="
+                companyForm.controls['stateid'].invalid &&
+                companyForm.controls['stateid'].touched"
+                [class.has-success]="companyForm.controls['stateid'].valid"
+            >
               <label>State/Province</label>
               <select class="form-control select" formControlName="stateid">
                 <option value="cal">California</option>
@@ -55,7 +69,23 @@
             </div>
           </div>
           <div class="col-sm-6 col-md-6 col-lg-3">
-            <div class="form-group">
+            <div class="form-group"
+               [class.has-error]="
+              companyForm.controls['cityid'].invalid &&
+              companyForm.controls['cityid'].touched"
+               [class.has-success]="companyForm.controls['cityid'].valid"
+            >
+              <label>City</label>
+              <input class="form-control" type="text" formControlName="cityid">
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-6 col-lg-3">
+            <div class="form-group"
+               [class.has-error]="
+              companyForm.controls['zipcode'].invalid &&
+              companyForm.controls['zipcode'].touched"
+             [class.has-success]="companyForm.controls['zipcode'].valid"
+            >
               <label>ZIP Code</label>
               <input class="form-control" type="text" formControlName="zipcode">
             </div>
@@ -63,13 +93,23 @@
         </div>
         <div class="row">
           <div class="col-sm-6">
-            <div class="form-group">
+            <div class="form-group"
+               [class.has-error]="
+              companyForm.controls['email'].invalid &&
+              companyForm.controls['email'].touched"
+             [class.has-success]="companyForm.controls['email'].valid"
+            >
               <label>Email</label>
-              <input class="form-control" type="email" formControlName="email">
+              <input class="form-control" type="email" formControlName="email" required>
             </div>
           </div>
           <div class="col-sm-6">
-            <div class="form-group">
+            <div class="form-group"
+               [class.has-error]="
+              companyForm.controls['phone'].invalid &&
+              companyForm.controls['phone'].touched"
+             [class.has-success]="companyForm.controls['phone'].valid"
+            >
               <label>Phone Number</label>
               <input class="form-control" type="text" formControlName="phone">
             </div>

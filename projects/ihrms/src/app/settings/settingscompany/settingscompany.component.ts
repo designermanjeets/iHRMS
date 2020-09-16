@@ -35,19 +35,21 @@ export class SettingscompanyComponent implements OnInit {
 
     this.companyForm = this.fb.group({
       companyname: ['', Validators.required],
-      contactperson: [''],
+      corporateid: ['', Validators.required],
       address1: [''],
       address2: [''],
-      countryid: [''],
-      cityid: [''],
-      stateid: [''],
-      zipcode: [''],
-      email: [''],
+      countryid: ['', Validators.required],
+      stateid: ['', Validators.required],
+      cityid: ['', Validators.required],
+      zipcode: ['', Validators.required],
+      email: ['', Validators.required],
       phone: [''],
       mobile: [''],
       fax: [''],
       website: ['']
     });
+
+    this.getCompany();
   }
 
   updateCompany(){
@@ -76,10 +78,11 @@ export class SettingscompanyComponent implements OnInit {
     this.apollo.watchQuery({
       query: GET_COMPANY_QUERY,
       variables: {
-        "corporateid": "123"
+        "corporateid": JSON.parse(sessionStorage.getItem('user')).corporateid
       },
-    }).valueChanges.subscribe((response) => {
-      console.log(response)
+    }).valueChanges.subscribe((response: any) => {
+        console.log(response.data.getCompany);
+        this.companyForm.patchValue(response.data.getCompany);
     });
   }
 

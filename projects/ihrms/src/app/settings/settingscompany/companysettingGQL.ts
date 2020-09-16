@@ -84,7 +84,8 @@ export const GET_COMPANY_QUERY = gql`
     getCompany(
       corporateid: $corporateid
     ) {
-        corporateid
+        corporateid,
+        companyname
       }
   }
 `;
