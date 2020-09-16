@@ -332,7 +332,7 @@ const routes: Routes = [
     FullCalendarModule,
     MorrisJsModule,
     TooltipModule.forRoot(),
-    RouterModule.forRoot(routes),
+    RouterModule.forRoot(routes, {useHash: true}),
     SharedModule,
     AgGridModule.withComponents([
       ActionComponent

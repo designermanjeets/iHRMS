@@ -216,7 +216,8 @@ export class EmployeeDetailsComponent implements OnInit {
       })
       .subscribe( (val: any) => {
         if(val.data.updateUser) {
-          window.location.reload();
+          // window.location.reload();
+          this.router.navigate(['employees/all-employees']);
         }
       }, error => console.log(error));
   }

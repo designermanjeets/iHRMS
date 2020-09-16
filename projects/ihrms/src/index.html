@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <title>Ihrms</title>
-  <base href="/">
+  <base href="./">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
@@ -57,16 +57,16 @@
       }
       .loader-ellips__dot:nth-child(1),
       .loader-ellips__dot:nth-child(2) {
-          left: 0;  
+          left: 0;
       }
-      .loader-ellips__dot:nth-child(3) { 
-          left: 1.5em;   
+      .loader-ellips__dot:nth-child(3) {
+          left: 1.5em;
       }
-      .loader-ellips__dot:nth-child(4) { 
-          left: 3em;   
+      .loader-ellips__dot:nth-child(4) {
+          left: 3em;
       }
       .loader-ellips__dot:nth-child(1) {
-          animation-name: reveal;  
+          animation-name: reveal;
       }
       .loader-ellips__dot:nth-child(2),
       .loader-ellips__dot:nth-child(3) {
@@ -77,33 +77,33 @@
           animation-direction: reverse;
       }
       @keyframes reveal {
-          from { 
-              transform: scale(0.001); 
+          from {
+              transform: scale(0.001);
           }
-          to { 
-              transform: scale(1); 
+          to {
+              transform: scale(1);
           }
       }
       @keyframes slide {
-          to { 
-              transform: translateX(1.5em) 
+          to {
+              transform: translateX(1.5em)
           }
       }
-      .loader-ellips__dot:nth-child(1) { 
-          background: #453a94;  
+      .loader-ellips__dot:nth-child(1) {
+          background: #453a94;
       }
-      .loader-ellips__dot:nth-child(2) { 
-          background: #f43b48;  
+      .loader-ellips__dot:nth-child(2) {
+          background: #f43b48;
       }
-      .loader-ellips__dot:nth-child(3) { 
-          background: #453a94;  
+      .loader-ellips__dot:nth-child(3) {
+          background: #453a94;
       }
-      .loader-ellips__dot:nth-child(4) { 
-          background: #453a94;  
+      .loader-ellips__dot:nth-child(4) {
+          background: #453a94;
       }
-            
+
     </style>
-  
+
    <!-- Loader -->
   <div id="loader-wrapper">
     <div id="loader">
@@ -116,5 +116,8 @@
     </div>
 </div>
   </app-root>
+  <script>
+    // window.jQuery = window.$ = require('jquery');
+  </script>
 </body>
 </html>

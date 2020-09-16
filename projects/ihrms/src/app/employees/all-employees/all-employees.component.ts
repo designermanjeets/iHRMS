@@ -1,6 +1,6 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {IMyDpOptions} from 'mydatepicker';
-import { Router } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import { AppService } from '../../app.service';
 import {ActionComponent} from '../../shared/agrid/components/action/action.component';
 import {GET_COMPANIES_QUERY} from "../../settings/settingscompany/companysettingGQL";
@@ -52,6 +52,7 @@ export class AllEmployeesComponent implements OnInit {
   companies: [];
   isModal: boolean;
   matcher = new MyErrorStateMatcher();
+  actionParams: any;
 
   public date: Date = new Date();
   public model: any = {date: {year: this.date.getFullYear(), month: this.date.getMonth() + 1, day: this.date.getDate()}};
@@ -69,9 +70,7 @@ export class AllEmployeesComponent implements OnInit {
           clicked: (params) => this.actionClick(params)
         }},
     ];
-
   rowData;
-
   private gridApi;
   private gridColumnApi;
   private gridOptions: GridOptions;
@@ -84,21 +83,23 @@ export class AllEmployeesComponent implements OnInit {
     private fb: FormBuilder,
     private createUserGQL: CreateUserGQL,
     private cdref: ChangeDetectorRef,
-    private deleteUserGQL: DeleteUserGQL
+    private deleteUserGQL: DeleteUserGQL,
+    private activeRoute: ActivatedRoute,
+    private getuserquery: GET_USERS_QUERY
   ) {
     this.srch = [];
     this.modules = appService.employee_modules;
+
+    this.getUsers();
+    this.getCompanies();
+
   }
 
   ngOnInit() {
 
-    console.log(this.filtertextbox);
     $('.floating').on('focus blur', function (e) {
       $(this).parents('.form-focus').toggleClass('focused', (e.type === 'focus' || this.value.length > 0));
     }).trigger('blur');
-
-    this.getUsers();
-    this.getCompanies();
 
     this.editForm = this.fb.group({
       firstname: [''],
@@ -168,18 +169,26 @@ export class AllEmployeesComponent implements OnInit {
       this.onEdit(params.rowData.data);
     }
     if(params.type === 'delete') {
-      this.onDelete(params.rowData.data.email);
+        this.actionParams = params.rowData.data.email;
+        $('#delete_employee').modal('show');
     }
   }
 
+  onYes(res) {
+    if(res === 'yes'){
+      this.onDelete(this.actionParams);
+      $('#delete_employee').modal('hide');
+      this.actionParams = null;
+    }
+}
+
   getUsers() {
-    this.apollo.watchQuery({
-      query: GET_USERS_QUERY,
-      variables: {
-        "pagination": {
-          "limit": 100
-        }
-      },
+    this.getuserquery.watch({
+      "pagination": {
+        "limit": 100
+      }
+    }, {
+      fetchPolicy: 'network-only'
     }).valueChanges.subscribe((response: any) => {
       console.log(response)
       this.rowData = response.data.users;
@@ -219,7 +228,7 @@ export class AllEmployeesComponent implements OnInit {
       .subscribe( (val: any) => {
         if(val.data.signup.username) {
           $('#add_employee').modal('hide');
-          window.location.reload();
+          this.getUsers();
         }
       }, error => console.log(error));
   }
@@ -235,7 +244,7 @@ export class AllEmployeesComponent implements OnInit {
     })
     .subscribe( (val: any) => {
       if(!val.data.deleteUser.email) {
-        window.location.reload();
+        this.getUsers();
       }
     }, error => console.log(error));
   }

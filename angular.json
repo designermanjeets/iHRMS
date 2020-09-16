@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/ihrms",
+            "outputPath": "dist",
             "index": "projects/ihrms/src/index.html",
             "main": "projects/ihrms/src/main.ts",
             "polyfills": "projects/ihrms/src/polyfills.ts",

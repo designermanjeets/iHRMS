@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import gql from "graphql-tag";
+import {Query} from "apollo-angular";
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +27,11 @@ export class EmployeeGQLService {
   }
 }
 
-export const GET_USERS_QUERY = gql`
+@Injectable({
+  providedIn: 'root',
+})
+export class GET_USERS_QUERY extends Query<Response> {
+  document = gql`
    query getUsers(
       $pagination: Pagination!
     ) {
@@ -52,4 +57,5 @@ export const GET_USERS_QUERY = gql`
         }
       }
   }
-`;
+ `;
+}
