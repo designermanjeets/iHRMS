@@ -35,6 +35,7 @@ export class SettingscompanyComponent implements OnInit {
 
     this.companyForm = this.fb.group({
       companyname: ['', Validators.required],
+      printname: [''],
       corporateid: ['', Validators.required],
       address1: [''],
       address2: [''],
@@ -46,7 +47,20 @@ export class SettingscompanyComponent implements OnInit {
       phone: [''],
       mobile: [''],
       fax: [''],
-      website: ['']
+      website: [''],
+      financialbegindate: ['', Validators.required],
+      booksbegindate: ['', Validators.required],
+      cinno: ['', Validators.required],
+      panno: ['', Validators.required],
+      gstin: ['', Validators.required],
+      currencyid: ['', Validators.required],
+      createdby: ['', Validators.required],
+      createdon: ['', Validators.required],
+      createdip: ['', Validators.required],
+      modifiedby: [''],
+      modifiedon: [''],
+      modifiedip: [''],
+      alias: [''],
     });
 
     this.getCompany();

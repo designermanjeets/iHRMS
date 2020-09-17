@@ -13,8 +13,19 @@
             >
               <label>Company Name <span class="text-danger">*</span></label>
               <input class="form-control" type="text" formControlName="companyname">
+              <span class="help-block" *ngIf="companyForm.controls['companyname'].errors && companyForm.controls['companyname'].touched">
+                  Company Name is invalid
+              </span>
             </div>
           </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label>Print Name</label>
+              <input class="form-control" type="text" formControlName="printname">
+            </div>
+          </div>
+        </div>
+        <div class="row">
           <div class="col-sm-6">
             <div class="form-group"
                  [class.has-error]="
@@ -24,19 +35,22 @@
             >
               <label>Corporate ID <span class="text-danger">*</span></label>
               <input class="form-control" type="text" formControlName="corporateid">
+              <span class="help-block" *ngIf="companyForm.controls['corporateid'].errors && companyForm.controls['corporateid'].touched">
+                  Corporate ID is invalid
+              </span>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label>Address Line 1</label>
+              <input class="form-control " type="text" formControlName="address1">
             </div>
           </div>
         </div>
         <div class="row">
-          <div class="col-sm-12">
+          <div class="col-sm-6">
             <div class="form-group">
-              <label>Address</label>
-              <input class="form-control " type="text" formControlName="address1">
-            </div>
-          </div>
-          <div class="col-sm-12">
-            <div class="form-group">
-              <label>Address</label>
+              <label>Address Line 2</label>
               <input class="form-control " type="text" formControlName="address2">
             </div>
           </div>
@@ -47,10 +61,13 @@
                 companyForm.controls['countryid'].touched"
                [class.has-success]="companyForm.controls['countryid'].valid"
             >
-              <label>Country</label>
+              <label>Country <span class="text-danger m-l-5">*</span></label>
               <select class="form-control select" formControlName="countryid">
                 <option value="IN">INDIA</option>
               </select>
+              <span class="help-block" *ngIf="companyForm.controls['corporateid'].errors && companyForm.controls['countryid'].touched">
+                  Country is invalid
+              </span>
             </div>
           </div>
           <div class="col-sm-6 col-md-6 col-lg-3">
@@ -60,34 +77,43 @@
                 companyForm.controls['stateid'].touched"
                 [class.has-success]="companyForm.controls['stateid'].valid"
             >
-              <label>State/Province</label>
+              <label>State/Province <span class="text-danger m-l-5">*</span></label>
               <select class="form-control select" formControlName="stateid">
                 <option value="cal">California</option>
                 <option value="alk">Alaska</option>
                 <option value="alb">Alabama</option>
               </select>
+              <span class="help-block" *ngIf="companyForm.controls['stateid'].errors && companyForm.controls['stateid'].touched">
+                  State/Province is invalid
+              </span>
             </div>
           </div>
-          <div class="col-sm-6 col-md-6 col-lg-3">
+          <div class="col-sm-6 col-md-6">
             <div class="form-group"
                [class.has-error]="
               companyForm.controls['cityid'].invalid &&
               companyForm.controls['cityid'].touched"
                [class.has-success]="companyForm.controls['cityid'].valid"
             >
-              <label>City</label>
+              <label>City <span class="text-danger m-l-5">*</span></label>
               <input class="form-control" type="text" formControlName="cityid">
+              <span class="help-block" *ngIf="companyForm.controls['cityid'].errors && companyForm.controls['cityid'].touched">
+                  City is invalid
+              </span>
             </div>
           </div>
-          <div class="col-sm-6 col-md-6 col-lg-3">
+          <div class="col-sm-6 col-md-6">
             <div class="form-group"
                [class.has-error]="
               companyForm.controls['zipcode'].invalid &&
               companyForm.controls['zipcode'].touched"
              [class.has-success]="companyForm.controls['zipcode'].valid"
             >
-              <label>ZIP Code</label>
-              <input class="form-control" type="text" formControlName="zipcode">
+              <label>ZIP Code <span class="text-danger m-l-5">*</span></label>
+              <input class="form-control" type="number" formControlName="zipcode">
+              <span class="help-block" *ngIf="companyForm.controls['zipcode'].errors && companyForm.controls['zipcode'].touched">
+                  ZIP Code
+              </span>
             </div>
           </div>
         </div>
@@ -99,8 +125,11 @@
               companyForm.controls['email'].touched"
              [class.has-success]="companyForm.controls['email'].valid"
             >
-              <label>Email</label>
-              <input class="form-control" type="email" formControlName="email" required>
+              <label>Email <span class="text-danger m-l-5">*</span></label>
+              <input class="form-control" type="email"  pattern="([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})"  formControlName="email" required>
+              <span class="help-block" *ngIf="companyForm.controls['email'].errors && companyForm.controls['email'].touched">
+                  Email is invalid
+              </span>
             </div>
           </div>
           <div class="col-sm-6">
@@ -111,15 +140,26 @@
              [class.has-success]="companyForm.controls['phone'].valid"
             >
               <label>Phone Number</label>
-              <input class="form-control" type="text" formControlName="phone">
+              <input class="form-control" type="number" formControlName="phone" pattern="(\d{10}|\d{12})">
+              <span class="help-block" *ngIf="companyForm.controls['phone'].errors && companyForm.controls['phone'].touched">
+                  Phone Number is invalid
+              </span>
             </div>
           </div>
         </div>
         <div class="row">
           <div class="col-sm-6">
-            <div class="form-group">
+            <div class="form-group"
+             [class.has-error]="
+              companyForm.controls['mobile'].invalid &&
+              companyForm.controls['mobile'].touched"
+             [class.has-success]="companyForm.controls['mobile'].valid"
+            >
               <label>Mobile Number</label>
-              <input class="form-control" type="text" formControlName="mobile">
+              <input class="form-control" type="number" formControlName="mobile" pattern="(\d{10}|\d{12})">
+              <span class="help-block" *ngIf="companyForm.controls['mobile'].errors && companyForm.controls['mobile'].touched">
+                  mobile Number is invalid
+              </span>
             </div>
           </div>
           <div class="col-sm-6">
@@ -130,16 +170,185 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-sm-12">
+          <div class="col-sm-6">
             <div class="form-group">
               <label>Website Url</label>
-              <input class="form-control" type="text" formControlName="website">
+              <input class="form-control" type="url" formControlName="website">
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group pos-rel"
+                 [class.has-error]="
+                  companyForm.controls['financialbegindate'].invalid &&
+                  companyForm.controls['financialbegindate'].touched"
+                 [class.has-success]="companyForm.controls['financialbegindate'].valid"
+            >
+              <label class="control-label">Finincial Begin Date <span class="text-danger m-l-5">*</span></label>
+              <input readonly type="text" class="form-control datecolor" formControlName="financialbegindate" [matDatepicker]="picker1">
+              <mat-datepicker-toggle class="formpicker" matSuffix [for]="picker1"></mat-datepicker-toggle>
+              <mat-datepicker #picker1></mat-datepicker>
+              <span class="help-block" *ngIf="companyForm.controls['financialbegindate'].errors && companyForm.controls['financialbegindate'].touched">
+                  Finincial Begin Date is invalid
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group pos-rel"
+                 [class.has-error]="
+                  companyForm.controls['booksbegindate'].invalid &&
+                  companyForm.controls['booksbegindate'].touched"
+                 [class.has-success]="companyForm.controls['booksbegindate'].valid"
+            >
+              <label class="control-label">Books Begin Date <span class="text-danger m-l-5">*</span></label>
+              <input readonly type="text" class="form-control datecolor" formControlName="booksbegindate" [matDatepicker]="picker2">
+              <mat-datepicker-toggle class="formpicker" matSuffix [for]="picker2"></mat-datepicker-toggle>
+              <mat-datepicker #picker2></mat-datepicker>
+              <span class="help-block" *ngIf="companyForm.controls['booksbegindate'].errors && companyForm.controls['booksbegindate'].touched">
+                  Books Begin Date is invalid
+              </span>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group pos-rel"
+                 [class.has-error]="
+                  companyForm.controls['cinno'].invalid &&
+                  companyForm.controls['cinno'].touched"
+                 [class.has-success]="companyForm.controls['cinno'].valid"
+            >
+              <label class="control-label">CIN No. <span class="text-danger m-l-5">*</span></label>
+              <input type="number" class="form-control" formControlName="cinno">
+              <span class="help-block" *ngIf="companyForm.controls['cinno'].errors && companyForm.controls['cinno'].touched">
+                  CIN No. Date is invalid
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group pos-rel"
+                 [class.has-error]="
+                  companyForm.controls['panno'].invalid &&
+                  companyForm.controls['panno'].touched"
+                 [class.has-success]="companyForm.controls['panno'].valid"
+            >
+              <label class="control-label">PAN No. <span class="text-danger m-l-5">*</span></label>
+              <input type="number" class="form-control" formControlName="panno">
+              <span class="help-block" *ngIf="companyForm.controls['panno'].errors && companyForm.controls['panno'].touched">
+                  PAN No. is invalid
+              </span>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group pos-rel"
+                 [class.has-error]="
+                  companyForm.controls['gstin'].invalid &&
+                  companyForm.controls['gstin'].touched"
+                 [class.has-success]="companyForm.controls['gstin'].valid"
+            >
+              <label class="control-label">GST-IN No. <span class="text-danger m-l-5">*</span></label>
+              <input type="number" class="form-control" formControlName="gstin">
+              <span class="help-block" *ngIf="companyForm.controls['gstin'].errors && companyForm.controls['gstin'].touched">
+                  GST-IN No. is invalid
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group pos-rel"
+                 [class.has-error]="
+                  companyForm.controls['currencyid'].invalid &&
+                  companyForm.controls['currencyid'].touched"
+                 [class.has-success]="companyForm.controls['currencyid'].valid"
+            >
+              <label class="control-label">Currency ID <span class="text-danger m-l-5">*</span></label>
+              <input type="text" class="form-control" formControlName="currencyid">
+              <span class="help-block" *ngIf="companyForm.controls['currencyid'].errors && companyForm.controls['currencyid'].touched">
+                  Currency ID is invalid
+              </span>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group pos-rel"
+                 [class.has-error]="
+                  companyForm.controls['createdby'].invalid &&
+                  companyForm.controls['createdby'].touched"
+                 [class.has-success]="companyForm.controls['createdby'].valid"
+            >
+              <label class="control-label">Created by <span class="text-danger m-l-5">*</span></label>
+              <input type="text" class="form-control" formControlName="createdby">
+              <span class="help-block" *ngIf="companyForm.controls['createdby'].errors && companyForm.controls['createdby'].touched">
+                  Created by is invalid
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group pos-rel"
+               [class.has-error]="
+                companyForm.controls['createdon'].invalid &&
+                companyForm.controls['createdon'].touched"
+               [class.has-success]="companyForm.controls['createdon'].valid"
+              >
+                <label class="control-label">Created On <span class="text-danger m-l-5">*</span></label>
+                <input readonly type="text" class="form-control datecolor" formControlName="createdon" [matDatepicker]="picker3">
+                <mat-datepicker-toggle class="formpicker" matSuffix [for]="picker3"></mat-datepicker-toggle>
+                <mat-datepicker #picker3></mat-datepicker>
+                <span class="help-block" *ngIf="companyForm.controls['createdon'].errors && companyForm.controls['createdon'].touched">
+                  Created On is invalid
+                </span>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group pos-rel"
+                   [class.has-error]="
+                    companyForm.controls['createdip'].invalid &&
+                    companyForm.controls['createdip'].touched"
+                   [class.has-success]="companyForm.controls['createdip'].valid"
+              >
+                <label class="control-label">Created IP <span class="text-danger m-l-5">*</span></label>
+                <input type="text" class="form-control" formControlName="createdip">
+                <span class="help-block" *ngIf="companyForm.controls['createdip'].errors && companyForm.controls['createdip'].touched">
+                  Created IP is invalid
+                </span>
+              </div>
+            </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group pos-rel">
+              <label class="control-label">Modified by</label>
+              <input type="text" class="form-control" formControlName="modifiedby">
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group pos-rel">
+              <label class="control-label">Modified On</label>
+              <input readonly type="text" class="form-control datecolor" formControlName="modifiedon" [matDatepicker]="picker4">
+              <mat-datepicker-toggle class="formpicker" matSuffix [for]="picker4"></mat-datepicker-toggle>
+              <mat-datepicker #picker4></mat-datepicker>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group pos-rel">
+              <label class="control-label">Modified IP</label>
+              <input type="text" class="form-control" formControlName="modifiedip">
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group pos-rel">
+              <label class="control-label">Alias</label>
+              <input type="text" class="form-control" formControlName="alias">
             </div>
           </div>
         </div>
         <div class="row">
           <div class="col-sm-12">
-
               <div *ngIf="uptCompany" class="alert alert-info m-t-10" style="text-align: center;">
                   <strong class="text-center">Saved Successfully</strong>
               </div>

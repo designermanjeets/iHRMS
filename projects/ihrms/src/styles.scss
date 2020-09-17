@@ -23,6 +23,8 @@ a { cursor: pointer }
 .cdk-overlay-container {
   z-index: 1099 !important;
 }
+.formpicker { position: absolute; right: 0; top: 23px }
+.datecolor { background-color: #ffffff }
 
 /* You can add global styles to this file, and also import other style files */
 
