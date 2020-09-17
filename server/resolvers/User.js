@@ -25,7 +25,7 @@ const mutation ={
       joiningdate,
       permissions
     },{me,secret}) => new Promise(async (resolve, reject) => {
-      const user = await User.findOne({$or:[ { email},{username} ]})
+      const user = await User.findOne({$or:[ { email},{username}, {emmpid} ]})
       if (user) {
         reject('user already exist');
       } else {
