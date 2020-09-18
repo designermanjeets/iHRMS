@@ -97,6 +97,7 @@ export class SettingscompanyComponent implements OnInit {
     }).valueChanges.subscribe((response: any) => {
         console.log(response.data.getCompany);
         this.companyForm.patchValue(response.data.getCompany);
+        this.companyForm.patchValue(response.data.getCompany);
     });
   }
 
