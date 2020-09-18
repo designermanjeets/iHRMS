@@ -1,10 +1,10 @@
 <div class="content container-fluid">
   <div class="row">
-    <div class="col-md-8 col-md-offset-2">
-      <form [formGroup]="companyForm" (ngSubmit)="getCompanies()">
+    <div class="col-md-12">
+      <form [formGroup]="companyForm" (ngSubmit)="updateCompany()">
         <h3 class="page-title">Company Details</h3>
         <div class="row">
-          <div class="col-sm-6">
+          <div class="col-sm-4">
             <div class="form-group"
                  [class.has-error]="
                   companyForm.controls['companyname'].invalid &&
@@ -18,15 +18,13 @@
               </span>
             </div>
           </div>
-          <div class="col-sm-6">
+          <div class="col-sm-4">
             <div class="form-group">
               <label>Print Name</label>
               <input class="form-control" type="text" formControlName="printname">
             </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-6">
+          <div class="col-sm-4">
             <div class="form-group"
                  [class.has-error]="
                   companyForm.controls['corporateid'].invalid &&
@@ -40,20 +38,22 @@
               </span>
             </div>
           </div>
+        </div>
+        <div class="row">
           <div class="col-sm-6">
             <div class="form-group">
               <label>Address Line 1</label>
               <input class="form-control " type="text" formControlName="address1">
             </div>
           </div>
-        </div>
-        <div class="row">
           <div class="col-sm-6">
             <div class="form-group">
               <label>Address Line 2</label>
               <input class="form-control " type="text" formControlName="address2">
             </div>
           </div>
+        </div>
+        <div class="row">
           <div class="col-sm-6 col-md-6 col-lg-3">
             <div class="form-group"
                [class.has-error]="
@@ -137,12 +137,14 @@
               </span>
             </div>
           </div>
+        </div>
+        <div class="row">
           <div class="col-sm-6 col-md-6">
             <div class="form-group"
-               [class.has-error]="
+                 [class.has-error]="
               companyForm.controls['zipcode'].invalid &&
               companyForm.controls['zipcode'].touched"
-             [class.has-success]="companyForm.controls['zipcode'].valid"
+                 [class.has-success]="companyForm.controls['zipcode'].valid"
             >
               <label>ZIP Code <span class="text-danger m-l-5">*</span></label>
               <input class="form-control" type="number" pattern="(^\d{6}$)" formControlName="zipcode">
@@ -151,8 +153,6 @@
               </span>
             </div>
           </div>
-        </div>
-        <div class="row">
           <div class="col-sm-6">
             <div class="form-group"
                [class.has-error]="
@@ -181,14 +181,12 @@
               </span>
             </div>
           </div>
-        </div>
-        <div class="row">
           <div class="col-sm-6">
             <div class="form-group"
-             [class.has-error]="
+                 [class.has-error]="
               companyForm.controls['mobile'].invalid &&
               companyForm.controls['mobile'].touched"
-             [class.has-success]="companyForm.controls['mobile'].valid"
+                 [class.has-success]="companyForm.controls['mobile'].valid"
             >
               <label>Mobile Number</label>
               <input class="form-control" type="number" formControlName="mobile" pattern="(\d{10}|\d{12})">
@@ -197,20 +195,22 @@
               </span>
             </div>
           </div>
+        </div>
+        <div class="row">
           <div class="col-sm-6">
             <div class="form-group">
               <label>Fax</label>
               <input class="form-control" type="text" formControlName="fax">
             </div>
           </div>
-        </div>
-        <div class="row">
           <div class="col-sm-6">
             <div class="form-group">
               <label>Website Url</label>
               <input class="form-control" type="url" formControlName="website">
             </div>
           </div>
+        </div>
+        <div class="row">
           <div class="col-sm-6">
             <div class="form-group pos-rel"
                  [class.has-error]="
@@ -227,8 +227,6 @@
               </span>
             </div>
           </div>
-        </div>
-        <div class="row">
           <div class="col-sm-6">
             <div class="form-group pos-rel"
                  [class.has-error]="
@@ -245,6 +243,8 @@
               </span>
             </div>
           </div>
+        </div>
+        <div class="row">
           <div class="col-sm-6">
             <div class="form-group pos-rel"
                  [class.has-error]="
@@ -259,8 +259,6 @@
               </span>
             </div>
           </div>
-        </div>
-        <div class="row">
           <div class="col-sm-6">
             <div class="form-group pos-rel"
                  [class.has-error]="
@@ -275,6 +273,8 @@
               </span>
             </div>
           </div>
+        </div>
+        <div class="row">
           <div class="col-sm-6">
             <div class="form-group pos-rel"
                  [class.has-error]="
@@ -289,8 +289,6 @@
               </span>
             </div>
           </div>
-        </div>
-        <div class="row">
           <div class="col-sm-6">
             <div class="form-group pos-rel"
                  [class.has-error]="
@@ -305,6 +303,8 @@
               </span>
             </div>
           </div>
+        </div>
+        <div class="row">
           <div class="col-sm-6">
             <div class="form-group pos-rel"
                  [class.has-error]="
@@ -319,24 +319,24 @@
               </span>
             </div>
           </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-6">
-              <div class="form-group pos-rel"
-               [class.has-error]="
+          <div class="col-sm-6">
+            <div class="form-group pos-rel"
+                 [class.has-error]="
                 companyForm.controls['createdon'].invalid &&
                 companyForm.controls['createdon'].touched"
-               [class.has-success]="companyForm.controls['createdon'].valid"
-              >
-                <label class="control-label">Created On <span class="text-danger m-l-5">*</span></label>
-                <input readonly type="text" class="form-control datecolor" formControlName="createdon" [matDatepicker]="picker3">
-                <mat-datepicker-toggle class="formpicker" matSuffix [for]="picker3"></mat-datepicker-toggle>
-                <mat-datepicker #picker3></mat-datepicker>
-                <span class="help-block" *ngIf="companyForm.controls['createdon'].errors && companyForm.controls['createdon'].touched">
+                 [class.has-success]="companyForm.controls['createdon'].valid"
+            >
+              <label class="control-label">Created On <span class="text-danger m-l-5">*</span></label>
+              <input readonly type="text" class="form-control datecolor" formControlName="createdon" [matDatepicker]="picker3">
+              <mat-datepicker-toggle class="formpicker" matSuffix [for]="picker3"></mat-datepicker-toggle>
+              <mat-datepicker #picker3></mat-datepicker>
+              <span class="help-block" *ngIf="companyForm.controls['createdon'].errors && companyForm.controls['createdon'].touched">
                   Created On is invalid
                 </span>
-              </div>
             </div>
+          </div>
+        </div>
+        <div class="row">
             <div class="col-sm-6">
               <div class="form-group pos-rel"
                    [class.has-error]="
@@ -350,31 +350,29 @@
                   Created IP is invalid
                 </span>
               </div>
-            </div>
-        </div>
-        <div class="row">
+          </div>
           <div class="col-sm-6">
             <div class="form-group pos-rel">
               <label class="control-label">Modified by</label>
-              <input type="text" class="form-control" formControlName="modifiedby">
-            </div>
-          </div>
-          <div class="col-sm-6">
-            <div class="form-group pos-rel">
-              <label class="control-label">Modified On</label>
-              <input readonly type="text" class="form-control datecolor" formControlName="modifiedon" [matDatepicker]="picker4">
-              <mat-datepicker-toggle class="formpicker" matSuffix [for]="picker4"></mat-datepicker-toggle>
-              <mat-datepicker #picker4></mat-datepicker>
+              <input type="text" readonly class="form-control" formControlName="modifiedby">
             </div>
           </div>
         </div>
         <div class="row">
           <div class="col-sm-6">
             <div class="form-group pos-rel">
-              <label class="control-label">Modified IP</label>
-              <input type="text" class="form-control" formControlName="modifiedip">
+              <label class="control-label">Modified On</label>
+              <input readonly type="text" class="form-control datecolor" formControlName="modifiedon">
             </div>
           </div>
+          <div class="col-sm-6">
+            <div class="form-group pos-rel">
+              <label class="control-label">Modified IP</label>
+              <input type="text" readonly class="form-control" formControlName="modifiedip">
+            </div>
+          </div>
+        </div>
+        <div class="row">
           <div class="col-sm-6">
             <div class="form-group pos-rel">
               <label class="control-label">Alias</label>

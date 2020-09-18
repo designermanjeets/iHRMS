@@ -24,7 +24,7 @@ import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { EmployeeMainComponent } from './employees/employee-main/employee-main.component';
 import { AllEmployeesComponent } from './employees/all-employees/all-employees.component';
-// import { HolidaysComponent } from './employees/holidays/holidays.component';
+import { HolidaysComponent } from './employees/holidays/holidays.component';
 // import { LeavesComponent } from './employees/leaves/leaves.component';
 // import { AttendanceComponent } from './employees/attendance/attendance.component';
 // import { DepartmentsComponent } from './employees/departments/departments.component';
@@ -60,7 +60,7 @@ import { HeaderComponent } from './header/header.component';
 // import { ClientDetailsComponent } from './clients/client-details/client-details.component';
 // import { ContactDetailsComponent } from './contacts/contact-details/contact-details.component';
 import { EmployeeDetailsComponent } from './employees/employee-details/employee-details.component';
-// import { HolidayDetailsComponent } from './employees/holiday-details/holiday-details.component';
+import { HolidayDetailsComponent } from './employees/holiday-details/holiday-details.component';
 // import { DepartmentDetailsComponent } from './employees/department-details/department-details.component';
 // import { DesignationDetailsComponent } from './employees/designation-details/designation-details.component';
 // import { LeaveDetailsComponent } from './employees/leave-details/leave-details.component';
@@ -96,7 +96,7 @@ import { SettingscompanyComponent } from './settings/settingscompany/settingscom
 // import { SettingsalaryComponent } from './settings/settingsalary/settingsalary.component';
 // import { SettingsnotificationsComponent } from './settings/settingsnotifications/settingsnotifications.component';
 // import { SettingspasswordComponent } from './settings/settingspassword/settingspassword.component';
-// import { SettingsleaveComponent } from './settings/settingsleave/settingsleave.component';
+import { SettingsleaveComponent } from './settings/settingsleave/settingsleave.component';
 // import { AssetsmainComponent } from './assets/assetsmain/assetsmain.component';
 // import { EmailmainComponent } from './email/emailmain/emailmain.component';
 // import { ComposeComponent } from './email/compose/compose.component';
@@ -128,8 +128,8 @@ const routes: Routes = [
       { path: '', redirectTo: 'all-employees', pathMatch: 'full' },
       { path: 'all-employees', component: AllEmployeesComponent },
       { path: 'all-employees/edit', component: EmployeeDetailsComponent },
-      // { path: 'holidays', component: HolidaysComponent },
-      // { path: 'holidays/edit', component: HolidayDetailsComponent },
+      { path: 'holidays', component: HolidaysComponent },
+      { path: 'holidays/edit', component: HolidayDetailsComponent },
       // { path: 'leaves', component: LeavesComponent },
       // { path: 'leaves/edit', component: LeaveDetailsComponent },
       // { path: 'attendance', component: AttendanceComponent },
@@ -211,7 +211,7 @@ const routes: Routes = [
     // { path: 'salary-settings', component: SettingsalaryComponent },
     // { path: 'notifications', component: SettingsnotificationsComponent },
     // { path: 'change-password', component: SettingspasswordComponent },
-    // { path: 'leave-type', component: SettingsleaveComponent }
+    { path: 'leave-type', component: SettingsleaveComponent }
   ]
   },
   { path: 'pages/login', component: LoginPageComponent },
@@ -231,7 +231,7 @@ const routes: Routes = [
     DashboardComponent,
     EmployeeMainComponent,
     AllEmployeesComponent,
-    // HolidaysComponent,
+    HolidaysComponent,
     // LeavesComponent,
     // AttendanceComponent,
     // DepartmentsComponent,
@@ -267,7 +267,7 @@ const routes: Routes = [
     // ClientDetailsComponent,
     // ContactDetailsComponent,
     EmployeeDetailsComponent,
-    // HolidayDetailsComponent,
+    HolidayDetailsComponent,
     // DepartmentDetailsComponent,
     // DesignationDetailsComponent,
     // LeaveDetailsComponent,
@@ -302,7 +302,7 @@ const routes: Routes = [
     // SettingsalaryComponent,
     // SettingsnotificationsComponent,
     // SettingspasswordComponent,
-    // SettingsleaveComponent,
+    SettingsleaveComponent,
     // AssetsmainComponent,
     // EmailmainComponent,
     // ComposeComponent,

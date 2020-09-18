@@ -14,6 +14,13 @@
             <input type="hidden" [(ngModel)]="uptD.status" name="status" #status="ngModel">
           </div>
           <div class="form-group">
+            <label>Paid <span class="text-danger">*</span></label>
+            <select class="form-control">
+              <option>Yes</option>
+              <option>No</option>
+            </select>
+          </div>
+          <div class="form-group">
             <label>Holiday Date <span class="text-danger">*</span></label>
             <my-date-picker [options]="myDatePickerOptions" [(ngModel)]="uptD.date" name="date" #date="ngModel" required></my-date-picker>
           </div>

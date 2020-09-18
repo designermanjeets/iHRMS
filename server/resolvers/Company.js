@@ -126,9 +126,7 @@ const mutation = {
         await Company.findOneAndUpdate({
           "corporateid": corporateid
         },{$set:{...param}},{new: true})
-          .then((result) => {
-            resolve(result);
-          })
+          .then((result) => { resolve(result) })
       }
     }catch(error){
       reject(error);

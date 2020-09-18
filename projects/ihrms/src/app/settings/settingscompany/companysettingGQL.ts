@@ -36,24 +36,63 @@ export class RegisterCompanyGQL extends Mutation {
 export class UpdateCompanyGQL extends Mutation {
   document = gql`
     mutation updateCompany(
-      $companyname: String,
-      $address1: String,
-      $address2: String,
-      $countryid: String,
+      $companyname: String
+      $address1: String
+      $address2: String
+      $countryid: String
       $corporateid: String
+      $stateid: String
+      $cityid: String
+      $zipcode: String
+      $email: String
+      $financialbegindate: String
+      $booksbegindate: String
+      $cinno: String
+      $panno: String
+      $gstin: String
+      $currencyid: String,
+      $modifiedby: String,
+      $modifiedon: String,
+      $modifiedip: String,
     ) {
     updateCompany(
-      companyname: $companyname,
-      address1: $address1,
-      address2: $address2,
-      countryid: $countryid,
+      companyname: $companyname
+      address1: $address1
+      address2: $address2
+      countryid: $countryid
       corporateid: $corporateid
+      stateid: $stateid
+      cityid: $cityid
+      zipcode: $zipcode
+      email: $email
+      financialbegindate: $financialbegindate,
+      booksbegindate: $booksbegindate,
+      cinno: $cinno
+      panno: $panno
+      gstin: $gstin
+      currencyid: $currencyid,
+      modifiedby: $modifiedby,
+      modifiedon: $modifiedon,
+      modifiedip: $modifiedip
     ) {
-        companyname,
-        address1,
-        address2,
-        countryid,
+        companyname
+        address1
+        address2
+        countryid
         corporateid
+        stateid
+        cityid
+        zipcode
+        email
+        financialbegindate
+        booksbegindate,
+        cinno
+        panno
+        gstin
+        currencyid
+        modifiedby
+        modifiedon
+        modifiedip
       }
   }
   `;
@@ -84,13 +123,25 @@ export const GET_COMPANY_QUERY = gql`
     getCompany(
       corporateid: $corporateid
     ) {
-        companyname,
-        address1,
-        address2,
-        countryid,
-        corporateid,
+        companyname
+        address1
+        address2
+        countryid
+        corporateid
+        stateid
+        cityid
+        zipcode
+        email
+        financialbegindate
+        booksbegindate
+        cinno
+        panno
+        gstin
+        currencyid
+        modifiedby
+        modifiedon
+        modifiedip
         createdon
-
       }
   }
 `;

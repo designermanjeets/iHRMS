@@ -11,61 +11,69 @@
   <div class="row">
     <div class="col-md-12">
       <div class="table-responsive">
-        <table class="table table-striped custom-table" [mfData]="rows" #mf="mfDataTable" [mfRowsOnPage]="5">
-          <thead>
-            <tr>
-              <th style="width: 35%">
-                <mfDefaultSorter by="leave_type">Leave Type</mfDefaultSorter>
-              </th>
-              <th style="width: 30%">
-                <mfDefaultSorter by="leave_days">Leave Days</mfDefaultSorter>
-              </th>
-              <th style="width: 30%">
-                <mfDefaultSorter by="status">Status</mfDefaultSorter>
-              </th>
-              <th style="width: 5%">
-                <mfDefaultSorter by="action">Action</mfDefaultSorter>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let item of mf.data">
-              <td>{{item.leave_type}}</td>
-              <td>{{item.leave_days}}</td>
-              <td>
-                <div class="dropdown action-label">
-                  <a class="btn btn-white btn-sm rounded dropdown-toggle" href="javascript:" data-toggle="dropdown"
-                    aria-expanded="false">
-                    <i class="fa fa-dot-circle-o text-success"></i> {{item.status}} <i class="caret"></i>
-                  </a>
-                  <ul class="dropdown-menu pull-right">
-                    <li><a href="javascript:"><i class="fa fa-dot-circle-o text-success"></i> Active</a></li>
-                    <li><a href="javascript:"><i class="fa fa-dot-circle-o text-danger"></i> Inactive</a></li>
-                  </ul>
-                </div>
-              </td>
-              <td class="text-right">
-                <div class="dropdown">
-                  <a href="javascript:" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i
-                      class="fa fa-ellipsis-v"></i></a>
-                  <ul class="dropdown-menu pull-right">
-                    <li><a href="javascript:" title="Edit" (click)="onEdit(item)"><i class="fa fa-pencil m-r-5"></i>
-                        Edit</a></li>
-                    <li><a href="javascript:" title="Delete" (click)="onDelete(item)"><i class="fa fa-trash-o m-r-5"></i>
-                        Delete</a></li>
-                  </ul>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-          <tfoot>
-            <tr>
-              <td colspan="12">
-                <mfBootstrapPaginator></mfBootstrapPaginator>
-              </td>
-            </tr>
-          </tfoot>
-        </table>
+
+        <app-agrid
+          [rowData]="rowData"
+          [columnDefs]="columnDefs"
+          (onGridApiCreated)="onGridReady($event)"
+        >
+        </app-agrid>
+
+<!--        <table class="table table-striped custom-table" [mfData]="rows" #mf="mfDataTable" [mfRowsOnPage]="5">-->
+<!--          <thead>-->
+<!--            <tr>-->
+<!--              <th style="width: 35%">-->
+<!--                <mfDefaultSorter by="leave_type">Leave Type</mfDefaultSorter>-->
+<!--              </th>-->
+<!--              <th style="width: 30%">-->
+<!--                <mfDefaultSorter by="leave_days">Leave Days</mfDefaultSorter>-->
+<!--              </th>-->
+<!--              <th style="width: 30%">-->
+<!--                <mfDefaultSorter by="status">Status</mfDefaultSorter>-->
+<!--              </th>-->
+<!--              <th style="width: 5%">-->
+<!--                <mfDefaultSorter by="action">Action</mfDefaultSorter>-->
+<!--              </th>-->
+<!--            </tr>-->
+<!--          </thead>-->
+<!--          <tbody>-->
+<!--            <tr *ngFor="let item of mf.data">-->
+<!--              <td>{{item.leave_type}}</td>-->
+<!--              <td>{{item.leave_days}}</td>-->
+<!--              <td>-->
+<!--                <div class="dropdown action-label">-->
+<!--                  <a class="btn btn-white btn-sm rounded dropdown-toggle" href="javascript:" data-toggle="dropdown"-->
+<!--                    aria-expanded="false">-->
+<!--                    <i class="fa fa-dot-circle-o text-success"></i> {{item.status}} <i class="caret"></i>-->
+<!--                  </a>-->
+<!--                  <ul class="dropdown-menu pull-right">-->
+<!--                    <li><a href="javascript:"><i class="fa fa-dot-circle-o text-success"></i> Active</a></li>-->
+<!--                    <li><a href="javascript:"><i class="fa fa-dot-circle-o text-danger"></i> Inactive</a></li>-->
+<!--                  </ul>-->
+<!--                </div>-->
+<!--              </td>-->
+<!--              <td class="text-right">-->
+<!--                <div class="dropdown">-->
+<!--                  <a href="javascript:" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i-->
+<!--                      class="fa fa-ellipsis-v"></i></a>-->
+<!--                  <ul class="dropdown-menu pull-right">-->
+<!--                    <li><a href="javascript:" title="Edit" (click)="onEdit(item)"><i class="fa fa-pencil m-r-5"></i>-->
+<!--                        Edit</a></li>-->
+<!--                    <li><a href="javascript:" title="Delete" (click)="onDelete(item)"><i class="fa fa-trash-o m-r-5"></i>-->
+<!--                        Delete</a></li>-->
+<!--                  </ul>-->
+<!--                </div>-->
+<!--              </td>-->
+<!--            </tr>-->
+<!--          </tbody>-->
+<!--          <tfoot>-->
+<!--            <tr>-->
+<!--              <td colspan="12">-->
+<!--                <mfBootstrapPaginator></mfBootstrapPaginator>-->
+<!--              </td>-->
+<!--            </tr>-->
+<!--          </tfoot>-->
+<!--        </table>-->
       </div>
     </div>
   </div>
@@ -105,6 +113,20 @@
             <label>Number of days <span class="text-danger">*</span></label>
             <input class="form-control" type="text" min=0 #leave_days='ngModel' name='leave_days' [(ngModel)]='addLT.leave_days'>
           </div>
+          <div class="form-group">
+            <label>Carry Forward <span class="text-danger">*</span></label>
+            <select class="form-control">
+              <option>Yes</option>
+              <option>No</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Status <span class="text-danger">*</span></label>
+            <select class="form-control">
+              <option>Active</option>
+              <option>Inactive</option>
+            </select>
+          </div>
           <div class="m-t-20 text-center">
             <button class="btn btn-primary">Add Leave Type</button>
           </div>
@@ -130,6 +152,20 @@
           <div class="form-group">
             <label>Number of days <span class="text-danger">*</span></label>
             <input class="form-control" type="text" #leave_days='ngModel' name='leave_days' [(ngModel)]='uptLT.leave_days'>
+          </div>
+          <div class="form-group">
+            <label>Carry Forward <span class="text-danger">*</span></label>
+            <select class="form-control">
+              <option>Yes</option>
+              <option>No</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Status <span class="text-danger">*</span></label>
+            <select class="form-control">
+              <option>Active</option>
+              <option>Inactive</option>
+            </select>
           </div>
           <div class="m-t-20 text-center">
             <button class="btn btn-primary">Save Changes</button>

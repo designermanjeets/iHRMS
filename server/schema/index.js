@@ -1,10 +1,8 @@
 const {makeExecutableSchema} = require('graphql-tools');
 const Query = require('../resolvers/Query');
-const { User, Company } = require ('../resolvers/index');
+const { User, Company, Holiday } = require ('../resolvers/index');
 const Mutation = require('../resolvers/Mutation');
 const ISODate = require('../scalars/ISODate');
-
-
 
 const typeDefs = `
   type Query {
@@ -21,6 +19,7 @@ const typeDefs = `
     me: User,
     getCompany(corporateid: String!): Company
     getCompanies(query: Pagination!): [Company]
+    getHolidays(query: Pagination!): [Holiday]
   }
 
   type Mutation {
@@ -116,7 +115,20 @@ const typeDefs = `
       modifiedip: String,
       alias: String
     ): Company,
-    deleteCompany( corporateid: String ): Company
+    deleteCompany( corporateid: String ): Company,
+    createHoliday (
+      title: String,
+      date: ISODate,
+      day: String,
+      paid: String,
+    ): Holiday,
+    updateHoliday(
+      title: String,
+      date: ISODate,
+      day: String,
+      paid: String,
+    ): Holiday,
+    deleteHoliday( date: ISODate ): Holiday,
   }
   type meta {
     createdAt:String
@@ -268,6 +280,12 @@ const typeDefs = `
     import: Boolean,
     export: Boolean
   }
+  type Holiday{
+    title: String!,
+    date: ISODate,
+    day:  String,
+    paid: String,
+  },
   input ProductInput{
     ref: String,
     name: String,

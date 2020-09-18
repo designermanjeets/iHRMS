@@ -68,14 +68,27 @@ export class SettingscompanyComponent implements OnInit {
 
   updateCompany(){
     console.log(this.companyForm.value);
-    const form = this.companyForm.value;
+    const form = (this.companyForm as FormGroup).value;
     this.updateCompanyGQL
       .mutate({
         "companyname": form.companyname,
         "address1": form.address1,
         "address2": form.address2,
         "countryid": form.countryid,
-        "corporateid": "1231"
+        "corporateid": form.corporateid,
+        "stateid": form.stateid,
+        "cityid": form.cityid,
+        "zipcode": form.zipcode,
+        "email": form.email,
+        "financialbegindate": form.financialbegindate,
+        "booksbegindate": form.booksbegindate,
+        "cinno": form.cinno,
+        "panno": form.panno,
+        "gstin": form.gstin,
+        "currencyid": form.currencyid,
+        "modifiedby": form.modifiedby,
+        "modifiedon": form.modifiedon,
+        "modifiedip": form.modifiedip
       })
       .subscribe( val => {
         if(val.data) {

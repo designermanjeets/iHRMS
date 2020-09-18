@@ -121,59 +121,60 @@ export class AppService {
       'import': false,
       'export': false
     }
-    
+
   ];
 
   public holidays = [
     {
       'title': 'New Year',
-      'date': {formatted: "11-01-2018"},
+      'date': "11-01-2018",
       'day': 'Sunday',
       'status': 'completed',
+      'paid': 'No',
       'holiday_id':1
     },
-    {
-      'title': 'Good Friday',
-      'date': {formatted: "01-01-2018"},
-      'day': 'Friday',
-      'status': 'completed',
-      'holiday_id':2
-    },
-    {
-      'title': 'May Day',
-      'date': {formatted: "09-09-2018"},
-      'day': 'Monday',
-      'status': 'completed',
-      'holiday_id':3
-    },
-    {
-      'title': 'Memorial Day',
-      'date': {formatted: "17-01-2018"},
-      'day': 'Monday',
-      'status': 'completed',
-      'holiday_id':4
-    },
-    {
-      'title': 'Ramzon',
-      'date': {formatted: "19-01-2018"},
-      'day': 'Monday',
-      'status': 'upcoming',
-      'holiday_id':5
-    },
-    {
-      'title': 'Bakrid',
-      'date': {formatted: "17-02-2018"},
-      'day': 'Saturday',
-      'status': 'upcoming',
-      'holiday_id':6
-    },
-    {
-      'title': 'Deepavali',
-      'date': {formatted: "01-05-2018"},
-      'day': 'Wednesday',
-      'status': 'upcoming',
-      'holiday_id':7
-    }
+    // {
+    //   'title': 'Good Friday',
+    //   'date': {formatted: "01-01-2018"},
+    //   'day': 'Friday',
+    //   'status': 'completed',
+    //   'holiday_id':2
+    // },
+    // {
+    //   'title': 'May Day',
+    //   'date': {formatted: "09-09-2018"},
+    //   'day': 'Monday',
+    //   'status': 'completed',
+    //   'holiday_id':3
+    // },
+    // {
+    //   'title': 'Memorial Day',
+    //   'date': {formatted: "17-01-2018"},
+    //   'day': 'Monday',
+    //   'status': 'completed',
+    //   'holiday_id':4
+    // },
+    // {
+    //   'title': 'Ramzon',
+    //   'date': {formatted: "19-01-2018"},
+    //   'day': 'Monday',
+    //   'status': 'upcoming',
+    //   'holiday_id':5
+    // },
+    // {
+    //   'title': 'Bakrid',
+    //   'date': {formatted: "17-02-2018"},
+    //   'day': 'Saturday',
+    //   'status': 'upcoming',
+    //   'holiday_id':6
+    // },
+    // {
+    //   'title': 'Deepavali',
+    //   'date': {formatted: "01-05-2018"},
+    //   'day': 'Wednesday',
+    //   'status': 'upcoming',
+    //   'holiday_id':7
+    // }
   ];
 
   public leaves = [
@@ -675,7 +676,7 @@ export class AppService {
           'taskID':6
         }
       ];
-      
+
       public assets = [
         {
           'asset_user': 'John Doe',
@@ -732,13 +733,15 @@ export class AppService {
           'leave_type':'Casual Leave',
           'leave_days' : 12,
           'status' : 'Active',
-          'id':456
+          'id':456,
+          'carryforward' : 'Yes',
         },
         {
           'leave_type':'Medical Leave',
           'leave_days' : 12,
           'status' : 'Active',
-          'id':458
+          'id':458,
+          'carryforward' : 'No',
         }
       ]
 
@@ -812,7 +815,7 @@ export class AppService {
 
         }
       ]
-     
+
   constructor() { }
 
 }

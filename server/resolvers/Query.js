@@ -1,16 +1,16 @@
-const {promisify} = require('../helpers');
-const {User,Product,Order,Customer, Company} = require('../models/index.js');
+const { promisify } = require('../helpers');
+const { User, Product, Order, Customer, Company, Holiday} = require('../models/index.js');
 const ISODate = require('../scalars/ISODate');
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 
 const paramHandler= (qry)  => {
-  let param ={}
+  let param = {};
   if(qry.argument && qry.query)param= {[qry.argument]: {'$regex':qry.query}}
   if(qry.dates){
-    const gte =qry.dates.gte?new Date(qry.dates.gte):null
-    let lt =qry.dates.lt?new Date(qry.dates.lt):null
-    param.updatedAt={}
+    const gte = qry.dates.gte?new Date(qry.dates.gte):null
+    let lt = qry.dates.lt?new Date(qry.dates.lt):null
+    param.updatedAt = {}
     if(gte)param.meta.updatedAt.$gte=gte
     if(lt){
       param.meta.updatedAt.$lte=lt.setDate(lt.getDate()+1)
@@ -30,7 +30,7 @@ const resolvers = {
   products : (_, args,context)  => new Promise((resolve, reject) => {
     let sort= { [args.query.sortBy]:args.query.descending}
     if(!args.query.sortBy)sort={'meta.updatedAt':-1}
-    const param=paramHandler(args.query)
+    const param = paramHandler(args.query)
 
     Product.find(param,(err, result) => {
         if (err) reject(err);
@@ -39,7 +39,7 @@ const resolvers = {
 
   }),
   productCount : (_, args,context)  => new Promise((resolve, reject) => {
-    const param=paramHandler(args.query)
+    const param = paramHandler(args.query)
     Product.find(param,(err, result) => {
         if (err) reject(err);
         else resolve(result);
@@ -57,7 +57,7 @@ const resolvers = {
   orders : (_, args)  => new Promise((resolve, reject) => {
     let sort= { [args.query.sortBy]:args.query.descending}
     if(!args.query.sortBy)sort={'meta.updatedAt':-1}
-    const param=paramHandler(args.query)
+    const param = paramHandler(args.query)
     if(args.query.search){
       param.$or= [
         { 'products.name': {'$regex':args.query.search, '$options' : 'i'} },
@@ -75,7 +75,7 @@ const resolvers = {
 
   }),
   orderCount:async  (_, args,{me}) => new Promise((resolve, reject) => {
-    const param=paramHandler(args.query)
+    const param = paramHandler(args.query)
     if(args.query.search){
       param.$or= [
         { 'products.name': {'$regex':args.query.search, '$options' : 'i'} },
@@ -96,7 +96,7 @@ const resolvers = {
   //
   /************ */
   customers: async (_, args) => new Promise((resolve, reject) => {
-    const param=paramHandler(args.query)
+    const param = paramHandler(args.query)
     if(args.query.search){
       param.$or= [
         { 'products.name': {'$regex':args.query.search, '$options' : 'i'} },
@@ -127,7 +127,7 @@ const resolvers = {
     }
   }),
   users: async (_, args, { me })  => new Promise(async (resolve, reject) => {
-    const param=paramHandler(args.query)
+    const param = paramHandler(args.query)
     User.find(param,(err, result) => {
       if (err) reject(err);
       else resolve(result);
@@ -151,8 +151,16 @@ const resolvers = {
   }),
 
   getCompanies: async (_, args, { me })  => new Promise(async (resolve, reject) => {
-    const param=paramHandler(args.query)
+    const param = paramHandler(args.query)
     Company.find(param,(err, result) => {
+      if (err) reject(err);
+      else resolve(result);
+    }).skip(args.query.offset).limit(args.query.limit)
+  }),
+
+  getHolidays: async (_, args, { me })  => new Promise(async (resolve, reject) => {
+    const param = paramHandler(args.query)
+    Holiday.find(param,(err, result) => {
       if (err) reject(err);
       else resolve(result);
     }).skip(args.query.offset).limit(args.query.limit)
