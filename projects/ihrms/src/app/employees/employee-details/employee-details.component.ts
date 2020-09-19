@@ -1,22 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import {IMyDpOptions} from 'mydatepicker';
 import { Router,ActivatedRoute } from '@angular/router';
-import { AppService } from './../../app.service';
+import { AppService } from '../../app.service';
 import {EmployeeGQLService} from "../all-employees/employee-gql.service";
-import {FormArray, FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {EmpdetailGQLService} from "./empdetail-gql.service";
 import {GET_COMPANIES_QUERY} from "../../settings/settingscompany/companysettingGQL";
 import {Apollo} from "apollo-angular";
-import {ErrorStateMatcher} from "@angular/material/core";
-
-export class MyErrorStateMatcher implements ErrorStateMatcher {
-  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
-    const invalidCtrl = !!(control && control.invalid && control.parent.dirty);
-    const invalidParent = !!(control && control.parent && control.parent.invalid && control.parent.dirty);
-
-    return (invalidCtrl || invalidParent);
-  }
-}
 
 @Component({
   selector: 'app-employee-details',
@@ -34,69 +24,13 @@ export class EmployeeDetailsComponent implements OnInit {
     height: '38px'
   };
 
-  // public model: any = { date: { year: 2018, month: 10, day: 9 } };
-  // public model1: any = { date: { year: 2018, month: 10, day: 9 } };
-
   rows = [];
   public uptEmp:any = [];
   public srch = [];
 
-  user = {
-    leaveReq_read:true,
-    holiday_read:false,
-    clients_read:true,
-    projects_read:true,
-    tasks_read:true,
-    chats_read:true,
-    assets_read:true,
-    timesheet_read:false,
-    leaveReq_write:true,
-    holiday_write:true,
-    clients_write:true,
-    projects_write:true,
-    tasks_write:true,
-    chats_write:true,
-    assets_write:true,
-    timesheet_write:true,
-    leaveReq_create:true,
-    holiday_create:true,
-    clients_create:true,
-    projects_create:true,
-    tasks_create:true,
-    chats_create:false,
-    assets_create:true,
-    timesheet_create:true,
-    leaveReq_delete:true,
-    holiday_delete:true,
-    clients_delete:true,
-    projects_delete:true,
-    tasks_delete:true,
-    chats_delete:true,
-    assets_delete:true,
-    timesheet_delete:true,
-    leaveReq_import:true,
-    holiday_import:true,
-    clients_import:true,
-    projects_import:true,
-    tasks_import:true,
-    chats_import:true,
-    assets_import:true,
-    timesheet_import:true,
-    leaveReq_export:true,
-    holiday_export:true,
-    clients_export:true,
-    projects_export:true,
-    tasks_export:true,
-    chats_export:true,
-    assets_export:true,
-    timesheet_export:true,
-  };
-
   uptEmployeeValidation:boolean = false;
   editForm: FormGroup;
   companies: [];
-  matcher = new MyErrorStateMatcher();
-
 
   constructor(
     private appService:AppService,

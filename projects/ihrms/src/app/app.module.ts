@@ -95,7 +95,7 @@ import { SettingscompanyComponent } from './settings/settingscompany/settingscom
 // import { SettingsinvoiceComponent } from './settings/settingsinvoice/settingsinvoice.component';
 // import { SettingsalaryComponent } from './settings/settingsalary/settingsalary.component';
 // import { SettingsnotificationsComponent } from './settings/settingsnotifications/settingsnotifications.component';
-// import { SettingspasswordComponent } from './settings/settingspassword/settingspassword.component';
+import { SettingspasswordComponent } from './settings/settingspassword/settingspassword.component';
 import { SettingsleaveComponent } from './settings/settingsleave/settingsleave.component';
 // import { AssetsmainComponent } from './assets/assetsmain/assetsmain.component';
 // import { EmailmainComponent } from './email/emailmain/emailmain.component';
@@ -210,7 +210,7 @@ const routes: Routes = [
     // { path: 'invoive-settings', component: SettingsinvoiceComponent },
     // { path: 'salary-settings', component: SettingsalaryComponent },
     // { path: 'notifications', component: SettingsnotificationsComponent },
-    // { path: 'change-password', component: SettingspasswordComponent },
+    { path: 'change-password', component: SettingspasswordComponent },
     { path: 'leave-type', component: SettingsleaveComponent }
   ]
   },
@@ -301,7 +301,7 @@ const routes: Routes = [
     // SettingsinvoiceComponent,
     // SettingsalaryComponent,
     // SettingsnotificationsComponent,
-    // SettingspasswordComponent,
+    SettingspasswordComponent,
     SettingsleaveComponent,
     // AssetsmainComponent,
     // EmailmainComponent,

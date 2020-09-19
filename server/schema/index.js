@@ -33,6 +33,12 @@ const typeDefs = `
     ): User,
     login (email: String!, password: String!): customUser,
     deleteUser (email: String!): User,
+    changePassword (
+      id: ID!,
+      oldPassword: String!,
+      newPassword: String!,
+      email: String!
+    ): ChangePasswordUser,
     createCompany (
       companyname: String,
       printname: String,
@@ -139,6 +145,13 @@ const typeDefs = `
   }
   type customUser{
     token:String,
+    user:User
+  },
+  type ChangePasswordUser{
+    _id: ID!
+    oldPassword:String,
+    newPassword:String,
+    email: String,
     user:User
   },
   type Company {

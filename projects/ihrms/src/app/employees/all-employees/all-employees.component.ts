@@ -6,19 +6,9 @@ import {ActionComponent} from '../../shared/agrid/components/action/action.compo
 import {GET_COMPANIES_QUERY} from "../../settings/settingscompany/companysettingGQL";
 import {EmployeeGQLService, GET_USERS_QUERY} from "./employee-gql.service";
 import {Apollo} from "apollo-angular";
-import {FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {CreateUserGQL, DeleteUserGQL} from "../employee-details/empdetail-gql.service";
-import { ErrorStateMatcher } from '@angular/material/core';
 import {GridOptions} from "ag-grid-community";
-
-export class MyErrorStateMatcher implements ErrorStateMatcher {
-  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
-    const invalidCtrl = !!(control && control.invalid && control.parent.dirty);
-    const invalidParent = !!(control && control.parent && control.parent.invalid && control.parent.dirty);
-
-    return (invalidCtrl || invalidParent);
-  }
-}
 
 declare const $: any;
 
@@ -51,7 +41,6 @@ export class AllEmployeesComponent implements OnInit {
   editForm: FormGroup;
   companies: [];
   isModal: boolean;
-  matcher = new MyErrorStateMatcher();
   actionParams: any;
 
   public date: Date = new Date();

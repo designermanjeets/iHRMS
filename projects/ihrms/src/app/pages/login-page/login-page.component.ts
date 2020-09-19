@@ -14,6 +14,7 @@ export class LoginPageComponent implements OnInit {
 
   loginForm: FormGroup;
   isloggedin: boolean;
+  ispwdreset: boolean;
 
   constructor(
     private registerGQL: RegisterGQL,
@@ -22,6 +23,10 @@ export class LoginPageComponent implements OnInit {
     private fb: FormBuilder
   ) {
     this.router.navigateByUrl('/pages/login');
+    if(sessionStorage.getItem('resetpwd')) {
+      this.ispwdreset = true;
+      sessionStorage.removeItem('resetpwd');
+    }
   }
 
   ngOnInit() {

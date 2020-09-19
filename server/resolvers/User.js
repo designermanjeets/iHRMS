@@ -79,16 +79,42 @@ const mutation ={
   deleteUser:(_, { email },{me,secret}) => new Promise(async (resolve, reject) => {
     try{
       let param = { email }
-      const comp = await User.findOne({ "email": email });
-      if (!comp)throw new Error('User not found!!')
-      if(comp) {
+      const user = await User.findOne({ "email": email });
+      if (!user) throw new Error('User not found!!')
+      if(user) {
         await User.deleteOne({ "email": email }, {new: true})
           resolve({User});
       }
     } catch(error){
       reject(error);
     }
-  })
+  }),
+  changePassword:(_, { id, username, email, oldPassword, newPassword},{me,secret}) => new Promise(async (resolve, reject) => {
+    try{
+      const getuser = await User.findOne({email });
+      let param = { username, email, oldPassword, newPassword }
+      console.log(newPassword)
+      if(getuser) {
+        const validOld = await bcrypt.compare(oldPassword, getuser.password);
+        const validNew = newPassword !== oldPassword;
+        if(validOld) {
+          if(validNew) {
+            param.password= await bcrypt.hash(newPassword, 10);
+            const user = await User.findByIdAndUpdate(id,{ password: param.password },{new: true});
+            resolve({user});
+          } else {
+            reject({data: 'New Password should not be same as Old Password!'})
+          }
+        } else {
+          reject({data: 'Incorrect Old Password!'})
+        }
+      } else {
+        reject({data: 'No User Found!'})
+      }
+    } catch(error){
+      reject(error);
+    }
+  }),
 }
 
 // _________  //

@@ -12,8 +12,6 @@ const mutation = {
     if (holiday) {
       reject('Holiday already exist!');
     } else {
-      const holidayz = await Holiday.find();
-      console.log(holidayz);
       const newHoliday = await Holiday.create({
         id,
         title,

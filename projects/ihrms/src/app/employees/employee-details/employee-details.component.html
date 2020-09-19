@@ -10,26 +10,26 @@
             <div class="row">
                 <div class="col-sm-6">
                     <div class="form-group">
-                      <label class="control-label">First Name</label>
-                      <input class="form-control" type="text" formControlName="firstname">
+                      <label for="firstname" class="control-label">First Name</label>
+                      <input id="firstname" class="form-control" type="text" formControlName="firstname">
                     </div>
                   </div>
                   <div class="col-sm-6">
                     <div class="form-group">
-                      <label class="control-label">Last Name</label>
-                      <input class="form-control" type="text" formControlName="lastname">
+                      <label for="lastname" class="control-label">Last Name</label>
+                      <input id="lastname" class="form-control" type="text" formControlName="lastname">
                     </div>
                   </div>
                   <div class="col-sm-6">
                     <div class="form-group">
-                      <label class="control-label">Username <span class="text-danger m-l-5">*</span></label>
-                      <input class="form-control" type="text" formControlName="username" required>
+                      <label for="username" class="control-label">Username <span class="text-danger m-l-5">*</span></label>
+                      <input id="username" class="form-control" type="text" formControlName="username" required>
                     </div>
                   </div>
                   <div class="col-sm-6">
                     <div class="form-group" [class.has-error]="editForm.controls['email'].invalid && editForm.controls['email'].touched" [class.has-success]="editForm.controls['email'].valid">
-                      <label class="control-label">Email <span class="text-danger m-l-5">*</span></label>
-                      <input class="form-control" type="email" pattern="([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})" formControlName="email" required>
+                      <label for="email" class="control-label">Email <span class="text-danger m-l-5">*</span></label>
+                      <input id="email" class="form-control" type="email" pattern="([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})" formControlName="email" required>
                       <span class="help-block" *ngIf="editForm.controls['email'].errors && editForm.controls['email'].touched">
                         Email is invalid
                       </span>
@@ -42,14 +42,14 @@
                        [class.has-success]="editForm.controls['password'].valid"
                   >
                     <div class="form-group">
-                      <label class="control-label">Password <span class="text-danger m-l-5">*</span></label>
-                      <input class="form-control" type="password" formControlName="password">
+                      <label for="password" class="control-label">Password <span class="text-danger m-l-5">*</span></label>
+                      <input id="password" class="form-control" type="password" formControlName="password">
                     </div>
                   </div>
                   <div class="col-sm-6">
                     <div class="form-group" [class.has-error]="editForm.hasError('notSame')">
-                      <label class="control-label">Confirm Password<span class="text-danger m-l-5">*</span></label>
-                      <input class="form-control" type="password" matInput formControlName="password2" [errorStateMatcher]="matcher">
+                      <label for="password2" class="control-label">Confirm Password<span class="text-danger m-l-5">*</span></label>
+                      <input id="password2" class="form-control" type="password" matInput formControlName="password2">
                       <span class="help-block" *ngIf="editForm.hasError('notSame')">
                         Passwords do not match
                       </span>
@@ -62,8 +62,8 @@
                           editForm.controls['emmpid'].touched"
                          [class.has-success]="editForm.controls['emmpid'].valid"
                     >
-                      <label class="control-label">Employee ID <span class="text-danger m-l-5">*</span></label>
-                      <input type="text" class="form-control" formControlName="emmpid" readonly>
+                      <label for="emmpid" class="control-label">Employee ID <span class="text-danger m-l-5">*</span></label>
+                      <input id="emmpid" type="text" class="form-control" formControlName="emmpid" readonly>
                     </div>
                   </div>
                   <div class="col-sm-6">
@@ -73,8 +73,8 @@
                           editForm.controls['joiningdate'].touched"
                          [class.has-success]="editForm.controls['joiningdate'].valid"
                     >
-                      <label class="control-label">Joining Date <span class="text-danger m-l-5">*</span></label>
-                      <input readonly type="text" class="form-control datecolor" formControlName="joiningdate" [matDatepicker]="picker1">
+                      <label for="joiningdate" class="control-label">Joining Date <span class="text-danger m-l-5">*</span></label>
+                      <input id="joiningdate" readonly type="text" class="form-control datecolor" formControlName="joiningdate" [matDatepicker]="picker1">
                       <mat-datepicker-toggle class="formpicker" matSuffix [for]="picker1"></mat-datepicker-toggle>
                       <mat-datepicker #picker1></mat-datepicker>
                     </div>
@@ -86,8 +86,8 @@
                           editForm.controls['corporateid'].touched"
                          [class.has-success]="editForm.controls['corporateid'].valid"
                     >
-                      <label class="control-label">Company <span class="text-danger m-l-5">*</span></label>
-                      <select class="select form-control" formControlName="corporateid" required>
+                      <label for="corporateid" class="control-label">Company <span class="text-danger m-l-5">*</span></label>
+                      <select id="corporateid" class="select form-control" formControlName="corporateid" required>
                         <option value="">--Select--</option>
                         <option *ngFor="let cmp of companies" [value]=cmp.corporateid>{{cmp.corporateid}}</option>
                       </select>
@@ -100,8 +100,8 @@
                        [class.has-success]="editForm.controls['role'].valid"
                   >
                     <div class="form-group">
-                      <label class="control-label">Roles<span class="text-danger m-l-5">*</span></label>
-                      <select class="select form-control" formControlName="role" required>
+                      <label for="role" class="control-label">Roles<span class="text-danger m-l-5">*</span></label>
+                      <select id="role" class="select form-control" formControlName="role" required>
                         <option value="Admin">Admin</option>
                         <option value="Management">Management</option>
                         <option value="Employee">Employee</option>
@@ -110,8 +110,8 @@
                   </div>
                   <div class="col-sm-6">
                     <div class="form-group" [class.has-error]="editForm.controls['mobile'].invalid && editForm.controls['mobile'].touched" [class.has-success]="editForm.controls['mobile'].valid">
-                      <label class="control-label">Phone</label>
-                      <input class="form-control unit-cost" type="text" formControlName="mobile" pattern="(\d{10}|\d{12})">
+                      <label for="mobile" class="control-label">Phone</label>
+                      <input id="mobile" class="form-control unit-cost" type="text" formControlName="mobile" pattern="(\d{10}|\d{12})">
                       <span class="help-block" *ngIf="editForm.controls['mobile'].errors && editForm.controls['mobile'].touched">
                         Mobile Number is invalid
                       </span>
@@ -135,64 +135,64 @@
                     <tr formGroupName="holiday">
                         <td>Holidays</td>
                         <td class="text-center">
-                          <input formControlName="read" type="checkbox">
+                          <input aria-label="read" formControlName="read" type="checkbox">
                         </td>
                         <td class="text-center">
-                          <input formControlName="write" type="checkbox">
+                          <input aria-label="write" formControlName="write" type="checkbox">
                         </td>
                         <td class="text-center">
-                          <input formControlName="create" type="checkbox">
+                          <input aria-label="create" formControlName="create" type="checkbox">
                         </td>
                         <td class="text-center">
-                          <input formControlName="delete" type="checkbox">
+                          <input aria-label="delete" formControlName="delete" type="checkbox">
                         </td>
                         <td class="text-center">
-                          <input formControlName="import" type="checkbox">
+                          <input aria-label="import" formControlName="import" type="checkbox">
                         </td>
                         <td class="text-center">
-                          <input formControlName="export" type="checkbox">
+                          <input aria-label="export" formControlName="export" type="checkbox">
                         </td>
                       </tr>
                       <tr formGroupName="leave">
                         <td>Leave Request</td>
                         <td class="text-center">
-                          <input formControlName="read" type="checkbox">
+                          <input aria-label="read" formControlName="read" type="checkbox">
                         </td>
                         <td class="text-center">
-                          <input formControlName="write" type="checkbox">
+                          <input aria-label="write" formControlName="write" type="checkbox">
                         </td>
                         <td class="text-center">
-                          <input formControlName="create" type="checkbox">
+                          <input aria-label="create" formControlName="create" type="checkbox">
                         </td>
                         <td class="text-center">
-                          <input formControlName="delete" type="checkbox">
+                          <input aria-label="delete" formControlName="delete" type="checkbox">
                         </td>
                         <td class="text-center">
-                          <input formControlName="import" type="checkbox">
+                          <input aria-label="import" formControlName="import" type="checkbox">
                         </td>
                         <td class="text-center">
-                          <input formControlName="export" type="checkbox">
+                          <input aria-label="export" formControlName="export" type="checkbox">
                         </td>
                       </tr>
                       <tr formGroupName="assets">
                         <td>Assets</td>
                         <td class="text-center">
-                          <input formControlName="read" type="checkbox">
+                          <input aria-label="read" formControlName="read" type="checkbox">
                         </td>
                         <td class="text-center">
-                          <input formControlName="write" type="checkbox">
+                          <input aria-label="write" formControlName="write" type="checkbox">
                         </td>
                         <td class="text-center">
-                          <input formControlName="create" type="checkbox">
+                          <input aria-label="create" formControlName="create" type="checkbox">
                         </td>
                         <td class="text-center">
-                          <input formControlName="delete" type="checkbox">
+                          <input aria-label="delete" formControlName="delete" type="checkbox">
                         </td>
                         <td class="text-center">
-                          <input formControlName="import" type="checkbox">
+                          <input aria-label="import" formControlName="import" type="checkbox">
                         </td>
                         <td class="text-center">
-                          <input formControlName="export" type="checkbox">
+                          <input aria-label="export" formControlName="export" type="checkbox">
                         </td>
                       </tr>
                </tbody>

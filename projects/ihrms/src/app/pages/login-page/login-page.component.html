@@ -7,6 +7,10 @@
             <a href="javascript:"><img src="assets/img/logo2.png" alt="Focus Technologies"></a>
           </div>
 
+          <div *ngIf="ispwdreset" class="alert alert-danger m-t-10" style="text-align: center;">
+            <strong class="text-center">Password Changes! Please Login Again!</strong>
+          </div>
+
           <div *ngIf="isloggedin" class="alert alert-danger m-t-10" style="text-align: center;">
             <strong class="text-center">Incorrect Email or Password!</strong>
           </div>
