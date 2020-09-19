@@ -32,8 +32,8 @@
           <div class="modal-body card-box">
             <p>Are you sure want to delete this?</p>
             <div class="m-t-20 text-left">
-              <a href="javascript:" class="btn btn-default" data-dismiss="modal">Close</a>
-              <button type="submit" class="btn btn-danger">Delete</button>
+              <a href="javascript:" class="btn btn-default m-r-10" data-dismiss="modal">Close</a>
+              <button (click)="onDeleteSub('yes')" type="submit" class="btn btn-danger">Delete</button>
             </div>
           </div>
         </form>
@@ -48,30 +48,29 @@
           <h4 class="modal-title">Add Holiday</h4>
         </div>
         <div class="modal-body">
-          <form  #addForm="ngForm" (ngSubmit)="addHoliday(addForm)" novalidate>
+          <form  [formGroup]="addForm" (ngSubmit)="addHoliday(addForm)" novalidate>
             <div class="form-group">
               <label>Holiday Name <span class="text-danger">*</span></label>
-              <input class="form-control" required type="text"  [(ngModel)]="addD.title" name="title" #title="ngModel" required>
+              <input class="form-control" required type="text" formControlName="title">
             </div>
             <div class="form-group">
               <label>Paid <span class="text-danger">*</span></label>
-              <select class="form-control">
+              <select class="form-control" formControlName="paid">
                 <option>Yes</option>
                 <option>No</option>
               </select>
-              <!--            <input class="form-control" required type="text" [(ngModel)]="uptD.title" name="title" #title="ngModel" required>-->
-              <!--            <input type="hidden" [(ngModel)]="uptD.holiday_id" name="holiday_id" #holiday_id="ngModel">-->
-              <!--            <input type="hidden" [(ngModel)]="uptD.status" name="status" #status="ngModel">-->
             </div>
-            <div class="form-group">
+            <div class="form-group pos-rel">
               <label>Holiday Date <span class="text-danger">*</span></label>
-              <my-date-picker [options]="myDatePickerOptions"  [(ngModel)]="addD.date" name="date" #date="ngModel" required></my-date-picker>
+              <input readonly type="text" class="form-control datecolor" formControlName="date" [matDatepicker]="picker1" required>
+              <mat-datepicker-toggle class="formpicker" matSuffix [for]="picker1"></mat-datepicker-toggle>
+              <mat-datepicker #picker1></mat-datepicker>
             </div>
             <div class="m-t-20 text-center">
-                <div *ngIf="addHolidayValidation" class="alert alert-info m-t-10">
-                    <strong>Warning!</strong> Must Fill all Mandatory Fields.
-                </div>
-              <button class="btn btn-primary">Create Holiday</button>
+              <div *ngIf="addHolidayValidation" class="alert alert-info m-t-10">
+                <strong>Warning!</strong> Must Fill all Mandatory Fields.
+              </div>
+              <button class="btn btn-primary" type="submit" [disabled]="addForm.invalid">Save Holiday</button>
             </div>
           </form>
         </div>

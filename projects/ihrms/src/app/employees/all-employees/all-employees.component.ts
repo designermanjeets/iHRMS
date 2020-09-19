@@ -187,8 +187,6 @@ export class AllEmployeesComponent implements OnInit {
       "pagination": {
         "limit": 100
       }
-    }, {
-      fetchPolicy: 'network-only'
     }).valueChanges.subscribe((response: any) => {
       console.log(response)
       this.rowData = response.data.users;

@@ -123,12 +123,13 @@ const typeDefs = `
       paid: String,
     ): Holiday,
     updateHoliday(
+      id: ID!,
       title: String,
       date: ISODate,
       day: String,
       paid: String,
     ): Holiday,
-    deleteHoliday( date: ISODate ): Holiday,
+    deleteHoliday( id: ID! ): Holiday,
   }
   type meta {
     createdAt:String
@@ -281,7 +282,8 @@ const typeDefs = `
     export: Boolean
   }
   type Holiday{
-    title: String!,
+    _id: ID,
+    title: String,
     date: ISODate,
     day:  String,
     paid: String,

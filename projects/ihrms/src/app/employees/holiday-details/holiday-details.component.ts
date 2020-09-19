@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {IMyDpOptions} from 'mydatepicker';
 import { ActivatedRoute,Router } from '@angular/router';
 import { AppService } from './../../app.service';
-import {FormGroup} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {UpdateHolidayGQL} from "../holidays/holidays-gql.service";
 import {GetholidaysGQLService} from "../holidays/getholidays-gql.service";
 
@@ -32,18 +32,27 @@ export class HolidayDetailsComponent implements OnInit {
     private appService:AppService,
     private router:Router,
     private route:ActivatedRoute,
-    private getholidaysGQLService: GetholidaysGQLService
+    private getholidaysGQLService: GetholidaysGQLService,
+    private updateHolidayGQL: UpdateHolidayGQL,
+    private fb: FormBuilder
   ) {
     this.rows = appService.holidays;
     this.srch = [...this.rows];
   }
 
   ngOnInit() {
+
+    this.editForm = this.fb.group({
+      title: ['', Validators.required],
+      date: ['', Validators.required],
+      paid: ['', Validators.required]
+    });
+
     this.route.queryParams.subscribe(params => {
       console.log(params);
       this.uptD = [];
-      if(params.id) {
-        const holiday = this.getholidaysGQLService.getHolidays(params.id);
+      if(params._id) {
+        const holiday = this.getholidaysGQLService.getHolidays(params._id);
         if(!holiday) {
           this.router.navigate(['employees/holidays']);
         } else {
@@ -53,8 +62,8 @@ export class HolidayDetailsComponent implements OnInit {
       } else {
         this.router.navigate(['employees/holidays']);
       }
-
     });
+
   }
 
   getDayOfWeek(date) {
@@ -65,33 +74,20 @@ export class HolidayDetailsComponent implements OnInit {
   }
 
   updateHoliday(f){
-    //console.log(f);
-    if (f.invalid === true)
-      this.uptHolidayValidation = true;
-    else {
-      this.uptHolidayValidation = false;
-    var id = f.form.value.holiday_id;
-    //console.log(id);
-    var index = this.rows.findIndex(function(item, i){
-      return item.holiday_id === id
-    });
-
-    //console.log(index);
-    if (index > -1) {
-        this.rows.splice(index, 1);
-    }
-
-    let d = f.form.value.date.formatted.split('-');
-    let align_date = ""+d[2]+"-"+d[1]+"-"+d[0];
-    //console.log(align_date);
-    f.form.value.day = this.getDayOfWeek(align_date);
-    f.form.value.status = "upcoming";
-    this.uptD = f.form.value;
-    this.rows.unshift(f.form.value);
-    this.srch.unshift(f.form.value);
-    this.rows = this.rows;
-    this.router.navigate(['employees/holidays']);
-  }
+    this.updateHolidayGQL
+      .mutate({
+        "id": this.uptD._id,
+        "title": f.value.title,
+        "paid": f.value.paid,
+        "date": f.value.date,
+        "day": 'Mon',
+      })
+      .subscribe( (val: any) => {
+        if(val.data) {
+          console.log(val.data);
+          this.router.navigate(['employees/holidays']);
+        }
+      }, error => console.log(error));
   }
 
 }

@@ -2,6 +2,7 @@ const { Holiday } = require('../models/index');
 
 const mutation = {
   createHoliday:(_, {
+    id,
     title,
     date,
     day,
@@ -11,7 +12,10 @@ const mutation = {
     if (holiday) {
       reject('Holiday already exist!');
     } else {
+      const holidayz = await Holiday.find();
+      console.log(holidayz);
       const newHoliday = await Holiday.create({
+        id,
         title,
         date,
         day,
@@ -22,6 +26,7 @@ const mutation = {
   }),
 
   updateHoliday:(_, {
+    id,
     title,
     date,
     day,
@@ -34,27 +39,23 @@ const mutation = {
         day,
         paid,
       }
-      const comp = await Holiday.findOne({ "date": date });
-      if (!comp)throw new Error('Holiday not found!!')
-      if(comp) {
-        await Holiday.findOneAndUpdate({
-          "date": date
-        },{$set:{...param}},{new: true})
+      const holi = await Holiday.findById(id);
+      if (!holi) throw new Error('Holiday not found!!')
+      if(holi) {
+        await Holiday.findByIdAndUpdate(id,{$set:{...param}},{new: true})
           .then((result) => { resolve(result) })
       }
-    }catch(error){
+    } catch(error){
       reject(error);
     }
   }),
 
-  deleteHoliday:(_, { date },{me,secret}) => new Promise(async (resolve, reject) => {
+  deleteHoliday:(_, { id },{me,secret}) => new Promise(async (resolve, reject) => {
     try{
-      let param = { date }
-      console.log(date)
-      const comp = await Holiday.findOne({ "date": date });
+      const comp = await Holiday.findById(id);
       if (!comp) throw new Error('Holiday not found!!')
       if(comp) {
-        await Holiday.deleteOne({ "date": date }, {new: true})
+        await Holiday.findByIdAndDelete(id)
           .then((result) => {
             resolve(result);
           })

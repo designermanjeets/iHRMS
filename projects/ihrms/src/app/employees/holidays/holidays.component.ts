@@ -6,8 +6,9 @@ import {ActionComponent} from "../../shared/agrid/components/action/action.compo
 import {GridOptions} from "ag-grid-community";
 import {GET_COMPANIES_QUERY} from "../../settings/settingscompany/companysettingGQL";
 import { Apollo } from "apollo-angular";
-import {GET_HOLIDAYS_QUERY} from "./holidays-gql.service";
+import {DeleteHolidayGQL, GET_HOLIDAYS_QUERY, RegisterHolidayGQL, UpdateHolidayGQL} from "./holidays-gql.service";
 import {GetholidaysGQLService} from "./getholidays-gql.service";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 
 declare const $:any;
 
@@ -31,6 +32,8 @@ export class HolidaysComponent implements OnInit {
   public addD:any = {};
   addHolidayValidation:boolean = false;
 
+  addForm: FormGroup;
+  actionParams: any;
 
   columnDefs = [
     {headerName: 'Title', field: 'title' },
@@ -51,7 +54,10 @@ export class HolidaysComponent implements OnInit {
     private router:Router,
     private route:ActivatedRoute,
     private apollo: Apollo,
-    private getholidaysGQLService: GetholidaysGQLService
+    private getholidaysGQLService: GetholidaysGQLService,
+    private fb: FormBuilder,
+    private registerHolidayGQL: RegisterHolidayGQL,
+    private deleteHolidayGQL: DeleteHolidayGQL
   ) {
     this.rows = appService.holidays;
     this.srch = [...this.rows];
@@ -62,6 +68,12 @@ export class HolidaysComponent implements OnInit {
 
   ngOnInit() {
   this.getHolidays();
+
+    this.addForm = this.fb.group({
+      title: ['', Validators.required],
+      date: ['', Validators.required],
+      paid: ['', Validators.required]
+    });
   }
 
   actionClick(params) {
@@ -69,10 +81,18 @@ export class HolidaysComponent implements OnInit {
       this.onEdit(params.rowData.data);
     }
     if(params.type === 'delete') {
-      // this.actionParams = params.rowData.data.email;
-      $('#delete_employee').modal('show');
+      this.actionParams = params.rowData.data._id;
+      $('#delete_holiday').modal('show');
     }
   }
+
+  onDeleteSub(res) {
+    if(res === 'yes') {
+      this.onDelete(this.actionParams);
+      $('#delete_holiday').modal('hide');
+      this.actionParams = null;
+    }
+}
 
   onGridReady($event) {
     console.log($event);
@@ -87,9 +107,13 @@ export class HolidaysComponent implements OnInit {
         }
       },
     }).valueChanges.subscribe((response: any) => {
-      if(response.data.getHolidays[0].title) {
+      if(response.data.getHolidays[0] && response.data.getHolidays[0].title) {
         this.rowData = response.data.getHolidays;
         this.getholidaysGQLService.setholidays(response.data.getHolidays);
+
+        this.rowData.forEach(row => {
+          row.day = this.getDayOfWeek(row.date);
+        })
       }
     });
   }
@@ -108,45 +132,38 @@ export class HolidaysComponent implements OnInit {
   }
 
   addHoliday(f){
-    //console.log(f);
-    //console.log(f.form.value);
-    let randomnumber = Math.floor(Math.random() * 99);
-    f.form.value.holiday_id = randomnumber;
-    if (f.invalid === true)
-      this.addHolidayValidation = true;
-    else {
-      this.addHolidayValidation = false;
-    let d = f.form.value.date.formatted.split('-');
-    let align_date = ""+d[2]+"-"+d[1]+"-"+d[0];
-    f.form.value.day = this.getDayOfWeek(align_date);
-    f.form.value.status = "upcoming";
-    //console.log(f.form.value.day);
-    this.rows.unshift(f.form.value);
-    this.srch.unshift(f.form.value);
-    this.rows = this.rows;
-    $('#add_holiday').modal('hide');
-    //console.log(this.rows);
-    }
+    console.log(f);
+
+    this.registerHolidayGQL
+      .mutate({
+        "title": f.value.title,
+        "paid": f.value.paid,
+        "date": f.value.date,
+        "day": this.getDayOfWeek(f.value.date),
+      })
+      .subscribe( (val: any) => {
+        if(val.data.createHoliday) {
+          console.log(val.data);
+          this.getHolidays(); // fetch latest
+          $('#add_holiday').modal('hide');
+        }
+      }, error => console.log(error));
   }
 
   onEdit(item){
-    this.router.navigate(['employees/holidays/edit'], { queryParams: { 'id': item.date } });
+    this.router.navigate(['employees/holidays/edit'], { queryParams: { '_id': item._id } });
   }
 
   onDelete(id){
-    //console.log("="+id+"=");
-
-    var index = this.rows.findIndex(function(item, i){
-      return item.holiday_id === id
-    });
-
-    //console.log(index);
-    if (index > -1) {
-        this.rows.splice(index, 1);
-        this.srch.splice(index, 1);
-    }
-    //console.log(this.rows);
-    this.rows = this.rows;
+    this.deleteHolidayGQL
+      .mutate({
+        "id": id
+      })
+      .subscribe( (val: any) => {
+        if(val.data.deleteHoliday) {
+          this.getHolidays();
+        }
+      }, error => console.log(error));
   }
 
 }

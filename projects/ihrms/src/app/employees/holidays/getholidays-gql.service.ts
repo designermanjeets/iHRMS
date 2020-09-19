@@ -9,13 +9,12 @@ export class GetholidaysGQLService {
 
   constructor() { }
 
-  getHolidays(date) {
-    console.log(this.holidays)
+  getHolidays(_id) {
     if(!this.holidays) {
       return false;
     } else {
       return this.holidays.find(
-        (h: any) => h.date === date);
+        (h: any) => h._id === _id);
     }
 
   }
