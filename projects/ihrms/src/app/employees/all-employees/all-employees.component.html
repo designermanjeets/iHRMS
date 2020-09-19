@@ -67,19 +67,7 @@
       <div class="modal-body">
         <form class="m-b-30" [formGroup]="editForm" (ngSubmit)="createSubmit(editForm)" novalidate>
           <div class="row">
-            <div class="col-sm-6">
-              <div class="form-group">
-                <label class="control-label">First Name</label>
-                <input class="form-control" type="text" formControlName="firstname">
-              </div>
-            </div>
-            <div class="col-sm-6">
-              <div class="form-group">
-                <label class="control-label">Last Name</label>
-                <input class="form-control" type="text" formControlName="lastname">
-              </div>
-            </div>
-            <div class="col-sm-6">
+            <div class="col-sm-4">
               <div class="form-group"
                    [class.has-error]="
                     editForm.controls['username'].invalid &&
@@ -88,9 +76,24 @@
               >
                 <label class="control-label">Username <span class="text-danger m-l-5">*</span></label>
                 <input class="form-control" type="text" formControlName="username" required>
+                <span class="help-block" *ngIf="editForm.controls['username'].errors && editForm.controls['username'].touched">
+                    Username is invalid
+                </span>
               </div>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label class="control-label">First Name</label>
+                <input class="form-control" type="text" formControlName="firstname">
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label class="control-label">Last Name</label>
+                <input class="form-control" type="text" formControlName="lastname">
+              </div>
+            </div>
+            <div class="col-sm-4">
               <div class="form-group" [class.has-error]="editForm.controls['email'].invalid && editForm.controls['email'].touched" [class.has-success]="editForm.controls['email'].valid">
                 <label class="control-label">Email <span class="text-danger m-l-5">*</span></label>
                 <input class="form-control" type="email" pattern="([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})" formControlName="email" required>
@@ -99,7 +102,7 @@
                 </span>
               </div>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-4">
               <div class="form-group"
                    [class.has-error]="
                     editForm.controls['password'].invalid &&
@@ -108,18 +111,29 @@
               >
                 <label class="control-label">Password<span class="text-danger m-l-5">*</span></label>
                 <input class="form-control" type="password" formControlName="password" required>
+                <span class="help-block" *ngIf="editForm.controls['password'].errors && editForm.controls['password'].touched">
+                    Password is invalid
+                </span>
               </div>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-4"
+                 [class.has-error]="
+                  editForm.controls['password2'].invalid &&
+                  editForm.controls['password2'].touched"
+                 [class.has-success]="editForm.controls['password2'].valid"
+            >
               <div class="form-group" [class.has-error]="editForm.hasError('notSame')">
                 <label class="control-label">Confirm Password<span class="text-danger m-l-5">*</span></label>
                 <input class="form-control" type="password" matInput formControlName="password2">
+                <span class="help-block" *ngIf="editForm.controls['password2'].errors && editForm.controls['password2'].touched">
+                    Confirm Password is invalid
+                </span>
                 <span class="help-block" *ngIf="editForm.hasError('notSame')">
                         Passwords do not match
                 </span>
               </div>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-4">
               <div class="form-group"
                    [class.has-error]="
                     editForm.controls['emmpid'].invalid &&
@@ -128,9 +142,12 @@
               >
                 <label class="control-label">Employee ID <span class="text-danger m-l-5">*</span></label>
                 <input type="text" class="form-control" formControlName="emmpid" required>
+                <span class="help-block" *ngIf="editForm.controls['emmpid'].errors && editForm.controls['emmpid'].touched">
+                    Employee ID is invalid
+                </span>
               </div>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-4">
               <div class="form-group pos-rel"
                    [class.has-error]="
                     editForm.controls['joiningdate'].invalid &&
@@ -141,9 +158,12 @@
                 <input readonly type="text" class="form-control datecolor" formControlName="joiningdate" [matDatepicker]="picker2" required>
                 <mat-datepicker-toggle class="formpicker" matSuffix [for]="picker2"></mat-datepicker-toggle>
                 <mat-datepicker #picker2></mat-datepicker>
+                <span class="help-block" *ngIf="editForm.controls['joiningdate'].errors && editForm.controls['joiningdate'].touched">
+                   Joining Date is invalid
+                </span>
               </div>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-4">
               <div class="form-group"
                    [class.has-error]="
                     editForm.controls['corporateid'].invalid &&
@@ -155,31 +175,37 @@
                   <option value="">--Select--</option>
                   <option *ngFor="let cmp of companies" [value]=cmp.corporateid>{{cmp.corporateid}}</option>
                 </select>
+                <span class="help-block" *ngIf="editForm.controls['corporateid'].errors && editForm.controls['corporateid'].touched">
+                   Company is invalid
+                </span>
               </div>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-4">
               <div class="form-group"
                    [class.has-error]="
                     editForm.controls['role'].invalid &&
                     editForm.controls['role'].touched"
                    [class.has-success]="editForm.controls['role'].valid"
               >
-                <label class="control-label">Roles<span class="text-danger m-l-5">*</span></label>
+                <label class="control-label">Role<span class="text-danger m-l-5">*</span></label>
                 <select class="select form-control" formControlName="role" required>
                   <option value="">--Select--</option>
                   <option value="Admin">Admin</option>
                   <option value="Management">Management</option>
                   <option value="Employee">Employee</option>
                 </select>
+                <span class="help-block" *ngIf="editForm.controls['role'].errors && editForm.controls['role'].touched">
+                   Role is invalid
+                </span>
               </div>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-4">
               <div class="form-group" [class.has-error]="editForm.controls['mobile'].invalid && editForm.controls['mobile'].touched" [class.has-success]="editForm.controls['mobile'].valid">
                 <label class="control-label">Mobile</label>
                 <input class="form-control unit-cost" type="text" formControlName="mobile" pattern="(\d{10}|\d{12})">
                 <span class="help-block" *ngIf="editForm.controls['mobile'].errors && editForm.controls['mobile'].touched">
-                        Mobile Number is invalid
-                      </span>
+                  Mobile Number is invalid
+                </span>
               </div>
             </div>
           </div>

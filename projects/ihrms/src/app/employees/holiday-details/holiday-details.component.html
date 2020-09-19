@@ -7,22 +7,46 @@
     <div class="row m-t-20">
       <div class="col-md-6 col-md-offset-3">
         <form  [formGroup]="editForm" (ngSubmit)="updateHoliday(editForm)" novalidate>
-          <div class="form-group">
-            <label for="title">Holiday Name <span class="text-danger">*</span></label>
+          <div class="form-group"
+             [class.has-error]="
+              editForm.controls['title'].invalid &&
+              editForm.controls['title'].touched"
+             [class.has-success]="editForm.controls['title'].valid"
+          >
+            <label for="title" class="control-label">Holiday Name <span class="text-danger">*</span></label>
             <input id="title" class="form-control" required type="text" formControlName="title">
+            <span class="help-block" *ngIf="editForm.controls['title'].errors && editForm.controls['title'].touched">
+                  Holiday Name is invalid
+            </span>
           </div>
-          <div class="form-group">
-            <label for="paid">Paid <span class="text-danger">*</span></label>
+          <div class="form-group"
+             [class.has-error]="
+              editForm.controls['paid'].invalid &&
+              editForm.controls['paid'].touched"
+             [class.has-success]="editForm.controls['paid'].valid"
+          >
+            <label for="paid" class="control-label">Paid <span class="text-danger">*</span></label>
             <select id="paid" class="form-control" formControlName="paid">
               <option value="Yes">Yes</option>
               <option value="No">No</option>
             </select>
+            <span class="help-block" *ngIf="editForm.controls['paid'].errors && editForm.controls['paid'].touched">
+                  Field Paid is invalid
+            </span>
           </div>
-          <div class="form-group pos-rel">
-            <label for="date">Holiday Date <span class="text-danger">*</span></label>
+          <div class="form-group pos-rel"
+             [class.has-error]="
+              editForm.controls['date'].invalid &&
+              editForm.controls['date'].touched"
+             [class.has-success]="editForm.controls['date'].valid"
+          >
+            <label for="date" class="control-label">Holiday Date <span class="text-danger">*</span></label>
             <input id="date" readonly type="text" class="form-control datecolor" formControlName="date" [matDatepicker]="picker1" required>
             <mat-datepicker-toggle class="formpicker" matSuffix [for]="picker1"></mat-datepicker-toggle>
             <mat-datepicker #picker1></mat-datepicker>
+            <span class="help-block" *ngIf="editForm.controls['date'].errors && editForm.controls['date'].touched">
+                  Holiday Date is invalid
+            </span>
           </div>
           <div class="m-t-20 text-center">
               <div *ngIf="uptHolidayValidation" class="alert alert-info m-t-10">

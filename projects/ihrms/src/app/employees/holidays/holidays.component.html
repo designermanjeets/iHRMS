@@ -49,22 +49,46 @@
         </div>
         <div class="modal-body">
           <form [formGroup]="addForm" (ngSubmit)="addHoliday(addForm)" novalidate>
-            <div class="form-group">
-              <label for="title">Holiday Name <span class="text-danger">*</span></label>
+            <div class="form-group"
+               [class.has-error]="
+                addForm.controls['title'].invalid &&
+                addForm.controls['title'].touched"
+               [class.has-success]="addForm.controls['title'].valid"
+            >
+              <label for="title" class="control-label">Holiday Name <span class="text-danger">*</span></label>
               <input id="title" class="form-control" required type="text" formControlName="title">
+              <span class="help-block" *ngIf="addForm.controls['title'].errors && addForm.controls['title'].touched">
+                  Holiday Name is invalid
+              </span>
             </div>
-            <div class="form-group">
-              <label for="paid">Paid <span class="text-danger">*</span></label>
+            <div class="form-group"
+                 [class.has-error]="
+                  addForm.controls['paid'].invalid &&
+                  addForm.controls['paid'].touched"
+                 [class.has-success]="addForm.controls['paid'].valid"
+            >
+              <label for="paid" class="control-label">Paid <span class="text-danger">*</span></label>
               <select id="paid" class="form-control" formControlName="paid">
                 <option value="Yes">Yes</option>
                 <option value="No">No</option>
               </select>
+              <span class="help-block" *ngIf="addForm.controls['paid'].errors && addForm.controls['paid'].touched">
+                  Field Paid is invalid
+              </span>
             </div>
-            <div class="form-group pos-rel">
-              <label for="date">Holiday Date <span class="text-danger">*</span></label>
+            <div class="form-group pos-rel"
+               [class.has-error]="
+                addForm.controls['date'].invalid &&
+                addForm.controls['date'].touched"
+               [class.has-success]="addForm.controls['date'].valid"
+          >
+              <label for="date" class="control-label">Holiday Date <span class="text-danger">*</span></label>
               <input id="date" readonly type="text" class="form-control datecolor" formControlName="date" [matDatepicker]="picker1" required>
               <mat-datepicker-toggle class="formpicker" matSuffix [for]="picker1"></mat-datepicker-toggle>
               <mat-datepicker #picker1></mat-datepicker>
+              <span class="help-block" *ngIf="addForm.controls['date'].errors && addForm.controls['date'].touched">
+                  Holiday Date is invalid
+              </span>
             </div>
             <div class="m-t-20 text-center">
               <div *ngIf="addHolidayValidation" class="alert alert-info m-t-10">
