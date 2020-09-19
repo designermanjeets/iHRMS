@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, Event, NavigationStart, NavigationEnd, NavigationError } from '@angular/router'
+import { Router, ActivatedRoute, Event, NavigationStart } from '@angular/router'
+import {AppService} from "./app.service";
 
 declare const $: any;
 
@@ -15,25 +16,30 @@ export class AppComponent implements OnInit {
   loginPage:Boolean = false;
   registerPage:Boolean = false;
   forgotPage:Boolean = false;
+  hidebars: boolean = true;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute) {
+  constructor(
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private appService: AppService
+  ) {
 
     if(!sessionStorage.getItem(('JWT_TOKEN'))) {
       this.router.navigateByUrl('./pages/login');
     }
-
-    router.events.subscribe((event: Event) => {
-
-      if (event instanceof NavigationEnd) {
-        this.url = event.url.split('/')[1];
-        this.url2 = event.url.split('/')[2];
-        //console.log(this.url);
-
-      }
-    });
   }
 
   ngOnInit() {
+
+    this.router.events.subscribe((event: Event) => {
+      if (event instanceof NavigationStart) {
+        this.url = event.url.split('/')[1];
+        this.url2 = event.url.split('/')[2];
+        setTimeout( () =>{
+          this.hidebars = this.appService.isJWToken;
+        })
+      }
+    });
 
     if ($('.main-wrapper').length > 0) {
       var $wrapper = $(".main-wrapper");

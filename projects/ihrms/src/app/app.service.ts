@@ -818,4 +818,8 @@ export class AppService {
 
   constructor() { }
 
+  get isJWToken() {
+        return !!sessionStorage.getItem('JWT_TOKEN');
+  }
+
 }
