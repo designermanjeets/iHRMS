@@ -30,7 +30,6 @@ export class SettingsleaveComponent implements OnInit {
   addForm: FormGroup;
   actionParams: any;
 
-
   columnDefs = [
     {headerName: 'Leave Type', field: 'leavetype' },
     {headerName: 'Leave Days', field: 'leavedays'},
