@@ -37,7 +37,7 @@ export class AppComponent implements OnInit {
         this.url2 = event.url.split('/')[2];
         setTimeout( () =>{
           this.hidebars = this.appService.isJWToken;
-          !this.appService.isJWToken && this.router.navigateByUrl('./pages/login');
+          // !this.appService.isJWToken && this.router.navigateByUrl('./pages/login');
         })
       }
     });

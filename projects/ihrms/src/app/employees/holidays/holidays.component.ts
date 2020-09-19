@@ -8,6 +8,7 @@ import { Apollo } from "apollo-angular";
 import {DeleteHolidayGQL, GET_HOLIDAYS_QUERY, RegisterHolidayGQL} from "./holidays-gql.service";
 import {GetholidaysGQLService} from "./getholidays-gql.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {DatetimeComponent} from "../../shared/agrid/components/datetime/datetime.component";
 
 declare const $:any;
 
@@ -36,7 +37,7 @@ export class HolidaysComponent implements OnInit {
 
   columnDefs = [
     {headerName: 'Title', field: 'title' },
-    {headerName: 'Holiday Date', field: 'date'},
+    {headerName: 'Holiday Date', field: 'date', cellRendererFramework: DatetimeComponent},
     {headerName: 'Day', field: 'day'},
     {headerName: 'Paid', field: 'paid'},
     {headerName: 'Action', field: 'action', cellRendererFramework: ActionComponent, cellRendererParams: {

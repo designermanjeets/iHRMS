@@ -9,6 +9,7 @@ import {Apollo} from "apollo-angular";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {CreateUserGQL, DeleteUserGQL} from "../employee-details/empdetail-gql.service";
 import {GridOptions} from "ag-grid-community";
+import {DatetimeComponent} from "../../shared/agrid/components/datetime/datetime.component";
 
 declare const $: any;
 
@@ -53,7 +54,7 @@ export class AllEmployeesComponent implements OnInit {
         {headerName: 'Employee ID', field: 'emmpid' },
         {headerName: 'Email', field: 'email'},
         {headerName: 'Mobile', field: 'mobile'},
-        {headerName: 'Join Date', field: 'joiningdate'},
+        {headerName: 'Join Date', field: 'joiningdate', cellRendererFramework: DatetimeComponent},
         {headerName: 'Role', field: 'role'},
         {headerName: 'Action', field: 'action', cellRendererFramework: ActionComponent, cellRendererParams: {
           clicked: (params) => this.actionClick(params)

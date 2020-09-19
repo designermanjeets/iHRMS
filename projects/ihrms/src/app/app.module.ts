@@ -107,6 +107,9 @@ import { ForgetPageComponent } from './pages/forget-page/forget-page.component';
 import { GraphQLModule } from './graphql.module';
 import { HttpClientModule } from '@angular/common/http';
 import {ActionComponent} from "./shared/agrid/components/action/action.component";
+import {DatetimeComponent} from "./shared/agrid/components/datetime/datetime.component";
+import {AnchorComponent} from "./shared/agrid/components/anchor/anchor.component";
+import {StatusComponent} from "./shared/agrid/components/status/status.component";
 // import { ProfilePageComponent } from './pages/profile-page/profile-page.component';
 // import { JobsListComponent } from './career/jobs-list/jobs-list.component';
 // import { JobsDetailsComponent } from './career/jobs-details/jobs-details.component';
@@ -335,7 +338,10 @@ const routes: Routes = [
     RouterModule.forRoot(routes, {useHash: true}),
     SharedModule,
     AgGridModule.withComponents([
-      ActionComponent
+      ActionComponent,
+      DatetimeComponent,
+      AnchorComponent,
+      StatusComponent
     ]),
     GraphQLModule,
     HttpClientModule,

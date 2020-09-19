@@ -7,16 +7,25 @@ import { ActionComponent } from './agrid/components/action/action.component';
 import { AgGridModule } from "ag-grid-angular";
 
 import { MatInputModule } from '@angular/material/input';
+import { DatetimeComponent } from './agrid/components/datetime/datetime.component';
+import { AnchorComponent } from './agrid/components/anchor/anchor.component';
+import { StatusComponent } from './agrid/components/status/status.component';
 
 @NgModule({
   declarations: [
     AgridComponent,
-    ActionComponent
+    ActionComponent,
+    DatetimeComponent,
+    AnchorComponent,
+    StatusComponent
   ],
   imports: [
     CommonModule,
     AgGridModule.withComponents([
-      ActionComponent
+      ActionComponent,
+      DatetimeComponent,
+      AnchorComponent,
+      StatusComponent
     ]),
     SharedRoutingModule,
     MatInputModule

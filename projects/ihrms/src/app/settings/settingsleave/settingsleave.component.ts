@@ -10,6 +10,7 @@ import {
   RegisterLeaveTypeGQL,
   UpdateLeaveTypeGQL
 } from "./leave-types-gql.service";
+import {StatusComponent} from "../../shared/agrid/components/status/status.component";
 
 declare const $:any;
 
@@ -34,7 +35,7 @@ export class SettingsleaveComponent implements OnInit {
     {headerName: 'Leave Type', field: 'leavetype' },
     {headerName: 'Leave Days', field: 'leavedays'},
     {headerName: 'Carry Forward', field: 'carryforward'},
-    {headerName: 'Active', field: 'status'},
+    {headerName: 'Active', field: 'status', cellRendererFramework: StatusComponent,},
     {headerName: 'Action', field: 'action', cellRendererFramework: ActionComponent, cellRendererParams: {
         clicked: (params) => this.actionClick(params)
       }},
