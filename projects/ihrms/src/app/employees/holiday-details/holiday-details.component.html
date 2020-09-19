@@ -8,19 +8,19 @@
       <div class="col-md-6 col-md-offset-3">
         <form  [formGroup]="editForm" (ngSubmit)="updateHoliday(editForm)" novalidate>
           <div class="form-group">
-            <label>Holiday Name <span class="text-danger">*</span></label>
-            <input class="form-control" required type="text" formControlName="title">
+            <label for="title">Holiday Name <span class="text-danger">*</span></label>
+            <input id="title" class="form-control" required type="text" formControlName="title">
           </div>
           <div class="form-group">
-            <label>Paid <span class="text-danger">*</span></label>
-            <select class="form-control" formControlName="paid">
+            <label for="paid">Paid <span class="text-danger">*</span></label>
+            <select id="paid" class="form-control" formControlName="paid">
               <option value="Yes">Yes</option>
               <option value="No">No</option>
             </select>
           </div>
           <div class="form-group pos-rel">
-            <label>Holiday Date <span class="text-danger">*</span></label>
-            <input readonly type="text" class="form-control datecolor" formControlName="date" [matDatepicker]="picker1" required>
+            <label for="date">Holiday Date <span class="text-danger">*</span></label>
+            <input id="date" readonly type="text" class="form-control datecolor" formControlName="date" [matDatepicker]="picker1" required>
             <mat-datepicker-toggle class="formpicker" matSuffix [for]="picker1"></mat-datepicker-toggle>
             <mat-datepicker #picker1></mat-datepicker>
           </div>

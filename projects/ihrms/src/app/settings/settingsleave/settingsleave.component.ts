@@ -2,6 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { AppService } from '../../app.service'
 import {ActionComponent} from "../../shared/agrid/components/action/action.component";
 import {GridOptions} from "ag-grid-community";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import { Apollo } from "apollo-angular";
+import {
+  DeleteLeaveTypeGQL,
+  GET_LEAVETYPES_QUERY,
+  RegisterLeaveTypeGQL,
+  UpdateLeaveTypeGQL
+} from "./leave-types-gql.service";
 
 declare const $:any;
 
@@ -18,10 +26,14 @@ export class SettingsleaveComponent implements OnInit {
   public addLT:any = {};
   public uptLT:any = {};
 
+  uptForm: FormGroup;
+  addForm: FormGroup;
+  actionParams: any;
+
 
   columnDefs = [
-    {headerName: 'Leave Type', field: 'leave_type' },
-    {headerName: 'Leave Days', field: 'leave_days'},
+    {headerName: 'Leave Type', field: 'leavetype' },
+    {headerName: 'Leave Days', field: 'leavedays'},
     {headerName: 'Carry Forward', field: 'carryforward'},
     {headerName: 'Active', field: 'status'},
     {headerName: 'Action', field: 'action', cellRendererFramework: ActionComponent, cellRendererParams: {
@@ -33,7 +45,14 @@ export class SettingsleaveComponent implements OnInit {
   private gridColumnApi;
   private gridOptions: GridOptions;
 
-  constructor(private leaveService:AppService) {
+  constructor(
+    private leaveService: AppService,
+    private fb: FormBuilder,
+    private apollo: Apollo,
+    private registerLeaveTypeGQL: RegisterLeaveTypeGQL,
+    private updateLeaveTypeGQL: UpdateLeaveTypeGQL,
+    private deleteLeaveTypeGQL: DeleteLeaveTypeGQL,
+  ) {
     this.rows = leaveService.leaveType;
     this.srch = [...this.rows];
     this.rowData = leaveService.leaveType;
@@ -43,16 +62,54 @@ export class SettingsleaveComponent implements OnInit {
     $('.floating').on('focus blur', function (e) {
       $(this).parents('.form-focus').toggleClass('focused', (e.type === 'focus' || this.value.length > 0));
     }).trigger('blur');
+
+    this.getLeaveTypes();
+
+    this.uptForm = this.fb.group({
+      leavetype: ['', Validators.required],
+      leavedays: ['', Validators.required],
+      carryforward: ['', Validators.required],
+      status: ['', Validators.required]
+    });
+
+    this.addForm = this.fb.group({
+      leavetype: ['', Validators.required],
+      leavedays: ['', Validators.required],
+      carryforward: ['', Validators.required],
+      status: ['', Validators.required]
+    });
   }
 
+  getLeaveTypes() {
+    this.apollo.watchQuery({
+      query: GET_LEAVETYPES_QUERY,
+      variables: {
+        "pagination": {
+          "limit": 100
+        }
+      },
+    }).valueChanges.subscribe((response: any) => {
+      if(response.data.getLeaveTypes) {
+        this.rowData = response.data.getLeaveTypes;
+      }
+    });
+  }
 
   actionClick(params) {
     if(params.type === 'edit') {
       this.onEdit(params.rowData.data);
     }
     if(params.type === 'delete') {
-      // this.actionParams = params.rowData.data.email;
-      $('#delete_employee').modal('show');
+      this.actionParams = params.rowData.data._id;
+      $('#delete_leavetype').modal('show');
+    }
+  }
+
+  onDeleteSub(res) {
+    if(res === 'yes') {
+      this.onDelete(this.actionParams);
+      $('#delete_leavetype').modal('hide');
+      this.actionParams = null;
     }
   }
 
@@ -66,64 +123,57 @@ export class SettingsleaveComponent implements OnInit {
     $('#add_leavetype').modal('show');
   }
 
-  addLeavetype(f)
-  {
-    //console.log(f.form.value);
-    f.form.value.status = 'Active';
-    this.rows.unshift(f.form.value);
-    this.srch.unshift(f.form.value);
-    this.rows = this.rows;
-    $('#add_leavetype').modal('hide');
-
+  addLeavetype(f) {
+    this.registerLeaveTypeGQL
+      .mutate({
+        "leavetype": f.value.leavetype,
+        "leavedays": f.value.leavedays,
+        "carryforward": f.value.carryforward,
+        "status": f.value.status,
+      })
+      .subscribe( (val: any) => {
+        if(val.data.createLeaveType) {
+          console.log(val.data.createLeaveType);
+          this.getLeaveTypes(); // fetch latest
+          $('#add_leavetype').modal('hide');
+        }
+      }, error => console.log(error));
   }
 
   onEdit(item){
     this.uptLT = item;
+    this.uptForm.patchValue(item);
     $('#edit_leavetype').modal('show');
   }
 
-  updateLeavetype(f)
-  {
-    //console.log(f.form.value);
-    var id = f.form.value.id;
-    //console.log(id);
-    var arr = this.rows.find(function(item, i){
-      return item.id === id
-    });
-
-    arr.id = f.form.value.id;
-    arr.leave_type = f.form.value.leave_type;
-    arr.leave_days = f.form.value.leave_days;
-
-    var index = this.rows.findIndex(function(item, i){
-      return item.id === id
-    });
-
-    //console.log(index);
-    if (index > -1) {
-        this.rows.splice(index, 1);
-    }
-
-    this.rows.unshift(arr);
-    this.srch.unshift(arr);
-    this.rows = this.rows;
-    $('#edit_leavetype').modal('hide');
-
+  updateLeavetype(f) {
+    this.updateLeaveTypeGQL
+      .mutate({
+        "id": this.uptLT._id,
+        "leavetype": f.value.leavetype,
+        "leavedays": f.value.leavedays,
+        "carryforward": f.value.carryforward,
+        "status": f.value.status,
+      })
+      .subscribe( (val: any) => {
+        if(val.data.updateLeaveType) {
+          console.log(val.data.updateLeaveType);
+          this.getLeaveTypes(); // fetch latest
+          $('#edit_leavetype').modal('hide');
+        }
+      }, error => console.log(error));
   }
 
-  onDelete(c){
-    //console.log("="+c.id+"=");
-    var index = this.rows.findIndex(function(item, i){
-      return item.id === c.id
-    });
-
-    //console.log(index);
-    if (index > -1) {
-        this.rows.splice(index, 1);
-        this.srch.splice(index, 1);
-    }
-    //console.log(this.rows);
-    this.rows = this.rows;
+  onDelete(id){
+    this.deleteLeaveTypeGQL
+      .mutate({
+        "id": id
+      })
+      .subscribe( (val: any) => {
+        if(val.data.deleteLeaveType) {
+          this.getLeaveTypes();
+        }
+      }, error => console.log(error));
   }
 
 

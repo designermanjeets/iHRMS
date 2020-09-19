@@ -4,9 +4,8 @@ import { ActivatedRoute,Router } from '@angular/router';
 import { AppService } from '../../app.service';
 import {ActionComponent} from "../../shared/agrid/components/action/action.component";
 import {GridOptions} from "ag-grid-community";
-import {GET_COMPANIES_QUERY} from "../../settings/settingscompany/companysettingGQL";
 import { Apollo } from "apollo-angular";
-import {DeleteHolidayGQL, GET_HOLIDAYS_QUERY, RegisterHolidayGQL, UpdateHolidayGQL} from "./holidays-gql.service";
+import {DeleteHolidayGQL, GET_HOLIDAYS_QUERY, RegisterHolidayGQL} from "./holidays-gql.service";
 import {GetholidaysGQLService} from "./getholidays-gql.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 
@@ -125,9 +124,7 @@ export class HolidaysComponent implements OnInit {
   }
 
   getDayOfWeek(date) {
-    //console.log(date);
-    var dayOfWeek = new Date(date).getDay();
-    //console.log(dayOfWeek)
+    const dayOfWeek = new Date(date).getDay();
     return isNaN(dayOfWeek) ? null : ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][dayOfWeek];
   }
 
