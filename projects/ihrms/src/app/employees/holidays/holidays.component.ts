@@ -107,7 +107,7 @@ export class HolidaysComponent implements OnInit {
         }
       },
     }).valueChanges.subscribe((response: any) => {
-      if(response.data.getHolidays[0] && response.data.getHolidays[0].title) {
+      if(response.data) {
         this.rowData = response.data.getHolidays;
         this.getholidaysGQLService.setholidays(response.data.getHolidays);
 

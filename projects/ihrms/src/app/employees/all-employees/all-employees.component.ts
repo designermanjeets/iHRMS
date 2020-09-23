@@ -7,9 +7,11 @@ import {GET_COMPANIES_QUERY} from "../../settings/settingscompany/companysetting
 import {EmployeeGQLService, GET_USERS_QUERY} from "./employee-gql.service";
 import {Apollo} from "apollo-angular";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {CreateUserGQL, DeleteUserGQL} from "../employee-details/empdetail-gql.service";
+import {CreateUserGQL, DeleteUserGQL, ImportUsersGQL} from "../employee-details/empdetail-gql.service";
 import {GridOptions} from "ag-grid-community";
 import {DatetimeComponent} from "../../shared/agrid/components/datetime/datetime.component";
+import * as moment from 'moment';
+import * as _ from 'lodash';
 
 declare const $: any;
 
@@ -64,6 +66,17 @@ export class AllEmployeesComponent implements OnInit {
   private gridApi;
   private gridColumnApi;
   private gridOptions: GridOptions;
+  xlsColumns = {
+    'A': 'firstname',
+    'B': 'emmpid',
+    'C': 'email',
+    'D': 'mobile',
+    'E': 'joiningdate',
+    'F': 'role',
+    'G': 'username',
+    'H': 'corporateid',
+    'I': 'password'
+  };
 
   constructor(
     private appService:AppService,
@@ -75,7 +88,8 @@ export class AllEmployeesComponent implements OnInit {
     private cdref: ChangeDetectorRef,
     private deleteUserGQL: DeleteUserGQL,
     private activeRoute: ActivatedRoute,
-    private getuserquery: GET_USERS_QUERY
+    private getuserquery: GET_USERS_QUERY,
+    private importUsersGQL: ImportUsersGQL
   ) {
     this.srch = [];
     this.modules = appService.employee_modules;
@@ -194,22 +208,23 @@ export class AllEmployeesComponent implements OnInit {
   }
 
   createSubmit(f){
+    const data = f || f.value;
     this.createUserGQL
       .mutate({
-        "firstname": f.value.firstname,
-        "lastname": f.value.lastname,
-        "username": f.value.username,
-        "email": f.value.email,
-        "password": f.value.password,
-        "role": f.value.role,
-        "emmpid": f.value.emmpid,
-        "corporateid": f.value.corporateid,
-        "joiningdate": f.value.joiningdate,
-        "mobile":f.value.mobile,
+        "firstname": data.firstname,
+        "lastname": data.lastname,
+        "username": data.username,
+        "email": data.email,
+        "password": data.password,
+        "role": data.role,
+        "emmpid": data.emmpid,
+        "corporateid": data.corporateid,
+        "joiningdate": data.joiningdate,
+        "mobile":data.mobile,
         "permissions": {
           "holiday": {
-            "read": f.value.permissions.holiday.read,
-            "write": f.value.permissions.holiday.write
+            "read": data.permissions && data.permissions.holiday.read,
+            "write": data.permissions && data.permissions.holiday.write
           }
         }
       })
@@ -284,10 +299,58 @@ export class AllEmployeesComponent implements OnInit {
   }
 
   onGridReady(params: any) {
-    console.log(params);
     this.gridOptions = params.gridOptions;
     this.gridApi = params.gridApi;
     this.gridColumnApi = params.gridColumnApi;
+  }
+
+  onImportgetData(rowData) {
+    rowData.forEach((r, i) => {
+      if(r.joiningdate instanceof Date && !isNaN(r.joiningdate)) {
+        // console.log('valid Date!');
+      } else {
+        // console.log('Invalid!'); // But Convert First
+        r.joiningdate = moment(r.joiningdate, "DD MM YYYY");
+      }
+    });
+
+    let uniqArrByEmail = _.difference(rowData, _.uniqBy(rowData, 'email'), 'email');
+    let uniqArrByEmmp = _.difference(rowData, _.uniqBy(rowData, 'emmpid'), 'emmpid');
+    let uniqArrByUsrn = _.difference(rowData, _.uniqBy(rowData, 'username'), 'username');
+    console.log(uniqArrByEmail);
+    console.log(uniqArrByEmmp);
+    console.log(uniqArrByUsrn);
+
+    if(uniqArrByEmail.length) {
+      console.log('Dupicate Emails');
+      console.log(uniqArrByEmail);
+    }
+    if(uniqArrByEmmp.length) {
+      console.log('Dupicate Employee IDs');
+      console.log(uniqArrByEmmp);
+    }
+    if(uniqArrByUsrn.length) {
+      console.log('Dupicate Employee Usernames');
+      console.log(uniqArrByUsrn);
+    }
+    if (!uniqArrByEmail.length && !uniqArrByEmmp.length && !uniqArrByEmmp.length) {
+      console.log('Success');
+      this.insertManyUsers(rowData);
+    }
+
+  }
+
+  insertManyUsers(data){
+    this.importUsersGQL
+      .mutate({
+        "input": data,
+      })
+      .subscribe( (val: any) => {
+        if(val.data.insertManyUsers.users[0].username) {
+          console.log(val.data);
+          setTimeout(_ => this.getUsers() , 1000)
+        }
+      }, error => setTimeout(_ => this.getUsers() , 1000));
   }
 
   onFilterTextBoxChanged(filtertextbox) {

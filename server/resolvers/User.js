@@ -2,10 +2,18 @@ const mongoose = require('mongoose');
 const jsonwebtoken = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 
-const { Order, User } = require('../models/index');
+const { Order, User, Upload } = require('../models/index');
 const { promisify } = require('../helpers');
 const ObjectId = mongoose.Types.ObjectId;
+const mongodb =  require('mongodb');
+const { createWriteStream, mkdir } = require('fs');
+const shortid = require('shortid');
 
+let DB;
+
+setTimeout(() => {
+  DB = require('../server');
+}, 1000)
 
 const resolvers = {
   company: (company, args) => promisify(Order.find({_id: {$in: company.orders}}))
@@ -27,7 +35,7 @@ const mutation ={
     },{me,secret}) => new Promise(async (resolve, reject) => {
       const user = await User.findOne({$or:[ { email},{username}, {emmpid} ]})
       if (user) {
-        reject('user already exist');
+        reject(new Error('user already exist'));
       } else {
         const newUser = await User.create({
               username,
@@ -46,6 +54,35 @@ const mutation ={
         createToken({ id: newUser.id,role:newUser.role,username:newUser.username, emmpid},secret,'1')
         resolve(newUser);
       }
+  }),
+  insertManyUsers:(_, { input },{me,secret}) => new Promise(async (resolve, reject) => {
+
+    let users = [];
+    let count = 0;
+
+    input.forEach((u) => {
+        const email = u.email; const username = u.username; const emmpid = u.emmpid;
+          User.findOne({$or:[ { email},{username}, {emmpid} ]}).then(function(data){
+            if (!data) {
+              ++count;
+              bcrypt.hash(u.password, 10).then(onfulfilles => {
+                u.password = onfulfilles;
+                User.create({...u}).then(res => {
+                  users.push(res);
+                  if(input.length === count) {
+                    resolve({users});
+                  }
+                  // createToken({ id: newUser.id,role:newUser.role,username:newUser.username, emmpid},secret,'1')
+                })
+              }, onrejected => {
+                reject(new Error('Password generation failed!'));
+              });
+            } else {
+              ++count;
+              resolve(new Error(data.username + ' Username already exists!'));
+            }
+          })
+      });
   }),
   login:(_, { email, password },{ me, secret }) => new Promise(async (resolve, reject) => {
       const user = await User.findOne({email})
@@ -115,7 +152,32 @@ const mutation ={
       reject(error);
     }
   }),
+
+  uploadFile: async (_, { file },{me,secret}) => new Promise(async (resolve, reject) => {
+    mkdir("projects/ihrms/src/assets/uploads/", { recursive: true }, (err) => {
+      if (err) throw err;
+    });
+    const upload = await processUpload(file);
+    // save our file to the mongodb
+    await Upload.create(upload)
+    resolve(upload);
+  }),
 }
+const storeUpload = async ({ stream, filename, mimetype }) => {
+  const id = shortid.generate();
+  const path = `projects/ihrms/src/assets/uploads/${id}-${filename}`;
+  return new Promise((resolve, reject) =>
+    stream
+      .pipe(createWriteStream(path))
+      .on("finish", () => resolve({ id, path, filename, mimetype }))
+      .on("error", reject)
+  );
+};
+const processUpload = async (upload) => {
+  const { createReadStream, filename, mimetype } = await upload;
+  const stream = createReadStream();
+  return await storeUpload({ stream, filename, mimetype });
+};
 
 // _________  //
 

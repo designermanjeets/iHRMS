@@ -19,6 +19,7 @@ import { SharedModule } from './shared/shared.module';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
+import { NgxUploaderModule } from 'ngx-uploader';
 
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -347,7 +348,8 @@ const routes: Routes = [
     HttpClientModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatInputModule
+    MatInputModule,
+    NgxUploaderModule
   ],
   providers: [
     EventService,

@@ -80,7 +80,7 @@ export class HolidayDetailsComponent implements OnInit {
         "title": f.value.title,
         "paid": f.value.paid,
         "date": f.value.date,
-        "day": 'Mon',
+        "day": this.getDayOfWeek(f.value.date),
       })
       .subscribe( (val: any) => {
         if(val.data) {

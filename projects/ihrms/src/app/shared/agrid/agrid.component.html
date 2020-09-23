@@ -1,3 +1,19 @@
+<div class="m-b-10">
+  <label class="btn btn-default m-r-10" for="inputGroupFile01">
+    <span class="glyphicon glyphicon-upload"></span>
+    <span>Import Data</span>
+    <input
+        id="inputGroupFile01"
+        type="file"
+        ngFileSelect
+        [options]="options"
+        (uploadOutput)="onUploadOutput($event)"
+        [uploadInput]="uploadInput"
+    >
+  </label>
+  <a (click)="onExport($event)" class="btn btn-default" href="javascript:"><i class="fa fa-plus"></i> Export</a>
+</div>
+
 <ag-grid-angular
   class="ag-theme-alpine"
   [rowData]="rowData"

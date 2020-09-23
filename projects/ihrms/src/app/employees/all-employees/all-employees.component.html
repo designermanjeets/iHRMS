@@ -30,6 +30,8 @@
         <app-agrid
           [rowData]="rowData"
           [columnDefs]="columnDefs"
+          [xlsColumns]="xlsColumns"
+          (onImportgetData)="onImportgetData($event)"
           (onGridApiCreated)="onGridReady($event)"
         >
         </app-agrid>

@@ -138,10 +138,21 @@ const typeDefs = `
       status: String,
     ): LeaveType,
     deleteLeaveType( id: ID! ): LeaveType,
+    uploadFile(file: Upload!): File,
+    insertManyUsers(input: [UserInput]!): CreateUsersPayload,
   }
+  type CreateUsersPayload {
+    users: [User]
+  },
   type meta {
     createdAt:String
     updatedAt:String
+  }
+  type File {
+    id: ID!
+    path: String
+    filename: String
+    mimetype: String
   }
   type customUser{
     token:String,
@@ -277,6 +288,20 @@ const typeDefs = `
     gte:String,
     lt:String,
     bool:Boolean
+  }
+  input UserInput {
+    _id: ID,
+    username: String,
+    email: String,
+    firstname: String,
+    lastname: String,
+    password: String,
+    role: String,
+    emmpid:String,
+    corporateid: String,
+    mobile: String,
+    joiningdate: ISODate,
+    permissions: PermissionsInput
   }
   scalar ISODate
 `;

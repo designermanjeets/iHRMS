@@ -109,6 +109,23 @@ export class CreateUserGQL extends Mutation {
   `;
 }
 
+@Injectable({
+  providedIn: 'root'
+})
+export class ImportUsersGQL extends Mutation {
+  document = gql`
+    mutation InsertManyMutation(
+      $input: [UserInput]!
+    ) {
+      insertManyUsers(input: $input) {
+        users {
+          username
+        }
+      }
+    }
+  `;
+}
+
 
 @Injectable({
   providedIn: 'root'

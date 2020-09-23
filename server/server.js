@@ -1,12 +1,26 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
+const mongoose = require('mongoose'), Admin = mongoose.mongo.Admin;
 const cors = require('cors');
 const { ApolloServer, AuthenticationError, graphiqlExpress, graphqlExpress } = require('apollo-server-express');
 const jwt = require('jsonwebtoken')
 const {typeDefs,resolvers} = require('./schema');
 
-mongoose.connect('mongodb://localhost:27017/ihrms');
+let allDatabases;
+const conn = mongoose.connect('mongodb://localhost:27017/ihrms').then((res) =>{
+    console.log('listDatabases succeeded');
+    // console.log(res.connections[0].db)
+    const DB = res.connections[0].db;
+    module.exports = DB;
+}, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+mongoose.connection.on('error', err => {
+
+});
+
 require('dotenv').config()
 
 const SECRET = "mscreativepixelms";
@@ -20,7 +34,7 @@ app.use(bodyParser.json())
 const Authorization = async req => {
     let token = req.headers['accesstoken']
     if(token)token = token.split(" ")[1];// console.log("___token",token)
-    console.log("___token1",req.headers['accesstoken'])
+    // console.log("___token1",req.headers['accesstoken'])
     if (token || token=='null') {
         try {
             if(req.body.operationName=="login")return
