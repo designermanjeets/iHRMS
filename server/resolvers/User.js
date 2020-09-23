@@ -61,37 +61,41 @@ const mutation ={
     let count = 0;
 
     input.forEach((u) => {
+      if(u.username !== 'superadmin') {
         const email = u.email; const username = u.username; const emmpid = u.emmpid;
-          User.findOne({$or:[ { email},{username}, {emmpid} ]}).then(function(data){
-            if (!data) {
-              ++count;
-              bcrypt.hash(u.password, 10).then(onfulfilles => {
-                u.password = onfulfilles;
-                User.create({...u}).then(res => {
-                  users.push(res);
-                  if(input.length === count) {
-                    resolve({users});
-                  }
-                  // createToken({ id: newUser.id,role:newUser.role,username:newUser.username, emmpid},secret,'1')
-                })
-              }, onrejected => {
-                reject(new Error('Password generation failed!'));
-              });
-            } else {
-              ++count;
-              resolve(new Error(data.username + ' Username already exists!'));
-            }
-          })
-      });
+        User.findOne({$or:[ { email},{username}, {emmpid} ]}).then(function(data){
+          if (!data) {
+            ++count;
+            bcrypt.hash(u.password, 10).then(onfulfilles => {
+              u.password = onfulfilles;
+              User.create({...u}).then(res => {
+                users.push(res);
+                if(input.length === count) {
+                  resolve({users});
+                }
+                // createToken({ id: newUser.id,role:newUser.role,username:newUser.username, emmpid},secret,'1')
+              })
+            }, onrejected => {
+              reject(new Error('Password generation failed!'));
+            });
+          } else {
+            ++count;
+            resolve(new Error(data.username + ' Username already exists!'));
+          }
+        })
+      } else {
+        resolve(new Error('User already Exists!'));
+      }
+    });
   }),
   login:(_, { email, password },{ me, secret }) => new Promise(async (resolve, reject) => {
-      const user = await User.findOne({email})
+      const user = await User.findOne({$or:[ { email: email},{username: email} ]})
       if (!user) {
-        reject({data: 'No user with that email'})
+        reject(new Error('No user with that email or username'));
       } else {
         const valid = await bcrypt.compare(password, user.password)
         if (!valid) {
-          reject({data: 'Incorrect password'})
+          reject(new Error('Incorrect password'));
         } else {
           const token = await createToken({ id: user.id,email:user.email,role:user.role,username:user.username, emmpid:user.emmpid},secret,'1y')
           resolve({ token, user });
@@ -102,7 +106,7 @@ const mutation ={
     try{
       const getuser = await User.findOne({email });
       let param ={username, email, password,role, firstname, lastname, emmpid, corporateid, mobile, joiningdate, permissions}
-      if(getuser) {
+      if(getuser && getuser.username !== 'superadmin') {
         if(password !== getuser.password) {
           param.password= await bcrypt.hash(password, 10)
         }
@@ -117,8 +121,8 @@ const mutation ={
     try{
       let param = { email }
       const user = await User.findOne({ "email": email });
-      if (!user) throw new Error('User not found!!')
-      if(user) {
+      if (!user) reject( new Error('User not found!!'))
+      if(user && user !== 'superadmin') {
         await User.deleteOne({ "email": email }, {new: true})
           resolve({User});
       }
@@ -130,8 +134,7 @@ const mutation ={
     try{
       const getuser = await User.findOne({email });
       let param = { username, email, oldPassword, newPassword }
-      console.log(newPassword)
-      if(getuser) {
+      if(getuser && getuser.username !== 'superadmin') {
         const validOld = await bcrypt.compare(oldPassword, getuser.password);
         const validNew = newPassword !== oldPassword;
         if(validOld) {
@@ -140,13 +143,13 @@ const mutation ={
             const user = await User.findByIdAndUpdate(id,{ password: param.password },{new: true});
             resolve({user});
           } else {
-            reject({data: 'New Password should not be same as Old Password!'})
+            reject(new Error('New Password should not be same as Old Password!'))
           }
         } else {
-          reject({data: 'Incorrect Old Password!'})
+          reject(new Error('Incorrect Old Password!'))
         }
       } else {
-        reject({data: 'No User Found!'})
+        reject(new Error('No User Found!'))
       }
     } catch(error){
       reject(error);

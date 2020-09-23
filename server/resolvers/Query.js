@@ -29,7 +29,7 @@ const resolvers = {
   // user: (_, args) => promisify(User.findById(args.id)),
   user: async (_, args, { me })  => new Promise(async (resolve, reject) => {
     const user = await User.findOne({ "email": args.email });
-    if(user) {
+    if(user || user.username !== 'superadmin') {
       return resolve(user);
     } else {
       return reject({data: 'User Not Found!'})
@@ -38,8 +38,9 @@ const resolvers = {
   users: async (_, args, { me })  => new Promise(async (resolve, reject) => {
     const param = paramHandler(args.query)
     User.find(param,(err, result) => {
+      const filteredAry = result.filter(e => e.username !== 'superadmin')
       if (err) reject(err);
-      else resolve(result);
+      else resolve(filteredAry);
     }).skip(args.query.offset).limit(args.query.limit)
   }),
 

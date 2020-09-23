@@ -8,7 +8,7 @@
           </div>
 
           <div *ngIf="ispwdreset" class="alert alert-danger m-t-10" style="text-align: center;">
-            <strong class="text-center">Password Changes! Please Login Again!</strong>
+            <strong class="text-center">Password Changed! Please Login Again!</strong>
           </div>
 
           <div *ngIf="isloggedin" class="alert alert-danger m-t-10" style="text-align: center;">
@@ -16,7 +16,7 @@
           </div>
           <form [formGroup]="loginForm" (ngSubmit)="login()">
             <div class="form-group">
-              <input class="form-control" type="text" placeholder="Email" formControlName="email">
+              <input class="form-control" type="text" placeholder="Email or password" formControlName="email">
             </div>
             <div class="form-group">
               <input class="form-control" type="password" placeholder="password" formControlName="password">
