@@ -59,3 +59,36 @@ export class GET_USERS_QUERY extends Query<Response> {
   }
  `;
 }
+
+
+@Injectable({
+  providedIn: 'root',
+})
+export class GET_USER_QUERY extends Query<Response> {
+  document = gql`
+   query getUser(
+      $email: String!
+    ) {
+    user(
+      email: $email,
+    ) {
+        username,
+        email,
+        firstname,
+        lastname,
+        role,
+        emmpid,
+        corporateid,
+        mobile,
+        joiningdate,
+        _id,
+        permissions {
+          holiday {
+            read
+            write
+          }
+        }
+      }
+  }
+ `;
+}

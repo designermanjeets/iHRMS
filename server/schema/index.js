@@ -29,10 +29,11 @@ const typeDefs = `
       corporateid: String!,
       mobile: String,
       joiningdate: ISODate,
-      permissions: PermissionsInput
+      permissions: PermissionsInput,
+      created_at: ISODate
     ): User,
     login (email: String!, password: String!): customUser,
-    deleteUser (email: String!): User,
+    deleteUser (email: String!, modified: [modifiedInputs]): User,
     changePassword (
       id: ID!,
       oldPassword: String!,
@@ -81,7 +82,9 @@ const typeDefs = `
       corporateid: String,
       mobile: String,
       joiningdate: ISODate,
-      permissions: PermissionsInput): User,
+      permissions: PermissionsInput,
+      modified: [modifiedInputs]
+      ): User,
     updateCompany(
       companyname: String,
       printname: String,
@@ -140,6 +143,16 @@ const typeDefs = `
     deleteLeaveType( id: ID! ): LeaveType,
     uploadFile(file: Upload!): File,
     insertManyUsers(input: [UserInput]!): CreateUsersPayload,
+    userAuditMutation(
+      id: ID!,
+      email: String,
+      username: String,
+      emmpid: String,
+      modified_by: String,
+      action: String,
+      comments: String,
+      modified_at: ISODate
+     ): userAudit
   }
   type CreateUsersPayload {
     users: [User]
@@ -236,10 +249,16 @@ const typeDefs = `
     corporateid: String,
     mobile: String,
     joiningdate: ISODate,
-    permissions: permissions
+    permissions: permissions,
+    created_at: ISODate,
+    modified: [modifiedTypes]
   }
   type permissions {
     holiday:PermissInput,
+  }
+  type modifiedTypes {
+    modified_at: ISODate,
+    modified_by: String
   }
   input PermissionsInput {
     holiday:permiss
@@ -273,6 +292,20 @@ const typeDefs = `
     leavedays: String!,
     carryforward: String,
     status: String,
+  },
+  type userAudit {
+    id: ID!,
+    email: String,
+    username: String,
+    emmpid: String,
+    modified_by: String,
+    action: String,
+    changedObj: User,
+    modified_at: ISODate
+  },
+  input modifiedInputs {
+    modified_by: String
+    modified_at: ISODate
   },
   input Pagination {
     query:String,

@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule  } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { ChartsModule } from 'ng2-charts';
-// import { DataTableModule } from "angular2-datatable";
+import { DataTableModule } from "@pascalhonegger/ng-datatable";
 import { NgSlimScrollModule, SLIMSCROLL_DEFAULTS } from 'ngx-slimscroll';
 import { MyDatePickerModule } from 'mydatepicker';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
@@ -26,7 +26,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { EmployeeMainComponent } from './employees/employee-main/employee-main.component';
 import { AllEmployeesComponent } from './employees/all-employees/all-employees.component';
 import { HolidaysComponent } from './employees/holidays/holidays.component';
-// import { LeavesComponent } from './employees/leaves/leaves.component';
+import { LeavesComponent } from './employees/leaves/leaves.component';
 // import { AttendanceComponent } from './employees/attendance/attendance.component';
 // import { DepartmentsComponent } from './employees/departments/departments.component';
 // import { DesignationsComponent } from './employees/designations/designations.component';
@@ -64,7 +64,7 @@ import { EmployeeDetailsComponent } from './employees/employee-details/employee-
 import { HolidayDetailsComponent } from './employees/holiday-details/holiday-details.component';
 // import { DepartmentDetailsComponent } from './employees/department-details/department-details.component';
 // import { DesignationDetailsComponent } from './employees/designation-details/designation-details.component';
-// import { LeaveDetailsComponent } from './employees/leave-details/leave-details.component';
+import { LeaveDetailsComponent } from './employees/leave-details/leave-details.component';
 // import { ProjectDetailsComponent } from './projects/project-details/project-details.component';
 // import { ClientProfileDetailsComponent } from './clients/client-profile-details/client-profile-details.component';
 // import { ClientProfileEditComponent } from './clients/client-profile-edit/client-profile-edit.component';
@@ -134,8 +134,8 @@ const routes: Routes = [
       { path: 'all-employees/edit', component: EmployeeDetailsComponent },
       { path: 'holidays', component: HolidaysComponent },
       { path: 'holidays/edit', component: HolidayDetailsComponent },
-      // { path: 'leaves', component: LeavesComponent },
-      // { path: 'leaves/edit', component: LeaveDetailsComponent },
+      { path: 'leaves', component: LeavesComponent },
+      { path: 'leaves/edit', component: LeaveDetailsComponent },
       // { path: 'attendance', component: AttendanceComponent },
       // { path: 'departments', component: DepartmentsComponent },
       // { path: 'departments/edit', component: DepartmentDetailsComponent },
@@ -236,7 +236,7 @@ const routes: Routes = [
     EmployeeMainComponent,
     AllEmployeesComponent,
     HolidaysComponent,
-    // LeavesComponent,
+    LeavesComponent,
     // AttendanceComponent,
     // DepartmentsComponent,
     // DesignationsComponent,
@@ -274,7 +274,7 @@ const routes: Routes = [
     HolidayDetailsComponent,
     // DepartmentDetailsComponent,
     // DesignationDetailsComponent,
-    // LeaveDetailsComponent,
+    LeaveDetailsComponent,
     // ProjectDetailsComponent,
     // ClientProfileDetailsComponent,
     // ClientProfileEditComponent,
@@ -329,7 +329,7 @@ const routes: Routes = [
     ReactiveFormsModule,
     BrowserAnimationsModule,
     ChartsModule,
-    // DataTableModule,
+    DataTableModule,
     NgSlimScrollModule,
     MyDatePickerModule,
     NgxDatatableModule,

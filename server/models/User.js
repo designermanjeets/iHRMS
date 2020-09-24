@@ -2,6 +2,11 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
+const subSchema = mongoose.Schema({
+  modified_by: String,
+  modified_at: Date
+}); //,{ _id : false }
+
 const userSchema = new Schema({
   username: String,
   email: String,
@@ -46,7 +51,10 @@ const userSchema = new Schema({
       import: Boolean,
       export: Boolean
     }
-  }
+  },
+  created_at: Date,
+  modified : [subSchema],
 }, {collection:'User'});
+
 
 module.exports = mongoose.model('User', userSchema);

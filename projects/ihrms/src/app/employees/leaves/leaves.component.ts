@@ -1,4 +1,4 @@
-import { AppService } from './../../app.service';
+import { AppService } from '../../app.service';
 import { Component, OnInit } from '@angular/core';
 import {IMyDpOptions} from 'mydatepicker';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -45,7 +45,7 @@ export class LeavesComponent implements OnInit {
   public addL: any = {};
   addLeaveValidation = false;
 
-  constructor(private appService: AppService, private router: Router, private route: ActivatedRoute) { 
+  constructor(private appService: AppService, private router: Router, private route: ActivatedRoute) {
     this.rows = appService.leaves;
     this.srch = [...this.rows];
   }
@@ -58,7 +58,7 @@ export class LeavesComponent implements OnInit {
     // var date1 = new Date("7/13/2010");
     // var date2 = new Date("7/11/2010");
     // var timeDiff = Math.abs(date2.getTime() - date1.getTime());
-    // var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
+    // var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
     // console.log(diffDays);
   }
 
@@ -99,7 +99,7 @@ export class LeavesComponent implements OnInit {
     if (index > -1) {
         this.rows.splice(index, 1);
         this.srch.splice(index, 1);
-    }        
+    }
     //console.log(this.rows);
     this.rows = this.rows;
   }

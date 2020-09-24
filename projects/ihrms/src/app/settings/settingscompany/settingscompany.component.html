@@ -290,47 +290,23 @@
             </div>
           </div>
           <div class="col-sm-4">
-            <div class="form-group pos-rel"
-               [class.has-error]="
-                companyForm.controls['createdby'].invalid &&
-                companyForm.controls['createdby'].touched"
-               [class.has-success]="companyForm.controls['createdby'].valid"
-            >
-              <label class="control-label">Created by <span class="text-danger m-l-5">*</span></label>
-              <input type="text" class="form-control" formControlName="createdby">
-              <span class="help-block" *ngIf="companyForm.controls['createdby'].errors && companyForm.controls['createdby'].touched">
-                  Created by is invalid
-              </span>
+            <div class="form-group pos-rel">
+              <label class="control-label">Created by</label>
+              <input readonly type="text" class="form-control" formControlName="createdby">
             </div>
           </div>
           <div class="col-sm-4">
-            <div class="form-group pos-rel"
-               [class.has-error]="
-                companyForm.controls['createdon'].invalid &&
-                companyForm.controls['createdon'].touched"
-               [class.has-success]="companyForm.controls['createdon'].valid"
-            >
-              <label class="control-label">Created On <span class="text-danger m-l-5">*</span></label>
+            <div class="form-group pos-rel">
+              <label class="control-label">Created On</label>
               <input readonly type="text" class="form-control datecolor" formControlName="createdon" [matDatepicker]="picker3">
               <mat-datepicker-toggle class="formpicker" matSuffix [for]="picker3"></mat-datepicker-toggle>
               <mat-datepicker #picker3></mat-datepicker>
-              <span class="help-block" *ngIf="companyForm.controls['createdon'].errors && companyForm.controls['createdon'].touched">
-                  Created On is invalid
-              </span>
             </div>
           </div>
             <div class="col-sm-4">
-              <div class="form-group pos-rel"
-                 [class.has-error]="
-                  companyForm.controls['createdip'].invalid &&
-                  companyForm.controls['createdip'].touched"
-                 [class.has-success]="companyForm.controls['createdip'].valid"
-              >
-                <label class="control-label">Created IP <span class="text-danger m-l-5">*</span></label>
-                <input type="text" class="form-control" formControlName="createdip">
-                <span class="help-block" *ngIf="companyForm.controls['createdip'].errors && companyForm.controls['createdip'].touched">
-                  Created IP is invalid
-                </span>
+              <div class="form-group pos-rel">
+                <label class="control-label">Created IP</label>
+                <input readonly type="text" class="form-control" formControlName="createdip">
               </div>
           </div>
           <div class="col-sm-4">

@@ -2,11 +2,9 @@ const mongoose = require('mongoose');
 const jsonwebtoken = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 
-const { Order, User, Upload } = require('../models/index');
+const { Order, User, Upload, Audit } = require('../models/index');
 const { promisify } = require('../helpers');
 const ObjectId = mongoose.Types.ObjectId;
-const mongodb =  require('mongodb');
-const { createWriteStream, mkdir } = require('fs');
 const shortid = require('shortid');
 
 let DB;
@@ -31,7 +29,8 @@ const mutation ={
       corporateid,
       mobile,
       joiningdate,
-      permissions
+      permissions,
+      created_at
     },{me,secret}) => new Promise(async (resolve, reject) => {
       const user = await User.findOne({$or:[ { email},{username}, {emmpid} ]})
       if (user) {
@@ -48,10 +47,11 @@ const mutation ={
               corporateid,
               mobile,
               joiningdate,
-              permissions
+              permissions,
+              created_at
             }
           )
-        createToken({ id: newUser.id,role:newUser.role,username:newUser.username, emmpid},secret,'1')
+        await createToken({ id: newUser.id,role:newUser.role,username:newUser.username, emmpid},secret,'1')
         resolve(newUser);
       }
   }),
@@ -102,28 +102,124 @@ const mutation ={
         }
       }
   }),
-  updateUser:(_, { id,username, email, password,role, firstname, lastname, emmpid, corporateid, mobile, joiningdate, permissions},{me,secret}) => new Promise(async (resolve, reject) => {
+  updateUser:(_, {
+    id,
+    username,
+    email,
+    password,
+    role,
+    firstname,
+    lastname,
+    emmpid,
+    corporateid,
+    mobile,
+    joiningdate,
+    permissions,
+    modified
+  },{me,secret}) => new Promise(async (resolve, reject) => {
     try{
-      const getuser = await User.findOne({email });
-      let param ={username, email, password,role, firstname, lastname, emmpid, corporateid, mobile, joiningdate, permissions}
-      if(getuser && getuser.username !== 'superadmin') {
-        if(password !== getuser.password) {
-          param.password= await bcrypt.hash(password, 10)
+      const getuser = await User.findOne({$or:[ { email},{username}, {emmpid} ]})
+      let param ={
+        username,
+        email,
+        password,
+        role,
+        firstname,
+        lastname,
+        emmpid,
+        corporateid,
+        mobile,
+        joiningdate,
+        permissions
+      }
+
+      let changeFields = {};
+      for ( item in param) {
+        if(param[item] && param[item] !== getuser[item]) {
+          if(item === 'permissions') {
+            for(subitem in param[item]) {
+              if(JSON.stringify(param[item][subitem]) !== JSON.stringify(getuser[item][subitem])) {
+                changeFields['permissions'] = [];
+                changeFields['permissions'].push(param[item]);
+              }
+            }
+          } else {
+            // Hash Password Here
+            changeFields[item] = param[item];
+          }
         }
       }
-        const user = await User.findByIdAndUpdate(id,{$set:{...param}},{new: true})
-          .then((result) => { resolve(result) })
+
+      if(getuser && getuser.username !== 'superadmin') {
+        if(password !== getuser.password) {
+          param.password = await bcrypt.hash(password, 10)
+        }
+      }
+      await User.findByIdAndUpdate(
+        {_id: id},
+        { $set: {...param }, $push: { 'modified': modified  }  }, { new: true })
+        .then((result) => {
+          if(result) {
+            const nmodified = {
+              user_ID: getuser._id,
+              modified_by: modified[0].modified_by,
+              modified_at: modified[0].modified_at,
+              action: 'Changed',
+              changedObj: changeFields,
+              oldUserData: getuser
+            }
+            Audit.find({}).then(val =>{
+              if(val.length) {
+                Audit.findOneAndUpdate(
+                  { },
+                  { $push: { userAudit: nmodified  }  }, { new: true })
+                  .then((result) => {
+                    resolve(result);
+                  });
+              } else {
+                Audit.create({ userAudit: nmodified  })
+                  .then((result) => {
+                    resolve(result);
+                  });
+              }
+            });
+          } else {
+            reject(new Error('Error'));
+          }
+        })
     } catch(error){
         reject(error);
     }
   }),
-  deleteUser:(_, { email },{me,secret}) => new Promise(async (resolve, reject) => {
+  deleteUser:(_, { email, modified },{me,secret}) => new Promise(async (resolve, reject) => {
     try{
-      let param = { email }
+      let param = { email, modified }
       const user = await User.findOne({ "email": email });
       if (!user) reject( new Error('User not found!!'))
       if(user && user !== 'superadmin') {
         await User.deleteOne({ "email": email }, {new: true})
+          const nmodified = {
+            user_ID: user._id,
+            modified_by: modified[0].modified_by,
+            modified_at: modified[0].modified_at,
+            action: 'User Deleted!',
+            deletedUser: user
+          }
+          Audit.find({}).then(val =>{
+            if(val.length) {
+              Audit.findOneAndUpdate(
+                { },
+                { $push: { userAudit: nmodified  }  }, { new: true })
+                .then((result) => {
+                  resolve(result);
+                });
+            } else {
+              Audit.create({ userAudit: nmodified  })
+                .then((result) => {
+                  resolve(result);
+                });
+            }
+          });
           resolve({User});
       }
     } catch(error){

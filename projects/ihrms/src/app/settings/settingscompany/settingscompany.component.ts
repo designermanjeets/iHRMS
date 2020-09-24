@@ -8,8 +8,8 @@ import {
   RegisterCompanyGQL,
   UpdateCompanyGQL
 } from "./companysettingGQL";
-import {map} from "rxjs/operators";
 import {Apollo} from 'apollo-angular';
+import {GET_USER_QUERY} from "../../employees/all-employees/employee-gql.service";
 
 @Component({
   selector: 'app-settingscompany',
@@ -28,7 +28,8 @@ export class SettingscompanyComponent implements OnInit {
     private registerCompanyGQL: RegisterCompanyGQL,
     private updateCompanyGQL: UpdateCompanyGQL,
     private deleteCompanyGQL: DeleteCompanyGQL,
-    private apollo: Apollo
+    private apollo: Apollo,
+    private getusequery: GET_USER_QUERY,
   ) { }
 
   ngOnInit() {
@@ -63,7 +64,17 @@ export class SettingscompanyComponent implements OnInit {
       alias: [''],
     });
 
-    this.getCompany();
+    this.getUser();
+  }
+
+  getUser() {
+    this.getusequery.watch({
+      "email": JSON.parse(sessionStorage.getItem('user')).email
+    }).valueChanges.subscribe((response: any) => {
+      if(response.data.user) {
+        this.getCompany(response.data.user.corporateid);
+      }
+    });
   }
 
   updateCompany(){
@@ -101,16 +112,16 @@ export class SettingscompanyComponent implements OnInit {
   }
 
 
-  getCompany() {
+  getCompany(corporateid) {
     this.apollo.watchQuery({
       query: GET_COMPANY_QUERY,
       variables: {
-        "corporateid": JSON.parse(sessionStorage.getItem('user')).corporateid
+        "corporateid": corporateid
       },
     }).valueChanges.subscribe((response: any) => {
-        console.log(response.data.getCompany);
+      if(response) {
         this.companyForm.patchValue(response.data.getCompany);
-        this.companyForm.patchValue(response.data.getCompany);
+      }
     });
   }
 
