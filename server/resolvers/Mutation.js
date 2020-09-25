@@ -1,6 +1,6 @@
 const { mergeResolvers } = require("merge-graphql-schemas");
 
-const User  = require('./User');
+const User  = require('./user/User');
 const Company  = require('./Company');
 const Holiday  = require('./Holiday');
 const LeaveType  = require('./LeaveType');

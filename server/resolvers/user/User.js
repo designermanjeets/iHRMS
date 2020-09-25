@@ -2,15 +2,15 @@ const mongoose = require('mongoose');
 const jsonwebtoken = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 
-const { Order, User, Upload, Audit } = require('../models/index');
-const { promisify } = require('../helpers');
+const { Order, User, Upload, Audit } = require('../../models/index');
+const { promisify } = require('../../helpers');
 const ObjectId = mongoose.Types.ObjectId;
 const shortid = require('shortid');
 
 let DB;
 
 setTimeout(() => {
-  DB = require('../server');
+  DB = require('../../server');
 }, 1000)
 
 const resolvers = {
