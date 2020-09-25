@@ -5,6 +5,7 @@ const cors = require('cors');
 const { ApolloServer, AuthenticationError, graphiqlExpress, graphqlExpress } = require('apollo-server-express');
 const jwt = require('jsonwebtoken')
 const {typeDefs,resolvers} = require('./schema');
+const { Order, User, Upload, Audit } = require('../server/models/index');
 
 let allDatabases;
 const conn = mongoose.connect('mongodb://localhost:27017/ihrms').then((res) =>{
@@ -32,14 +33,24 @@ app.use(bodyParser.json())
 
 
 const Authorization = async req => {
-    let token = req.headers['accesstoken']
-    if(token)token = token.split(" ")[1];// console.log("___token",token)
-    // console.log("___token1",req.headers['accesstoken'])
-    if (token || token=='null') {
+    let token = req.headers['authorization'].split(" ")[1];
+    // console.log("___token1",token)
+    if (token) {
         try {
-            if(req.body.operationName=="login")return
-            console.log("___token2",await jwt.verify(token, SECRET))
-            return await jwt.verify(token, SECRET);//
+          const vtoken = await jwt.verify(token, SECRET);
+          // console.log("___token2 ",vtoken)
+          const user = await User.findOne({$or:[
+              { email: vtoken.email },
+              { username:vtoken.username },
+              { emmpid: vtoken.emmpid }
+          ]})
+          if(user.role === vtoken.role) {
+            return vtoken;
+          } else {
+            return new AuthenticationError(
+              'Invalid Role. Sign in again.',
+            );
+          }
         } catch (e) {
             throw new AuthenticationError(
                 'Your session expired. Sign in again.',

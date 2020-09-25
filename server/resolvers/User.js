@@ -51,7 +51,28 @@ const mutation ={
               created_at
             }
           )
-        await createToken({ id: newUser.id,role:newUser.role,username:newUser.username, emmpid},secret,'1')
+        await createToken({ id: newUser.id,role:newUser.role,username:newUser.username, emmpid},secret,'1d')
+
+        const nmodified = {
+          user_ID: newUser._id,
+          action: 'User Created!',
+          createdUser: newUser
+        }
+        Audit.find({}).then(val =>{
+          if(val.length) {
+            Audit.findOneAndUpdate(
+              { },
+              { $push: { userAudit: nmodified  }  }, { new: true })
+              .then((result) => {
+                resolve(result);
+              });
+          } else {
+            Audit.create({ userAudit: nmodified  })
+              .then((result) => {
+                resolve(result);
+              });
+          }
+        });
         resolve(newUser);
       }
   }),
@@ -97,7 +118,7 @@ const mutation ={
         if (!valid) {
           reject(new Error('Incorrect password'));
         } else {
-          const token = await createToken({ id: user.id,email:user.email,role:user.role,username:user.username, emmpid:user.emmpid},secret,'1y')
+          const token = await createToken({ id: user.id,email:user.email,role:user.role,username:user.username, emmpid:user.emmpid},secret,'1d')
           resolve({ token, user });
         }
       }
@@ -147,17 +168,13 @@ const mutation ={
             // Hash Password Here
             changeFields[item] = param[item];
             if(item === 'joiningdate' && JSON.stringify(param[item]) !== JSON.stringify(getuser[item])) {
-              console.log('d change');
               changeFields[item] = param[item];
             } else {
-              console.log('d remove no change');
               delete changeFields['joiningdate']
             }
           }
         }
       }
-
-      console.log(changeFields);
 
       if(getuser && getuser.username !== 'superadmin') {
         if(password !== getuser.password) {

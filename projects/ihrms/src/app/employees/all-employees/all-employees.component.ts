@@ -3,7 +3,7 @@ import {IMyDpOptions} from 'mydatepicker';
 import {ActivatedRoute, Router} from '@angular/router';
 import { AppService } from '../../app.service';
 import {ActionComponent} from '../../shared/agrid/components/action/action.component';
-import {GET_COMPANIES_QUERY} from "../../settings/settingscompany/companysettingGQL";
+import {GET_COMPANIES_QUERY, } from "../../settings/settingscompany/companysettingGQL";
 import {EmployeeGQLService, GET_USERS_QUERY} from "./employee-gql.service";
 import {Apollo} from "apollo-angular";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
@@ -12,6 +12,7 @@ import {GridOptions} from "ag-grid-community";
 import {DatetimeComponent} from "../../shared/agrid/components/datetime/datetime.component";
 import * as moment from 'moment';
 import * as _ from 'lodash';
+import {GET_HOLIDAYS_QUERY} from "../holidays/holidays-gql.service";
 
 declare const $: any;
 
@@ -88,7 +89,6 @@ export class AllEmployeesComponent implements OnInit {
     private cdref: ChangeDetectorRef,
     private deleteUserGQL: DeleteUserGQL,
     private activeRoute: ActivatedRoute,
-    private getuserquery: GET_USERS_QUERY,
     private importUsersGQL: ImportUsersGQL
   ) {
     this.srch = [];
@@ -187,10 +187,13 @@ export class AllEmployeesComponent implements OnInit {
 }
 
   getUsers() {
-    this.getuserquery.watch({
-      "pagination": {
-        "limit": 100
-      }
+    this.apollo.watchQuery({
+      query: GET_USERS_QUERY,
+      variables: {
+        "pagination": {
+          "limit": 100
+        }
+      },
     }).valueChanges.subscribe((response: any) => {
       console.log(response)
       this.rowData = response.data.users;

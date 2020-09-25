@@ -27,11 +27,7 @@ export class EmployeeGQLService {
   }
 }
 
-@Injectable({
-  providedIn: 'root',
-})
-export class GET_USERS_QUERY extends Query<Response> {
-  document = gql`
+  export const GET_USERS_QUERY = gql`
    query getUsers(
       $pagination: Pagination!
     ) {
@@ -58,7 +54,6 @@ export class GET_USERS_QUERY extends Query<Response> {
       }
   }
  `;
-}
 
 
 @Injectable({
