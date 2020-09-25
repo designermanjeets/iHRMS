@@ -208,7 +208,7 @@ export class AllEmployeesComponent implements OnInit {
   }
 
   createSubmit(f){
-    const data = f || f.value;
+    const data = f.value;
     this.createUserGQL
       .mutate({
         "firstname": data.firstname,
@@ -226,7 +226,8 @@ export class AllEmployeesComponent implements OnInit {
             "read": data.permissions && data.permissions.holiday.read,
             "write": data.permissions && data.permissions.holiday.write
           }
-        }
+        },
+        "modified" : []
       })
       .subscribe( (val: any) => {
         if(val.data.signup.username) {
@@ -243,7 +244,11 @@ export class AllEmployeesComponent implements OnInit {
   onDelete(email){
     this.deleteUserGQL
     .mutate({
-      "email": email
+      "email": email,
+      "modified": {
+        "modified_by": JSON.parse(sessionStorage.getItem('user')).username,
+        "modified_at": Date.now()
+      }
     })
     .subscribe( (val: any) => {
       if(!val.data.deleteUser.email) {

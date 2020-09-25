@@ -21,6 +21,7 @@ export class EmpdetailGQLService extends Mutation{
       $mobile: String
       $joiningdate: ISODate
       $permissions:PermissionsInput
+      $modified: [modifiedInputs]
     ) {
     updateUser(
         id: $id,
@@ -34,7 +35,8 @@ export class EmpdetailGQLService extends Mutation{
         emmpid: $emmpid,
         mobile: $mobile,
         joiningdate: $joiningdate,
-        permissions: $permissions
+        permissions: $permissions,
+        modified: $modified
     ) {
         username,
         email,
@@ -134,9 +136,11 @@ export class DeleteUserGQL extends Mutation {
   document = gql`
     mutation DeleteMutation(
       $email: String!
+      $modified: [modifiedInputs]
     ) {
     deleteUser(
-        email: $email
+        email: $email,
+        modified: $modified
     ) {
         email
       }

@@ -146,9 +146,18 @@ const mutation ={
           } else {
             // Hash Password Here
             changeFields[item] = param[item];
+            if(item === 'joiningdate' && JSON.stringify(param[item]) !== JSON.stringify(getuser[item])) {
+              console.log('d change');
+              changeFields[item] = param[item];
+            } else {
+              console.log('d remove no change');
+              delete changeFields['joiningdate']
+            }
           }
         }
       }
+
+      console.log(changeFields);
 
       if(getuser && getuser.username !== 'superadmin') {
         if(password !== getuser.password) {
@@ -159,7 +168,7 @@ const mutation ={
         {_id: id},
         { $set: {...param }, $push: { 'modified': modified  }  }, { new: true })
         .then((result) => {
-          if(result) {
+          if(result && Object.keys(changeFields).length !== 0) {
             const nmodified = {
               user_ID: getuser._id,
               modified_by: modified[0].modified_by,
@@ -184,7 +193,7 @@ const mutation ={
               }
             });
           } else {
-            reject(new Error('Error'));
+            resolve(result);
           }
         })
     } catch(error){

@@ -146,7 +146,11 @@ export class EmployeeDetailsComponent implements OnInit {
             "read": f.value.permissions.holiday.read,
             "write": f.value.permissions.holiday.write
           }
-        }
+        },
+        "modified": {
+            "modified_by": JSON.parse(sessionStorage.getItem('user')).username,
+            "modified_at": Date.now()
+          }
       })
       .subscribe( (val: any) => {
         if(val.data.updateUser) {
