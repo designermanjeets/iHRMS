@@ -30,6 +30,7 @@ const typeDefs = `
       mobile: String,
       joiningdate: ISODate,
       permissions: PermissionsInput,
+      created_by: String,
       created_at: ISODate
     ): User,
     login (email: String!, password: String!): customUser,
@@ -141,6 +142,19 @@ const typeDefs = `
       status: String,
     ): LeaveType,
     deleteLeaveType( id: ID! ): LeaveType,
+    createDesignation (
+      designation: String!,
+      department: String,
+      created_at: ISODate,
+      created_by: String
+    ): Designation,
+    updateDesignation(
+      id: ID!,
+      designation: String!,
+      department: String,
+      modified: [modifiedInputs]
+    ): Designation,
+    deleteDesignation( id: ID!, modified: [modifiedInputs] ): Designation,
     uploadFile(file: Upload!): File,
     insertManyUsers(input: [UserInput]!): CreateUsersPayload,
     userAuditMutation(
@@ -148,11 +162,24 @@ const typeDefs = `
       email: String,
       username: String,
       emmpid: String,
+      created_by: String,
       modified_by: String,
       action: String,
       comments: String,
+      created_at: ISODate,
       modified_at: ISODate
-     ): userAudit
+     ): userAudit,
+   desigAuditMutation(
+      id: ID!,
+      designation: String,
+      department: String,
+      created_by: String,
+      modified_by: String,
+      action: String,
+      comments: String,
+      created_at: ISODate,
+      modified_at: ISODate
+     ): desigAudit
   }
   type CreateUsersPayload {
     users: [User]
@@ -286,6 +313,13 @@ const typeDefs = `
     day:  String,
     paid: String,
   },
+  type Designation {
+    _id: ID,
+    designation: String!,
+    department: String,
+    created_at: ISODate,
+    modified: [modifiedTypes]
+  },
   type LeaveType {
     _id: ID,
     leavetype: String!,
@@ -301,6 +335,17 @@ const typeDefs = `
     modified_by: String,
     action: String,
     changedObj: User,
+    modified_at: ISODate
+  },
+  type desigAudit {
+    id: ID!,
+    email: String,
+    username: String,
+    designation: String,
+    department: String,
+    modified_by: String,
+    action: String,
+    comments: String,
     modified_at: ISODate
   },
   input modifiedInputs {

@@ -30,6 +30,7 @@ const mutation ={
       mobile,
       joiningdate,
       permissions,
+      created_by,
       created_at
     },{me,secret}) => new Promise(async (resolve, reject) => {
       const user = await User.findOne({$or:[ { email},{username}, {emmpid} ]})
@@ -54,8 +55,10 @@ const mutation ={
         await createToken({ id: newUser.id,role:newUser.role,username:newUser.username, emmpid},secret,'1d')
 
         const nmodified = {
-          user_ID: newUser._id,
+          newuser_ID: newUser._id,
           action: 'User Created!',
+          created_by: created_by,
+          created_at: created_at,
           createdUser: newUser
         }
         Audit.find({}).then(val =>{
