@@ -12,6 +12,7 @@ const auditSchema = mongoose.Schema({
 const userSchema = new Schema({
   userAudit : [auditSchema],
   desigAudit : [auditSchema],
+  departAudit : [auditSchema],
   leaveAudit : [auditSchema],
   holidayAudit : [auditSchema],
 }, {collection:'Audit'});

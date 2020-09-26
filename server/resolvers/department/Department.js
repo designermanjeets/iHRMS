@@ -1,92 +1,85 @@
-const { Designation, Audit } = require('../../models/index');
+const { Department, Audit } = require('../../models/index');
 
 const mutation = {
-  createDesignation:(_, {
-    designation,
+  createDepartment:(_, {
     department,
-    department_ID,
     created_at,
     created_by
   },{me,secret}) => new Promise(async (resolve, reject) => {
-    const desig = await Designation.findOne({$or:[ {designation} ]})
-    console.log(department_ID)
+    const desig = await Department.findOne({$or:[ {department} ]})
     if (desig) {
-      reject('Designation already exist');
+      reject('Department already exist');
     } else {
-      const newDesignation = await Designation.create({
-        designation,
+      const newDepartment = await Department.create({
         department,
-        department_ID,
         created_at,
         created_by
       })
       const nmodified = {
-        newDesig_ID: newDesignation._id,
-        action: 'Designation Created',
+        newDepart_ID: newDepartment._id,
+        action: 'Department Created',
         created_by: created_by,
         created_at: created_at,
-        createdDesignation: newDesignation
+        createdDepartment: newDepartment
       }
       Audit.find({}).then(val =>{
         if(val.length) {
           Audit.findOneAndUpdate(
             { },
-            { $push: { desigAudit: nmodified  }  }, { new: true })
+            { $push: { departAudit: nmodified  }  }, { new: true })
             .then((result) => {
               resolve(result);
             });
         } else {
-          Audit.create({ desigAudit: nmodified  })
+          Audit.create({ departAudit: nmodified  })
             .then((result) => {
               resolve(result);
             });
         }
         resolve(result);
       });
-      resolve(newDesignation);
+      resolve(newDepartment);
     }
   }),
 
-  updateDesignation:(_, {
+  updateDepartment:(_, {
     id,
-    designation,
     department,
     modified,
-    department_ID
   },{me,secret}) => new Promise(async (resolve, reject) => {
-    const dtype = await Designation.findById(id);
+    const dtype = await Department.findById(id);
     try{
-      let param = { designation, department, department_ID }
+      let param = { department }
       let changeFields = {};
       for ( item in param) {
         if(param[item] && param[item] !== dtype[item]) {
           changeFields[item] = param[item];
         }
       }
-      const ltype = await Designation.findById(id);
-      if (!ltype) throw new Error('Designation not found!!')
+      const ltype = await Department.findById(id);
+      if (!ltype) throw new Error('Department not found!!')
       if(ltype) {
-        await Designation.findByIdAndUpdate(id,{$set:{...param}, $push: { 'modified': modified  }  },{new: true})
+        await Department.findByIdAndUpdate(id,{$set:{...param}, $push: { 'modified': modified  }  },{new: true})
           .then((result) => {
             if(result && Object.keys(changeFields).length !== 0) {
               const nmodified = {
-                design_ID: dtype._id,
+                depart_ID: dtype._id,
                 modified_by: modified[0].modified_by,
                 modified_at: modified[0].modified_at,
                 action: 'Changed',
                 changedObj: changeFields,
-                oldDesignData: dtype
+                oldDepartData: dtype
               }
               Audit.find({}).then(val =>{
                 if(val.length) {
                   Audit.findOneAndUpdate(
                     { },
-                    { $push: { desigAudit: nmodified  }  }, { new: true })
+                    { $push: { departAudit: nmodified  }  }, { new: true })
                     .then((result) => {
                       resolve(result);
                     });
                 } else {
-                  Audit.create({ desigAudit: nmodified  })
+                  Audit.create({ departAudit: nmodified  })
                     .then((result) => {
                       resolve(result);
                     });
@@ -103,30 +96,30 @@ const mutation = {
     }
   }),
 
-  deleteDesignation:(_, { id, modified },{me,secret}) => new Promise(async (resolve, reject) => {
+  deleteDepartment:(_, { id, modified },{me,secret}) => new Promise(async (resolve, reject) => {
     try{
-      const ltype = await Designation.findById(id);
-      if (!ltype) throw new Error('Designation not found!!')
+      const ltype = await Department.findById(id);
+      if (!ltype) throw new Error('Department not found!!')
       if(ltype) {
-        await Designation.findByIdAndDelete(id)
+        await Department.findByIdAndDelete(id)
           .then((result) => {
             const nmodified = {
-              design_ID: ltype._id,
+              depart_ID: ltype._id,
               modified_by: modified[0].modified_by,
               modified_at: modified[0].modified_at,
-              action: 'Designation Deleted!',
-              deletedDesignation: ltype
+              action: 'Department Deleted!',
+              deletedDepartment: ltype
             }
             Audit.find({}).then(val =>{
               if(val.length) {
                 Audit.findOneAndUpdate(
                   { },
-                  { $push: { desigAudit: nmodified  }  }, { new: true })
+                  { $push: { departAudit: nmodified  }  }, { new: true })
                   .then((result) => {
                     resolve(result);
                   });
               } else {
-                Audit.create({ desigAudit: nmodified  })
+                Audit.create({ departAudit: nmodified  })
                   .then((result) => {
                     resolve(result);
                   });

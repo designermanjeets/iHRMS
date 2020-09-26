@@ -28,7 +28,7 @@ import { AllEmployeesComponent } from './employees/all-employees/all-employees.c
 import { HolidaysComponent } from './employees/holidays/holidays.component';
 import { LeavesComponent } from './employees/leaves/leaves.component';
 // import { AttendanceComponent } from './employees/attendance/attendance.component';
-// import { DepartmentsComponent } from './employees/departments/departments.component';
+import { DepartmentsComponent } from './employees/departments/departments.component';
 import { DesignationsComponent } from './employees/designations/designations.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { HeaderComponent } from './header/header.component';
@@ -62,7 +62,7 @@ import { HeaderComponent } from './header/header.component';
 // import { ContactDetailsComponent } from './contacts/contact-details/contact-details.component';
 import { EmployeeDetailsComponent } from './employees/employee-details/employee-details.component';
 import { HolidayDetailsComponent } from './employees/holiday-details/holiday-details.component';
-// import { DepartmentDetailsComponent } from './employees/department-details/department-details.component';
+import { DepartmentDetailsComponent } from './employees/department-details/department-details.component';
 import { DesignationDetailsComponent } from './employees/designation-details/designation-details.component';
 import { LeaveDetailsComponent } from './employees/leave-details/leave-details.component';
 // import { ProjectDetailsComponent } from './projects/project-details/project-details.component';
@@ -137,8 +137,8 @@ const routes: Routes = [
       { path: 'leaves', component: LeavesComponent },
       { path: 'leaves/edit', component: LeaveDetailsComponent },
       // { path: 'attendance', component: AttendanceComponent },
-      // { path: 'departments', component: DepartmentsComponent },
-      // { path: 'departments/edit', component: DepartmentDetailsComponent },
+      { path: 'departments', component: DepartmentsComponent },
+      { path: 'departments/edit', component: DepartmentDetailsComponent },
       { path: 'designations', component: DesignationsComponent },
       { path: 'designations/edit', component: DesignationDetailsComponent }
     ]
@@ -238,7 +238,7 @@ const routes: Routes = [
     HolidaysComponent,
     LeavesComponent,
     // AttendanceComponent,
-    // DepartmentsComponent,
+    DepartmentsComponent,
     DesignationsComponent,
     SidebarComponent,
     HeaderComponent,
@@ -272,7 +272,7 @@ const routes: Routes = [
     // ContactDetailsComponent,
     EmployeeDetailsComponent,
     HolidayDetailsComponent,
-    // DepartmentDetailsComponent,
+    DepartmentDetailsComponent,
     DesignationDetailsComponent,
     LeaveDetailsComponent,
     // ProjectDetailsComponent,

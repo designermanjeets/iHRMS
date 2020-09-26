@@ -6,14 +6,12 @@ const subSchema = mongoose.Schema({
   modified_at: Date
 }); //,{ _id : false }
 
-const designationSchema = new Schema({
-  designation: String,
+const departmentSchema = new Schema({
   department: String,
-  department_ID: String,
   created_at: Date,
-  created_by: String,
+  created_by: Date,
   modified : [subSchema]
-}, {collection:'Designation'});
+}, {collection:'Department'});
 
 
-module.exports = mongoose.model('Designation', designationSchema);
+module.exports = mongoose.model('Department', departmentSchema);

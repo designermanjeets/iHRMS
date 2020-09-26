@@ -34,7 +34,7 @@
                     <li><a href="javascript:" title="Edit" (click)="onEdit(item)"><i
                           class="fa fa-pencil m-r-5"></i>
                         Edit</a></li>
-                    <li><a title="Delete" (click)="onDelete(item.department_id)"><i class="fa fa-trash-o m-r-5"></i>
+                    <li><a title="Delete" (click)="actionClickDelete(item)"><i class="fa fa-trash-o m-r-5"></i>
                         Delete</a></li>
                   </ul>
                 </div>
@@ -63,8 +63,8 @@
       <div class="modal-body card-box">
         <p>Are you sure want to delete this?</p>
         <div class="m-t-20 text-left">
-          <a href="javascript:" class="btn btn-default" data-dismiss="modal">Close</a>
-          <button type="submit" class="btn btn-danger">Delete</button>
+          <a href="javascript:" class="btn btn-default m-r-10" data-dismiss="modal">Close</a>
+          <button (click)="onDeleteSub()" class="btn btn-danger">Delete</button>
         </div>
       </div>
     </div>
@@ -78,16 +78,24 @@
         <h4 class="modal-title">Add Department</h4>
       </div>
       <div class="modal-body">
-        <form #addForm="ngForm" (ngSubmit)="addDepartment(addForm)" novalidate>
-          <div class="form-group">
-            <label>Department Name <span class="text-danger">*</span></label>
-            <input class="form-control" required type="text" [(ngModel)]="addD.department" name="department" #department="ngModel" required>
+        <form [formGroup]="editForm" (ngSubmit)="addDepartment(editForm)" novalidate>
+          <div class="form-group"
+             [class.has-error]="
+              editForm.controls['department'].invalid &&
+              editForm.controls['department'].touched"
+             [class.has-success]="editForm.controls['department'].valid"
+          >
+            <label for="department">Department Name <span class="text-danger">*</span></label>
+            <input id="department" class="form-control" type="text" formControlName="department">
+            <span class="help-block" *ngIf="editForm.controls['department'].errors && editForm.controls['department'].touched">
+                  Department Name is invalid
+            </span>
           </div>
           <div class="m-t-20 text-center">
               <div *ngIf="addDepartmentValidation" class="alert alert-info m-t-10">
                   <strong>Warning!</strong> Must Fill all Mandatory Fields.
               </div>
-            <button class="btn btn-primary" type="submit">Create Department</button>
+            <button class="btn btn-primary" type="submit" [disabled]="editForm.invalid">Create Department</button>
           </div>
         </form>
       </div>

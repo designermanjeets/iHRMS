@@ -15,6 +15,7 @@ const typeDefs = `
     getHolidays(query: Pagination!): [Holiday]
     getLeaveTypes(query: Pagination!): [LeaveType]
     getDesignations(query: Pagination!): [Designation]
+    getDepartments(query: Pagination!): [Department]
   }
 
   type Mutation {
@@ -158,6 +159,17 @@ const typeDefs = `
       modified: [modifiedInputs]
     ): Designation,
     deleteDesignation( id: ID!, modified: [modifiedInputs] ): Designation,
+    createDepartment (
+      department: String!,
+      created_at: ISODate,
+      created_by: String
+    ): Department,
+    updateDepartment(
+      id: ID!,
+      department: String!,
+      modified: [modifiedInputs]
+    ): Department,
+    deleteDepartment( id: ID!, modified: [modifiedInputs] ): Department,
     uploadFile(file: Upload!): File,
     insertManyUsers(input: [UserInput]!): CreateUsersPayload,
     userAuditMutation(
@@ -183,7 +195,17 @@ const typeDefs = `
       comments: String,
       created_at: ISODate,
       modified_at: ISODate
-     ): desigAudit
+     ): desigAudit,
+   departAuditMutation(
+      id: ID!,
+      department: String,
+      created_by: String,
+      modified_by: String,
+      action: String,
+      comments: String,
+      created_at: ISODate,
+      modified_at: ISODate
+     ): departAudit
   }
   type CreateUsersPayload {
     users: [User]
@@ -282,6 +304,7 @@ const typeDefs = `
     joiningdate: ISODate,
     permissions: permissions,
     created_at: ISODate,
+    created_by: String,
     modified: [modifiedTypes]
   }
   type permissions {
@@ -323,6 +346,14 @@ const typeDefs = `
     department: String,
     department_ID: String,
     created_at: ISODate,
+    created_by: String,
+    modified: [modifiedTypes]
+  },
+  type Department {
+    _id: ID,
+    department: String!,
+    created_at: ISODate,
+    created_by: String,
     modified: [modifiedTypes]
   },
   type LeaveType {
@@ -349,6 +380,15 @@ const typeDefs = `
     designation: String,
     department: String,
     department_ID: String,
+    modified_by: String,
+    action: String,
+    comments: String,
+    modified_at: ISODate
+  },
+  type departAudit {
+    id: ID!,
+    depart_ID: String,
+    department: String,
     modified_by: String,
     action: String,
     comments: String,

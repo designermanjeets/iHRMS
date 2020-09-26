@@ -6,20 +6,26 @@
     </div>
     <div class="row m-t-20">
         <div class="col-md-6 col-md-offset-3">
-          <form #uptForm="ngForm" (ngSubmit)="updateDepartment(uptForm)" novalidate>
-            <div class="form-group">
-              <label>Department Name <span class="text-danger">*</span></label>
-              <input class="form-control" [(ngModel)]="uptD.department" name="department" type="text" #department="ngModel" required>
-              <input type="hidden" [(ngModel)]="uptD.department_id" name="department_id" #department_id="ngModel">
+          <form [formGroup]="editForm" (ngSubmit)="updateDepartment(editForm)" novalidate>
+            <div class="form-group"
+               [class.has-error]="
+                editForm.controls['department'].invalid &&
+                editForm.controls['department'].touched"
+               [class.has-success]="editForm.controls['department'].valid"
+            >
+              <label for="department">Department Name <span class="text-danger">*</span></label>
+              <input id="department" class="form-control" type="text" formControlName="department">
+              <span class="help-block" *ngIf="editForm.controls['department'].errors && editForm.controls['department'].touched">
+                  Department Name is invalid
+            </span>
             </div>
             <div class="m-t-20 text-center">
-                <div *ngIf="uptDepartmentValidation" class="alert alert-info m-t-10">
-                    <strong>Warning!</strong> Must Fill all Mandatory Fields.
-                </div>
-              <button class="btn btn-primary" type="submit">Save Changes</button>
+              <div *ngIf="uptDepartmentValidation" class="alert alert-info m-t-10">
+                <strong>Warning!</strong> Must Fill all Mandatory Fields.
+              </div>
+              <button class="btn btn-primary" type="submit" [disabled]="editForm.invalid">Create Department</button>
             </div>
           </form>
         </div>
       </div>
     </div>
-  

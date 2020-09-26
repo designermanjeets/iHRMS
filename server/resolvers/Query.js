@@ -1,5 +1,5 @@
 const { promisify } = require('../helpers');
-const { User, Company, Holiday, LeaveType, Designation} = require('../models/index.js');
+const { User, Company, Holiday, LeaveType, Designation, Department} = require('../models/index.js');
 const ISODate = require('../scalars/ISODate');
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
@@ -87,6 +87,14 @@ const resolvers = {
   getDesignations: async (_, args, { me })  => new Promise(async (resolve, reject) => {
     const param = paramHandler(args.query)
     Designation.find(param,(err, result) => {
+      if (err) reject(err);
+      else resolve(result);
+    }).skip(args.query.offset).limit(args.query.limit)
+  }),
+
+  getDepartments: async (_, args, { me })  => new Promise(async (resolve, reject) => {
+    const param = paramHandler(args.query)
+    Department.find(param,(err, result) => {
       if (err) reject(err);
       else resolve(result);
     }).skip(args.query.offset).limit(args.query.limit)

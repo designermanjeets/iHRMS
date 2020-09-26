@@ -5,6 +5,7 @@ const LeaveType = require('../models/LeaveType.js');
 const Upload = require('../models/Upload.js');
 const Audit = require('../models/Audit.js');
 const Designation = require('../models/Designation.js');
+const Department = require('../models/Department.js');
 
 
-module.exports = { User, Company, Holiday, LeaveType, Upload, Audit, Designation };
+module.exports = { User, Company, Holiday, LeaveType, Upload, Audit, Designation, Department };
