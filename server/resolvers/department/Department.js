@@ -1,4 +1,4 @@
-const { Department, Audit } = require('../../models/index');
+const { Department, Audit, Designation } = require('../../models/index');
 
 const mutation = {
   createDepartment:(_, {
@@ -62,6 +62,11 @@ const mutation = {
         await Department.findByIdAndUpdate(id,{$set:{...param}, $push: { 'modified': modified  }  },{new: true})
           .then((result) => {
             if(result && Object.keys(changeFields).length !== 0) {
+
+              Designation.updateMany(
+                {"department_ID": id},
+                { $set: { department: department}  }, { new: true }).then();
+
               const nmodified = {
                 depart_ID: dtype._id,
                 modified_by: modified[0].modified_by,
@@ -86,6 +91,7 @@ const mutation = {
                 }
                 resolve(result);
               });
+              resolve(result);
             } else {
               resolve(result);
             }

@@ -27,11 +27,7 @@
             >
               <label for="department">Departments <span class="text-danger">*</span></label>
               <select id="department" class="select floating form-control" formControlName="department">
-                <option value="Web Development">Web Development</option>
-                <option value="IT Management">IT Management</option>
-                <option value="Support Management">Support Management</option>
-                <option value="Application Development">Application Development</option>
-                <option value="Marketing">Marketing</option>
+                <option *ngFor="let opt of departments" [value]="opt._id">{{opt.department}}</option>
               </select>
               <span class="help-block" *ngIf="editForm.controls['department'].errors && editForm.controls['department'].touched">
                   Departments Name is invalid

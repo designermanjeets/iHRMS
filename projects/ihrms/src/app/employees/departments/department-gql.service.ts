@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Mutation } from "apollo-angular";
 import gql from "graphql-tag";
+import {Observable, ReplaySubject} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'

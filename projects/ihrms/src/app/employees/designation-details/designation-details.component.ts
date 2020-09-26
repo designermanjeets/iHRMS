@@ -13,6 +13,7 @@ export class DesignationDetailsComponent implements OnInit {
 
   rows = [];
   editForm: FormGroup;
+  departments: any;
 
   public srch = [];
   public uptD:any = [];
@@ -25,11 +26,7 @@ export class DesignationDetailsComponent implements OnInit {
     private setGetDesignationsService: SetGetDesignationsService,
     private updateDesignationGQL: UpdateDesignationGQL,
     private fb: FormBuilder
-  ) {
-    // this.rows = appService.designations; // No Mock
-    // this.srch = [...this.rows];
-
-  }
+  ) { }
 
   ngOnInit() {
 
@@ -46,7 +43,9 @@ export class DesignationDetailsComponent implements OnInit {
           this.router.navigate(['employees/designations']);
         } else {
           this.uptD = desig;
+          this.departments = this.setGetDesignationsService.getAllDepartments();
           this.editForm.patchValue(this.uptD);
+          this.editForm.get('department').patchValue(this.uptD.department_ID);
         }
       } else {
         this.router.navigate(['employees/designations']);
@@ -55,12 +54,13 @@ export class DesignationDetailsComponent implements OnInit {
   }
 
   updateDesignation(f){
+    const dprt = this.setGetDesignationsService.getDepartment(f.value.department);
     this.updateDesignationGQL
       .mutate({
         "id": this.uptD._id,
         "designation": f.value.designation,
-        "department": f.value.department,
-        "department_ID": f.value.department, // Should come from getDepartment service
+        "department": dprt.department,
+        "department_ID": dprt._id,
         "modified": {
           "modified_at": Date.now(),
           "modified_by": JSON.parse(sessionStorage.getItem('user')).username
@@ -68,7 +68,6 @@ export class DesignationDetailsComponent implements OnInit {
       })
       .subscribe( (val: any) => {
         if(val.data) {
-          console.log(val.data);
           this.router.navigate(['employees/designations']);
         }
       }, error => console.log(error));

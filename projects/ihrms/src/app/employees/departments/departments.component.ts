@@ -37,12 +37,9 @@ export class DepartmentsComponent implements OnInit {
     private createDepartmentGQL: CreateDepartmentGQL,
     private deleteDesignationGQL: DeleteDepartmentGQL,
     private setGetDepartmentsService: SetGetDepartmentsService,
-  ) {
-
-  }
+  ) { }
 
   ngOnInit() {
-
     this.editForm = this.fb.group({
       department: ['', Validators.required]
     });
@@ -51,7 +48,7 @@ export class DepartmentsComponent implements OnInit {
   }
 
   addReset(){
-    this.addD = { };
+    this.editForm.reset();
     $('#add_department').modal('show');
   }
 
@@ -75,7 +72,6 @@ export class DepartmentsComponent implements OnInit {
       })
       .subscribe( (val: any) => {
         if(val.data) {
-          console.log(val.data);
           this.getDepartments(); // fetch latest
           $('#add_department').modal('hide');
         }
@@ -101,7 +97,6 @@ export class DepartmentsComponent implements OnInit {
   }
 
   onEdit(item){
-    //console.log(item);
     this.router.navigate(['employees/departments/edit'], { queryParams: { 'id': item._id } });
   }
 

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Mutation } from "apollo-angular";
 import gql from "graphql-tag";
+import {Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -95,6 +96,7 @@ export const GET_DESIGNATIONS_QUERY = gql`
 export class SetGetDesignationsService {
 
   designations: any;
+  departments: any;
 
   constructor() { }
 
@@ -105,11 +107,27 @@ export class SetGetDesignationsService {
       return this.designations.find(
         (h: any) => h._id === _id);
     }
-
   }
 
   setDesignations(data) {
     this.designations = data;
+  }
+
+  setDepartments(data) {
+    this.departments = data;
+  }
+
+  getDepartment(_id) { // Same function but can be extented in future
+    if(!this.departments) {
+      return false;
+    } else {
+      return this.departments.find(
+        (h: any) => h._id === _id);
+    }
+  }
+
+  getAllDepartments() {
+    return this.departments;
   }
 
 }

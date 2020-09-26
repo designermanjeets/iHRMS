@@ -8,6 +8,7 @@ import {
 } from "./designation-gql.service";
 import { Apollo } from "apollo-angular";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {GET_DEPARTMENTS_QUERY} from "../departments/department-gql.service";
 
 declare const $:any;
 
@@ -22,6 +23,7 @@ export class DesignationsComponent implements OnInit {
 
   editForm: FormGroup;
   actionParams: any;
+  departments: any;
 
   public srch = [...this.rows];
   public addD:any = {};
@@ -65,12 +67,29 @@ export class DesignationsComponent implements OnInit {
         this.rows = response.data.getDesignations;
         this.srch = [...this.rows];
         this.setGetDesignationsService.setDesignations(response.data.getDesignations);
+        this.getDepartments();
+      }
+    });
+  }
+
+  getDepartments() {
+    this.apollo.watchQuery({
+      query: GET_DEPARTMENTS_QUERY,
+      variables: {
+        "pagination": {
+          "limit": 100
+        }
+      },
+    }).valueChanges.subscribe((response: any) => {
+      if(response.data) {
+        this.departments = response.data.getDepartments;
+        this.setGetDesignationsService.setDepartments(this.departments);
       }
     });
   }
 
   addReset(){
-    this.addD = { };
+    this.editForm.reset();
     $('#add_designation').modal('show');
   }
 
@@ -87,16 +106,16 @@ export class DesignationsComponent implements OnInit {
   }
 
   addDesignation(f){
+    const dprt = this.setGetDesignationsService.getDepartment(f.value.department);
     this.createDesignationGQL
       .mutate({
         "designation": f.value.designation,
-        "department": f.value.department,
-        "department_ID": f.value.department, // Should come from getDepartment service
+        "department": dprt.department,
+        "department_ID": dprt._id,
         "created_at": Date.now(),
       })
       .subscribe( (val: any) => {
         if(val.data) {
-          console.log(val.data);
           this.getDesignations(); // fetch latest
           $('#add_designation').modal('hide');
         }
@@ -122,7 +141,5 @@ export class DesignationsComponent implements OnInit {
         }
       }, error => console.log(error));
   }
-
-
 
 }
