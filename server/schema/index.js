@@ -146,13 +146,15 @@ const typeDefs = `
     createDesignation (
       designation: String!,
       department: String,
+      department_ID: String,
       created_at: ISODate,
       created_by: String
     ): Designation,
     updateDesignation(
       id: ID!,
       designation: String!,
-      department: String,
+      department: String,,
+      department_ID: String,
       modified: [modifiedInputs]
     ): Designation,
     deleteDesignation( id: ID!, modified: [modifiedInputs] ): Designation,
@@ -174,6 +176,7 @@ const typeDefs = `
       id: ID!,
       designation: String,
       department: String,
+      department_ID: String,
       created_by: String,
       modified_by: String,
       action: String,
@@ -318,6 +321,7 @@ const typeDefs = `
     _id: ID,
     designation: String!,
     department: String,
+    department_ID: String,
     created_at: ISODate,
     modified: [modifiedTypes]
   },
@@ -344,6 +348,7 @@ const typeDefs = `
     username: String,
     designation: String,
     department: String,
+    department_ID: String,
     modified_by: String,
     action: String,
     comments: String,

@@ -74,14 +74,6 @@ export class DesignationsComponent implements OnInit {
     $('#add_designation').modal('show');
   }
 
-  actionClick(params) {
-    if(params.type === 'edit') {
-      this.onEdit(params.rowData.data);
-    }
-    if(params.type === 'delete') {
-    }
-  }
-
   actionClickDelete(item) {
     console.log(item)
     this.actionParams = item;
@@ -99,6 +91,7 @@ export class DesignationsComponent implements OnInit {
       .mutate({
         "designation": f.value.designation,
         "department": f.value.department,
+        "department_ID": f.value.department, // Should come from getDepartment service
         "created_at": Date.now(),
       })
       .subscribe( (val: any) => {

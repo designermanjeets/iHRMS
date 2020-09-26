@@ -4,16 +4,19 @@ const mutation = {
   createDesignation:(_, {
     designation,
     department,
+    department_ID,
     created_at,
     created_by
   },{me,secret}) => new Promise(async (resolve, reject) => {
-    const leave = await Designation.findOne({$or:[ {designation} ]})
-    if (leave) {
+    const desig = await Designation.findOne({$or:[ {designation} ]})
+    console.log(department_ID)
+    if (desig) {
       reject('Designation already exist');
     } else {
       const newDesignation = await Designation.create({
         designation,
         department,
+        department_ID,
         created_at
       })
       const nmodified = {
@@ -47,11 +50,12 @@ const mutation = {
     id,
     designation,
     department,
-    modified
+    modified,
+    department_ID
   },{me,secret}) => new Promise(async (resolve, reject) => {
     const dtype = await Designation.findById(id);
     try{
-      let param = { designation, department }
+      let param = { designation, department, department_ID }
       let changeFields = {};
       for ( item in param) {
         if(param[item] && param[item] !== dtype[item]) {

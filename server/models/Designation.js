@@ -9,6 +9,7 @@ const subSchema = mongoose.Schema({
 const designationSchema = new Schema({
   designation: String,
   department: String,
+  department_ID: String,
   created_at: Date,
   modified : [subSchema]
 }, {collection:'Designation'});

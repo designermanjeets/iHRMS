@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute,Router } from '@angular/router';
-import { AppService } from './../../app.service';
+import { AppService } from '../../app.service';
 import { isEmpty } from 'rxjs/operators';
 
 @Component({
@@ -15,12 +15,12 @@ export class DepartmentDetailsComponent implements OnInit {
   public srch = [];
   public uptD:any;
   uptDepartmentValidation:boolean = false;
-  
-  constructor(private appService:AppService,private router:Router,private route:ActivatedRoute) { 
+
+  constructor(private appService:AppService,private router:Router,private route:ActivatedRoute) {
     this.rows = appService.departments;
     //console.log(this.rows);
     this.srch = [...this.rows];
-    
+
   }
 
   ngOnInit() {
@@ -48,14 +48,14 @@ export class DepartmentDetailsComponent implements OnInit {
       else{
         this.router.navigate(['employees/departments']);
       }
-      
-      
+
+
     });
   }
 
   updateDepartment(f){
     //console.log(f);
-    
+
     if (f.invalid === true)
       this.uptDepartmentValidation = true;
     else {
@@ -70,7 +70,7 @@ export class DepartmentDetailsComponent implements OnInit {
     if (index > -1) {
         this.rows.splice(index, 1);
     }
-    
+
     this.uptD = f.form.value;
     this.rows.unshift(f.form.value);
     this.srch.unshift(f.form.value);

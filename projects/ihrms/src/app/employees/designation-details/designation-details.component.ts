@@ -60,6 +60,7 @@ export class DesignationDetailsComponent implements OnInit {
         "id": this.uptD._id,
         "designation": f.value.designation,
         "department": f.value.department,
+        "department_ID": f.value.department, // Should come from getDepartment service
         "modified": {
           "modified_at": Date.now(),
           "modified_by": JSON.parse(sessionStorage.getItem('user')).username

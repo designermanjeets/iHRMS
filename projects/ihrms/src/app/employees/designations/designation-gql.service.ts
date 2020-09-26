@@ -10,15 +10,18 @@ export class CreateDesignationGQL extends Mutation {
     mutation createDesignation(
       $designation: String!
       $department: String
+      $department_ID: String
       $created_at: ISODate
     ) {
       createDesignation(
         designation: $designation
         department: $department
+        department_ID: $department_ID
         created_at: $created_at
       ) {
         designation
-        department
+        department,
+        department_ID
       }
     }
   `;
@@ -33,12 +36,14 @@ export class UpdateDesignationGQL extends Mutation {
       $id: ID!,
       $designation: String!
       $department: String
+      $department_ID: String
       $modified: [modifiedInputs]
     ) {
       updateDesignation(
         id: $id,
         designation: $designation
         department: $department
+        department_ID: $department_ID
         modified: $modified
       ) {
         designation
@@ -78,7 +83,8 @@ export const GET_DESIGNATIONS_QUERY = gql`
       ) {
         _id
         designation
-        department
+        department,
+        department_ID
       }
     }
 `;
