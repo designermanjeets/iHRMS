@@ -22,6 +22,7 @@ export class EmpdetailGQLService extends Mutation{
       $joiningdate: ISODate
       $department: String
       $department_ID: String
+      $designation: String
       $permissions:PermissionsInput
       $modified: [modifiedInputs]
     ) {
@@ -39,6 +40,7 @@ export class EmpdetailGQLService extends Mutation{
         joiningdate: $joiningdate,
         department: $department
         department_ID: $department_ID
+        designation: $designation
         permissions: $permissions,
         modified: $modified
     ) {
@@ -53,6 +55,7 @@ export class EmpdetailGQLService extends Mutation{
         joiningdate,
         department,
         department_ID,
+        designation,
         permissions {
           holiday {
             read
@@ -81,6 +84,7 @@ export class CreateUserGQL extends Mutation {
       $joiningdate: ISODate
       $department: String
       $department_ID: String
+      $designation: String,
       $mobile: String
       $permissions: PermissionsInput
     ) {
@@ -96,6 +100,7 @@ export class CreateUserGQL extends Mutation {
         joiningdate: $joiningdate,
         department: $department
         department_ID: $department_ID
+        designation: $designation
         mobile: $mobile,
         permissions: $permissions,
     ) {
@@ -107,8 +112,9 @@ export class CreateUserGQL extends Mutation {
         emmpid,
         corporateid,
         joiningdate,
-        department
-        department_ID
+        department,
+        department_ID,
+        designation,
         mobile,
         permissions {
           holiday {

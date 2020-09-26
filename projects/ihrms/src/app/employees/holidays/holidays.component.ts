@@ -130,8 +130,6 @@ export class HolidaysComponent implements OnInit {
   }
 
   addHoliday(f){
-    console.log(f);
-
     this.registerHolidayGQL
       .mutate({
         "title": f.value.title,

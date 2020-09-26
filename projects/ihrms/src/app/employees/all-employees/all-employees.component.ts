@@ -12,7 +12,8 @@ import {GridOptions} from "ag-grid-community";
 import {DatetimeComponent} from "../../shared/agrid/components/datetime/datetime.component";
 import * as moment from 'moment';
 import * as _ from 'lodash';
-import {GET_HOLIDAYS_QUERY} from "../holidays/holidays-gql.service";
+import {GET_DEPARTMENTS_QUERY} from "../departments/department-gql.service";
+import {GET_DESIGNATIONS_QUERY, SetGetDesignationsService} from "../designations/designation-gql.service";
 
 declare const $: any;
 
@@ -44,6 +45,9 @@ export class AllEmployeesComponent implements OnInit {
   uptEmployeeValidation:boolean = false;
   editForm: FormGroup;
   companies: [];
+  departments: any;
+  designations: any;
+  allDesignations: any;
   isModal: boolean;
   actionParams: any;
 
@@ -89,13 +93,15 @@ export class AllEmployeesComponent implements OnInit {
     private cdref: ChangeDetectorRef,
     private deleteUserGQL: DeleteUserGQL,
     private activeRoute: ActivatedRoute,
-    private importUsersGQL: ImportUsersGQL
+    private importUsersGQL: ImportUsersGQL,
+    private setGetDesignationsService: SetGetDesignationsService
   ) {
     this.srch = [];
     this.modules = appService.employee_modules;
 
     this.getUsers();
     this.getCompanies();
+    this.getDepartments();
 
   }
 
@@ -116,6 +122,8 @@ export class AllEmployeesComponent implements OnInit {
       joiningdate: ['', Validators.required],
       corporateid: ['', Validators.required],
       role: ['', Validators.required],
+      department: ['', Validators.required],
+      designation: ['', Validators.required],
       mobile: [''],
       permissions: this.fb.group({
         holiday: this.fb.group({
@@ -164,8 +172,46 @@ export class AllEmployeesComponent implements OnInit {
       },
     }).valueChanges.subscribe((response: any) => {
       this.companies = response.data.getCompanies;
-      console.log(this.companies);
     });
+  }
+
+  getDepartments() {
+    this.apollo.watchQuery({
+      query: GET_DEPARTMENTS_QUERY,
+      variables: {
+        "pagination": {
+          "limit": 100
+        }
+      },
+    }).valueChanges.subscribe((response: any) => {
+      if(response.data) {
+        this.departments = response.data.getDepartments;
+        this.setGetDesignationsService.setDepartments(this.departments);
+        this.getDesignations(); // Don't want to load All beforehand
+      }
+    });
+  }
+
+  getDesignations() {
+    this.apollo.watchQuery({
+      query: GET_DESIGNATIONS_QUERY,
+      variables: {
+        "pagination": {
+          "limit": 100
+        }
+      },
+    }).valueChanges.subscribe((response: any) => {
+      if(response.data) {
+        this.allDesignations = response.data.getDesignations;
+        this.setGetDesignationsService.setDesignations(this.allDesignations);
+        this.editForm.get('designation').disable(); // Will enable on Department basis/selection
+      }
+    });
+  }
+
+  onDepartChange(event) {
+    this.designations = _.filter(this.allDesignations, person => person.department_ID === event.value);
+    this.designations && this.editForm.get('designation').enable();
   }
 
   actionClick(params) {
@@ -195,7 +241,6 @@ export class AllEmployeesComponent implements OnInit {
         }
       },
     }).valueChanges.subscribe((response: any) => {
-      console.log(response)
       this.rowData = response.data.users;
       this.employeeGQLService.setUsers(response.data.users);
     });
@@ -212,6 +257,8 @@ export class AllEmployeesComponent implements OnInit {
 
   createSubmit(f){
     const data = f.value;
+    const dprt = this.setGetDesignationsService.getDepartment(f.value.department);
+    const desig = this.setGetDesignationsService.getDesignations(f.value.designation);
     this.createUserGQL
       .mutate({
         "firstname": data.firstname,
@@ -223,6 +270,9 @@ export class AllEmployeesComponent implements OnInit {
         "emmpid": data.emmpid,
         "corporateid": data.corporateid,
         "joiningdate": data.joiningdate,
+        "department": dprt.department,
+        "department_ID": dprt._id,
+        "designation": desig.designation,
         "mobile":data.mobile,
         "permissions": {
           "holiday": {
@@ -261,49 +311,25 @@ export class AllEmployeesComponent implements OnInit {
   }
 
   searchID(val) {
-    //console.log(val);
     val = val.toString();
-    //console.log(this.srch);
-    // this.rows.splice(0, this.rows.length);
-    //console.log(this.rows);
     let temp = this.srch.filter(function(d) {
-      //console.log(d.employeeID);
       d.employeeID = d.employeeID.toString();
       return d.employeeID.toLowerCase().indexOf(val) !== -1 || !val;
     });
-    //console.log(temp);
-    // this.rows.push(...temp);
-    //console.log(this.rows);
   }
 
   searchName(val) {
-    //console.log(val);
-    //console.log(this.srch);
-    // this.rows.splice(0, this.rows.length);
-    //console.log(this.rows);
     let temp = this.srch.filter(function(d) {
-      //console.log(d.userName);
       val = val.toLowerCase();
       return d.userName.toLowerCase().indexOf(val) !== -1 || !val;
     });
-    //console.log(temp);
-    // this.rows.push(...temp);
-    //console.log(this.rows);
   }
 
   searchDesg(val) {
-    //console.log(val);
-    //console.log(this.srch);
-    // this.rows.splice(0, this.rows.length);
-    //console.log(this.rows);
     let temp = this.srch.filter(function(d) {
-      //console.log(d.designation);
       val = val.toLowerCase();
       return d.designation.toLowerCase().indexOf(val) !== -1 || !val;
     });
-    //console.log(temp);
-    // this.rows.push(...temp);
-    //console.log(this.rows);
   }
 
   onGridReady(params: any) {
@@ -325,9 +351,6 @@ export class AllEmployeesComponent implements OnInit {
     let uniqArrByEmail = _.difference(rowData, _.uniqBy(rowData, 'email'), 'email');
     let uniqArrByEmmp = _.difference(rowData, _.uniqBy(rowData, 'emmpid'), 'emmpid');
     let uniqArrByUsrn = _.difference(rowData, _.uniqBy(rowData, 'username'), 'username');
-    console.log(uniqArrByEmail);
-    console.log(uniqArrByEmmp);
-    console.log(uniqArrByUsrn);
 
     if(uniqArrByEmail.length) {
       console.log('Dupicate Emails');

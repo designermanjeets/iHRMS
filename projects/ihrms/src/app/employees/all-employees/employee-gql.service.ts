@@ -12,7 +12,6 @@ export class EmployeeGQLService {
   constructor() { }
 
   getUser(id) {
-    console.log(this.users)
     if(!this.users) {
       return false;
     } else {
@@ -46,6 +45,7 @@ export class EmployeeGQLService {
         joiningdate,
         department,
         department_ID,
+        designation,
         _id,
         permissions {
           holiday {
@@ -80,6 +80,7 @@ export class GET_USER_QUERY extends Query<Response> {
         joiningdate,
         department,
         department_ID,
+        designation,
         _id,
         permissions {
           holiday {

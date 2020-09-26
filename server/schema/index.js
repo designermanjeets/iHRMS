@@ -33,6 +33,7 @@ const typeDefs = `
       joiningdate: ISODate,
       department: String,
       department_ID: String,
+      designation: String,
       permissions: PermissionsInput,
       created_by: String,
       created_at: ISODate
@@ -89,6 +90,7 @@ const typeDefs = `
       joiningdate: ISODate,
       department: String,
       department_ID: String,
+      designation: String,
       permissions: PermissionsInput,
       modified: [modifiedInputs]
       ): User,
@@ -280,6 +282,7 @@ const typeDefs = `
     joiningdate: ISODate,
     department: String,
     department_ID: String,
+    designation: String,
     permissions: permissions,
     created_at: ISODate,
     created_by: String,
@@ -376,9 +379,14 @@ const typeDefs = `
     role: String,
     emmpid:String,
     corporateid: String,
+    department: String,
+    department_ID: String,
+    designation: String,
     mobile: String,
     joiningdate: ISODate,
-    permissions: PermissionsInput
+    permissions: PermissionsInput,
+    created_at: ISODate,
+    created_by: String
   }
   scalar ISODate
 `;

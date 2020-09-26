@@ -20,6 +20,7 @@ const userSchema = new Schema({
   joiningdate: Date,
   department: String,
   department_ID: String,
+  designation: String,
   permissions:{
     employee: {
       read: Boolean,

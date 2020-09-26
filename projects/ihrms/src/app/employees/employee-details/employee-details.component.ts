@@ -8,7 +8,8 @@ import {EmpdetailGQLService} from "./empdetail-gql.service";
 import {GET_COMPANIES_QUERY} from "../../settings/settingscompany/companysettingGQL";
 import {Apollo} from "apollo-angular";
 import {GET_DEPARTMENTS_QUERY} from "../departments/department-gql.service";
-import {SetGetDesignationsService} from "../designations/designation-gql.service";
+import {GET_DESIGNATIONS_QUERY, SetGetDesignationsService} from "../designations/designation-gql.service";
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-employee-details',
@@ -34,6 +35,8 @@ export class EmployeeDetailsComponent implements OnInit {
   editForm: FormGroup;
   companies: [];
   departments: any;
+  designations: any;
+  allDesignations: any;
 
   constructor(
     private appService:AppService,
@@ -44,10 +47,7 @@ export class EmployeeDetailsComponent implements OnInit {
     private empdetailGQLService: EmpdetailGQLService,
     private apollo: Apollo,
     private setGetDesignationsService: SetGetDesignationsService
-  ) {
-    this.rows = appService.employees;
-    this.srch = [...this.rows];
-  }
+  ) { }
 
   ngOnInit() {
 
@@ -66,6 +66,7 @@ export class EmployeeDetailsComponent implements OnInit {
       corporateid: ['', Validators.required],
       role: ['', Validators.required],
       department: ['', Validators.required],
+      designation: ['', Validators.required],
       mobile: [''],
       permissions: this.fb.group({
         holiday: this.fb.group({
@@ -145,12 +146,43 @@ export class EmployeeDetailsComponent implements OnInit {
       if(response.data) {
         this.departments = response.data.getDepartments;
         this.setGetDesignationsService.setDepartments(this.departments);
+        this.getDesignations();
       }
     });
   }
 
+  getDesignations() {
+    this.apollo.watchQuery({
+      query: GET_DESIGNATIONS_QUERY,
+      variables: {
+        "pagination": {
+          "limit": 100
+        }
+      },
+    }).valueChanges.subscribe((response: any) => {
+      if(response.data) {
+        this.allDesignations = response.data.getDesignations;
+        this.setGetDesignationsService.setDesignations(this.allDesignations);
+        this.editForm.get('designation').disable(); // Will enable on Department basis/selection
+        this.onDepartChange({value: this.uptEmp.department_ID});
+      }
+    });
+  }
+
+  onDepartChange(event) {
+    this.designations = _.filter(this.allDesignations, person => person.department_ID === event.value);
+    if(this.designations) {
+      const getDesig = _.filter(this.designations, person => person.designation === this.uptEmp.designation);
+      this.editForm.get('designation').enable();
+      if(getDesig[0]) {
+        this.editForm.get('designation').patchValue(getDesig[0]._id);
+      }
+    }
+  }
+
   updateSubmit(f){
     const dprt = this.setGetDesignationsService.getDepartment(f.value.department);
+    const desig = this.setGetDesignationsService.getDesignations(f.value.designation);
     this.empdetailGQLService
       .mutate({
         "id": this.uptEmp._id,
@@ -160,6 +192,7 @@ export class EmployeeDetailsComponent implements OnInit {
         "role": f.value.role,
         "department": dprt.department,
         "department_ID": dprt._id,
+        "designation": desig.designation,
         "emmpid": f.value.emmpid,
         "corporateid": f.value.corporateid,
         "firstname": f.value.firstname,

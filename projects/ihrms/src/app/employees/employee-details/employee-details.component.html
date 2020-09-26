@@ -147,11 +147,29 @@
                   >
                     <div class="form-group">
                       <label for="department" class="control-label">Department<span class="text-danger m-l-5">*</span></label>
-                      <select id="department" class="select form-control" formControlName="department" required>
+                      <select id="department" class="select form-control" formControlName="department" required (change)="onDepartChange(editForm.controls['department'])">
+                        <option value="">--Select--</option>
                         <option *ngFor="let opt of departments" [value]="opt._id">{{opt.department}}</option>
                       </select>
                       <span class="help-block" *ngIf="editForm.controls['department'].errors && editForm.controls['department'].touched">
                         Department is invalid
+                      </span>
+                    </div>
+                  </div>
+                  <div class="col-sm-4"
+                     [class.has-error]="
+                      editForm.controls['designation'].invalid &&
+                      editForm.controls['designation'].touched"
+                     [class.has-success]="editForm.controls['designation'].valid"
+                  >
+                    <div class="form-group">
+                      <label for="designation" class="control-label">Designation<span class="text-danger m-l-5">*</span></label>
+                      <select id="designation" class="select form-control" formControlName="designation" required>
+                        <option value="">--Select--</option>
+                        <option *ngFor="let opt of designations" [value]="opt._id">{{opt.designation}}</option>
+                      </select>
+                      <span class="help-block" *ngIf="editForm.controls['designation'].errors && editForm.controls['designation'].touched">
+                        Designation is invalid
                       </span>
                     </div>
                   </div>
