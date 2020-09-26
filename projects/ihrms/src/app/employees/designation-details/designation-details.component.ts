@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute,Router } from '@angular/router';
-import { AppService } from './../../app.service';
+import { AppService } from '../../app.service';
+import {SetGetDesignationsService, UpdateDesignationGQL} from "../designations/designation-gql.service";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-designation-details',
@@ -10,70 +12,64 @@ import { AppService } from './../../app.service';
 export class DesignationDetailsComponent implements OnInit {
 
   rows = [];
+  editForm: FormGroup;
 
   public srch = [];
   public uptD:any = [];
   uptDesignationValidation:boolean = false;
-  
-  constructor(private appService:AppService,private router:Router,private route:ActivatedRoute) { 
-    this.rows = appService.designations;
-    this.srch = [...this.rows];
+
+  constructor(
+    private appService:AppService,
+    private router:Router,
+    private route:ActivatedRoute,
+    private setGetDesignationsService: SetGetDesignationsService,
+    private updateDesignationGQL: UpdateDesignationGQL,
+    private fb: FormBuilder
+  ) {
+    // this.rows = appService.designations; // No Mock
+    // this.srch = [...this.rows];
+
   }
 
   ngOnInit() {
-    this.route.queryParams.subscribe(params => {
-      //console.log(params);
-      this.uptD = [];
-      if(params.id)
-      {
-        var id = params.id;
-        var arr = this.rows.find(function(item, i){
-          return item.designation_id == id;
-        });
 
-        if(!arr)
-        {
+    this.editForm = this.fb.group({
+      designation: ['', Validators.required],
+      department: ['', Validators.required],
+    });
+
+    this.route.queryParams.subscribe(params => {
+      this.uptD = [];
+      if(params.id) {
+        const desig = this.setGetDesignationsService.getDesignations(params.id);
+        if(!desig) {
           this.router.navigate(['employees/designations']);
+        } else {
+          this.uptD = desig;
+          this.editForm.patchValue(this.uptD);
         }
-        else
-        {
-        this.uptD.push(arr);
-        this.uptD = this.uptD[0];
-        //console.log(this.uptD);
-        }
-      }
-      else{
+      } else {
         this.router.navigate(['employees/designations']);
       }
-      
-      
     });
   }
 
   updateDesignation(f){
-    //console.log(f);
-    if (f.invalid === true)
-    this.uptDesignationValidation = true;
-    else 
-    {
-    this.uptDesignationValidation = false;
-    var id = f.form.value.designation_id;
-    //console.log(id);
-    var index = this.rows.findIndex(function(item, i){
-      return item.designation_id === id
-    });
-
-    //console.log(index);
-    if (index > -1) {
-        this.rows.splice(index, 1);
-    }
-    //console.log(this.rows);
-    
-    this.uptD = f.form.value;
-    this.rows.unshift(f.form.value);
-    this.srch.unshift(f.form.value);
-    this.rows = this.rows;
-    this.router.navigate(['employees/designations']);
-  }
+    this.updateDesignationGQL
+      .mutate({
+        "id": this.uptD._id,
+        "designation": f.value.designation,
+        "department": f.value.department,
+        "modified": {
+          "modified_at": Date.now(),
+          "modified_by": JSON.parse(sessionStorage.getItem('user')).username
+        }
+      })
+      .subscribe( (val: any) => {
+        if(val.data) {
+          console.log(val.data);
+          this.router.navigate(['employees/designations']);
+        }
+      }, error => console.log(error));
   }
 }

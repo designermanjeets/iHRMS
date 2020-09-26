@@ -14,6 +14,7 @@ const typeDefs = `
     getCompanies(query: Pagination!): [Company]
     getHolidays(query: Pagination!): [Holiday]
     getLeaveTypes(query: Pagination!): [LeaveType]
+    getDesignations(query: Pagination!): [Designation]
   }
 
   type Mutation {
