@@ -1,4 +1,4 @@
-const { Department, Audit, Designation } = require('../../models/index');
+const { Department, Audit, Designation, User } = require('../../models/index');
 
 const mutation = {
   createDepartment:(_, {
@@ -64,6 +64,10 @@ const mutation = {
             if(result && Object.keys(changeFields).length !== 0) {
 
               Designation.updateMany(
+                {"department_ID": id},
+                { $set: { department: department}  }, { new: true }).then();
+
+              User.updateMany(
                 {"department_ID": id},
                 { $set: { department: department}  }, { new: true }).then();
 
