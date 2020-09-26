@@ -33,12 +33,12 @@ const mutation = {
         if(val.length) {
           Audit.findOneAndUpdate(
             { },
-            { $push: { leaveAudit: nmodified  }  }, { new: true })
+            { $push: { leaveTypeAudit: nmodified  }  }, { new: true })
             .then((result) => {
               resolve(result);
             });
         } else {
-          Audit.create({ leaveAudit: nmodified  })
+          Audit.create({ leaveTypeAudit: nmodified  })
             .then((result) => {
               resolve(result);
             });
@@ -90,11 +90,11 @@ const mutation = {
                 if(val.length) {
                   Audit.findOneAndUpdate(
                     { },
-                    { $push: { leaveAudit: nmodified  }  }, { new: true }).then(
+                    { $push: { leaveTypeAudit: nmodified  }  }, { new: true }).then(
                       res => resolve(res)
                   );
                 } else {
-                  Audit.create({ leaveAudit: nmodified  }, { new: true }).then(
+                  Audit.create({ leaveTypeAudit: nmodified  }, { new: true }).then(
                     res => resolve(res)
                   );
                 }
@@ -129,12 +129,12 @@ const mutation = {
               if(val.length) {
                 Audit.findOneAndUpdate(
                   { },
-                  { $push: { leaveAudit: nmodified  }  }, { new: true })
+                  { $push: { leaveTypeAudit: nmodified  }  }, { new: true })
                   .then((result) => {
                     resolve(result);
                   });
               } else {
-                Audit.create({ leaveAudit: nmodified  })
+                Audit.create({ leaveTypeAudit: nmodified  })
                   .then((result) => {
                     resolve(result);
                   });
