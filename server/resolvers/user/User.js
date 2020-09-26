@@ -29,6 +29,8 @@ const mutation ={
       corporateid,
       mobile,
       joiningdate,
+      department,
+      department_ID,
       permissions,
       created_by,
       created_at
@@ -48,6 +50,8 @@ const mutation ={
               corporateid,
               mobile,
               joiningdate,
+              department,
+              department_ID,
               permissions,
               created_at
             }
@@ -138,6 +142,8 @@ const mutation ={
     corporateid,
     mobile,
     joiningdate,
+    department,
+    department_ID,
     permissions,
     modified
   },{me,secret}) => new Promise(async (resolve, reject) => {
@@ -154,6 +160,8 @@ const mutation ={
         corporateid,
         mobile,
         joiningdate,
+        department,
+        department_ID,
         permissions
       }
 
@@ -211,6 +219,7 @@ const mutation ={
                     resolve(result);
                   });
               }
+              resolve(result);
             });
           } else {
             resolve(result);

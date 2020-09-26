@@ -18,6 +18,8 @@ const userSchema = new Schema({
   corporateid: String,
   mobile: String,
   joiningdate: Date,
+  department: String,
+  department_ID: String,
   permissions:{
     employee: {
       read: Boolean,

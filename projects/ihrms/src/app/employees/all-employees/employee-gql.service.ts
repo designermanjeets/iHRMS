@@ -44,6 +44,8 @@ export class EmployeeGQLService {
         mobile,
         password,
         joiningdate,
+        department,
+        department_ID,
         _id,
         permissions {
           holiday {
@@ -76,6 +78,8 @@ export class GET_USER_QUERY extends Query<Response> {
         corporateid,
         mobile,
         joiningdate,
+        department,
+        department_ID,
         _id,
         permissions {
           holiday {

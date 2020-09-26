@@ -7,6 +7,8 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {EmpdetailGQLService} from "./empdetail-gql.service";
 import {GET_COMPANIES_QUERY} from "../../settings/settingscompany/companysettingGQL";
 import {Apollo} from "apollo-angular";
+import {GET_DEPARTMENTS_QUERY} from "../departments/department-gql.service";
+import {SetGetDesignationsService} from "../designations/designation-gql.service";
 
 @Component({
   selector: 'app-employee-details',
@@ -31,6 +33,7 @@ export class EmployeeDetailsComponent implements OnInit {
   uptEmployeeValidation:boolean = false;
   editForm: FormGroup;
   companies: [];
+  departments: any;
 
   constructor(
     private appService:AppService,
@@ -39,7 +42,8 @@ export class EmployeeDetailsComponent implements OnInit {
     private fb: FormBuilder,
     private employeeGQLService: EmployeeGQLService,
     private empdetailGQLService: EmpdetailGQLService,
-    private apollo: Apollo
+    private apollo: Apollo,
+    private setGetDesignationsService: SetGetDesignationsService
   ) {
     this.rows = appService.employees;
     this.srch = [...this.rows];
@@ -48,6 +52,7 @@ export class EmployeeDetailsComponent implements OnInit {
   ngOnInit() {
 
     this.getCompanies();
+    this.getDepartments();
 
     this.editForm = this.fb.group({
       firstname: [''],
@@ -60,6 +65,7 @@ export class EmployeeDetailsComponent implements OnInit {
       joiningdate: ['', Validators.required],
       corporateid: ['', Validators.required],
       role: ['', Validators.required],
+      department: ['', Validators.required],
       mobile: [''],
       permissions: this.fb.group({
         holiday: this.fb.group({
@@ -99,6 +105,7 @@ export class EmployeeDetailsComponent implements OnInit {
           this.uptEmp = user;
           this.editForm.patchValue(this.uptEmp);
           this.editForm.get('password2').patchValue(this.uptEmp.password);
+          this.editForm.get('department').patchValue(this.uptEmp.department_ID);
           }
         } else {
         this.router.navigate(['employees/all-employees']);
@@ -126,8 +133,24 @@ export class EmployeeDetailsComponent implements OnInit {
     });
   }
 
+  getDepartments() {
+    this.apollo.watchQuery({
+      query: GET_DEPARTMENTS_QUERY,
+      variables: {
+        "pagination": {
+          "limit": 100
+        }
+      },
+    }).valueChanges.subscribe((response: any) => {
+      if(response.data) {
+        this.departments = response.data.getDepartments;
+        this.setGetDesignationsService.setDepartments(this.departments);
+      }
+    });
+  }
+
   updateSubmit(f){
-    console.log(f.value);
+    const dprt = this.setGetDesignationsService.getDepartment(f.value.department);
     this.empdetailGQLService
       .mutate({
         "id": this.uptEmp._id,
@@ -135,6 +158,8 @@ export class EmployeeDetailsComponent implements OnInit {
         "email": f.value.email,
         "password": f.value.password,
         "role": f.value.role,
+        "department": dprt.department,
+        "department_ID": dprt._id,
         "emmpid": f.value.emmpid,
         "corporateid": f.value.corporateid,
         "firstname": f.value.firstname,

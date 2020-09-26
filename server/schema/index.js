@@ -31,6 +31,8 @@ const typeDefs = `
       corporateid: String!,
       mobile: String,
       joiningdate: ISODate,
+      department: String,
+      department_ID: String,
       permissions: PermissionsInput,
       created_by: String,
       created_at: ISODate
@@ -85,6 +87,8 @@ const typeDefs = `
       corporateid: String,
       mobile: String,
       joiningdate: ISODate,
+      department: String,
+      department_ID: String,
       permissions: PermissionsInput,
       modified: [modifiedInputs]
       ): User,
@@ -302,6 +306,8 @@ const typeDefs = `
     corporateid: String,
     mobile: String,
     joiningdate: ISODate,
+    department: String,
+    department_ID: String,
     permissions: permissions,
     created_at: ISODate,
     created_by: String,
