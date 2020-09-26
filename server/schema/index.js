@@ -125,6 +125,8 @@ const typeDefs = `
       date: ISODate,
       day: String,
       paid: String,
+      created_at: ISODate,
+      created_by: String
     ): Holiday,
     updateHoliday(
       id: ID!,
@@ -132,13 +134,16 @@ const typeDefs = `
       date: ISODate,
       day: String,
       paid: String,
+      modified: [modifiedInputs]
     ): Holiday,
-    deleteHoliday( id: ID! ): Holiday,
+    deleteHoliday( id: ID!, modified: [modifiedInputs] ): Holiday,
     createLeaveType (
       leavetype: String,
       leavedays: String,
       carryforward: String,
       status: String,
+      created_at: ISODate,
+      created_by: String
     ): LeaveType,
     updateLeaveType(
       id: ID!,
@@ -146,8 +151,9 @@ const typeDefs = `
       leavedays: String,
       carryforward: String,
       status: String,
+      modified: [modifiedInputs]
     ): LeaveType,
-    deleteLeaveType( id: ID! ): LeaveType,
+    deleteLeaveType( id: ID!, modified: [modifiedInputs] ): LeaveType,
     createDesignation (
       designation: String!,
       department: String,
@@ -176,40 +182,6 @@ const typeDefs = `
     deleteDepartment( id: ID!, modified: [modifiedInputs] ): Department,
     uploadFile(file: Upload!): File,
     insertManyUsers(input: [UserInput]!): CreateUsersPayload,
-    userAuditMutation(
-      id: ID!,
-      email: String,
-      username: String,
-      emmpid: String,
-      created_by: String,
-      modified_by: String,
-      action: String,
-      comments: String,
-      created_at: ISODate,
-      modified_at: ISODate
-     ): userAudit,
-   desigAuditMutation(
-      id: ID!,
-      designation: String,
-      department: String,
-      department_ID: String,
-      created_by: String,
-      modified_by: String,
-      action: String,
-      comments: String,
-      created_at: ISODate,
-      modified_at: ISODate
-     ): desigAudit,
-   departAuditMutation(
-      id: ID!,
-      department: String,
-      created_by: String,
-      modified_by: String,
-      action: String,
-      comments: String,
-      created_at: ISODate,
-      modified_at: ISODate
-     ): departAudit
   }
   type CreateUsersPayload {
     users: [User]
@@ -345,6 +317,9 @@ const typeDefs = `
     date: ISODate,
     day:  String,
     paid: String,
+    created_at: ISODate,
+    created_by: String,
+    modified: [modifiedTypes]
   },
   type Designation {
     _id: ID,
@@ -368,37 +343,9 @@ const typeDefs = `
     leavedays: String!,
     carryforward: String,
     status: String,
-  },
-  type userAudit {
-    id: ID!,
-    email: String,
-    username: String,
-    emmpid: String,
-    modified_by: String,
-    action: String,
-    changedObj: User,
-    modified_at: ISODate
-  },
-  type desigAudit {
-    id: ID!,
-    email: String,
-    username: String,
-    designation: String,
-    department: String,
-    department_ID: String,
-    modified_by: String,
-    action: String,
-    comments: String,
-    modified_at: ISODate
-  },
-  type departAudit {
-    id: ID!,
-    depart_ID: String,
-    department: String,
-    modified_by: String,
-    action: String,
-    comments: String,
-    modified_at: ISODate
+    created_at: ISODate,
+    created_by: String,
+    modified: [modifiedTypes]
   },
   input modifiedInputs {
     modified_by: String

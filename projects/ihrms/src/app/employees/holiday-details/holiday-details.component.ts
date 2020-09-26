@@ -81,6 +81,10 @@ export class HolidayDetailsComponent implements OnInit {
         "paid": f.value.paid,
         "date": f.value.date,
         "day": this.getDayOfWeek(f.value.date),
+        "modified": {
+          "modified_by": JSON.parse(sessionStorage.getItem('user')).username,
+          "modified_at": Date.now()
+        }
       })
       .subscribe( (val: any) => {
         if(val.data) {

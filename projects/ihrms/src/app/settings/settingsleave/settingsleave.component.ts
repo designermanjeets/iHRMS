@@ -130,6 +130,8 @@ export class SettingsleaveComponent implements OnInit {
         "leavedays": f.value.leavedays,
         "carryforward": f.value.carryforward,
         "status": f.value.status,
+        "created_by": JSON.parse(sessionStorage.getItem('user')).username,
+        "created_at": Date.now(),
       })
       .subscribe( (val: any) => {
         if(val.data.createLeaveType) {
@@ -154,10 +156,13 @@ export class SettingsleaveComponent implements OnInit {
         "leavedays": f.value.leavedays,
         "carryforward": f.value.carryforward,
         "status": f.value.status,
+        "modified": {
+          "modified_by": JSON.parse(sessionStorage.getItem('user')).username,
+          "modified_at": Date.now()
+        }
       })
       .subscribe( (val: any) => {
         if(val.data.updateLeaveType) {
-          console.log(val.data.updateLeaveType);
           this.getLeaveTypes(); // fetch latest
           $('#edit_leavetype').modal('hide');
         }
@@ -167,7 +172,11 @@ export class SettingsleaveComponent implements OnInit {
   onDelete(id){
     this.deleteLeaveTypeGQL
       .mutate({
-        "id": id
+        "id": id,
+        "modified": {
+          "modified_by": JSON.parse(sessionStorage.getItem('user')).username,
+          "modified_at": Date.now()
+        }
       })
       .subscribe( (val: any) => {
         if(val.data.deleteLeaveType) {

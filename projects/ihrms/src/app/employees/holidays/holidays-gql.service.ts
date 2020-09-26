@@ -11,13 +11,17 @@ export class RegisterHolidayGQL extends Mutation {
       $title: String,
       $date: ISODate,
       $day: String,
-      $paid: String
+      $paid: String,
+      $created_by: String,
+      $created_at: ISODate,
     ) {
     createHoliday(
       title: $title,
       date: $date,
       day: $day,
       paid: $paid
+      created_by: $created_by,
+      created_at: $created_at,
     ) {
       title,
       date,
@@ -38,14 +42,16 @@ export class UpdateHolidayGQL extends Mutation {
       $title: String,
       $date: ISODate,
       $day: String,
-      $paid: String
+      $paid: String,
+      $modified: [modifiedInputs]
     ) {
     updateHoliday(
       id: $id,
       title: $title,
       date: $date,
       day: $day,
-      paid: $paid
+      paid: $paid,
+      modified: $modified
     ) {
       _id,
       title,
@@ -64,10 +70,12 @@ export class UpdateHolidayGQL extends Mutation {
 export class DeleteHolidayGQL extends Mutation {
   document = gql`
     mutation deleteHoliday(
-      $id: ID!
+      $id: ID!,
+      $modified: [modifiedInputs]
     ) {
     deleteHoliday(
-      id: $id
+      id: $id,
+      modified: $modified
     ) {
         _id
       }

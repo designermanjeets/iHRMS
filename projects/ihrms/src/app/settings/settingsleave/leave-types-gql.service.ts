@@ -10,13 +10,17 @@ export class RegisterLeaveTypeGQL extends Mutation {
     mutation createLeaveType(
       $leavetype: String!,
       $leavedays: String!,
-      $carryforward: String
+      $carryforward: String,
+      $created_by: String,
+      $created_at: ISODate,
       $status: String
     ) {
       createLeaveType(
         leavetype: $leavetype,
         leavedays: $leavedays,
         carryforward: $carryforward,
+        created_by: $created_by,
+        created_at: $created_at,
         status: $status,
       ) {
         leavetype
@@ -37,8 +41,9 @@ export class UpdateLeaveTypeGQL extends Mutation {
       $id: ID!
       $leavetype: String!,
       $leavedays: String!,
-      $carryforward: String
-      $status: String
+      $carryforward: String,
+      $status: String,
+      $modified: [modifiedInputs]
     ) {
       updateLeaveType(
         id: $id,
@@ -46,6 +51,7 @@ export class UpdateLeaveTypeGQL extends Mutation {
         leavedays: $leavedays,
         carryforward: $carryforward,
         status: $status,
+        modified: $modified
       ) {
         _id
         leavetype
@@ -63,10 +69,12 @@ export class UpdateLeaveTypeGQL extends Mutation {
 export class DeleteLeaveTypeGQL extends Mutation {
   document = gql`
     mutation deleteLeaveType(
-      $id: ID!
+      $id: ID!,
+      $modified: [modifiedInputs]
     ) {
       deleteLeaveType(
-        id: $id
+        id: $id,
+        modified: $modified
       ) {
         _id
       }

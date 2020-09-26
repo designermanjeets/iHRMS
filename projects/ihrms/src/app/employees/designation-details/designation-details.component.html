@@ -14,7 +14,7 @@
                [class.has-success]="editForm.controls['designation'].valid"
             >
               <label for="designation">Designation Name <span class="text-danger">*</span></label>
-              <input id="designation" class="form-control" type="text" readonly formControlName="designation">
+              <input id="designation" class="form-control" type="text" formControlName="designation">
               <span class="help-block" *ngIf="editForm.controls['designation'].errors && editForm.controls['designation'].touched">
                   Designation Name is invalid
               </span>
