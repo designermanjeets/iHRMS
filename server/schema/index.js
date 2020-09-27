@@ -161,14 +161,16 @@ const typeDefs = `
       department: String,
       department_ID: String,
       created_at: ISODate,
-      created_by: String
+      created_by: String,
+      leaveType: [leaveTypesInputs]
     ): Designation,
     updateDesignation(
       id: ID!,
       designation: String!,
       department: String,,
       department_ID: String,
-      modified: [modifiedInputs]
+      modified: [modifiedInputs],
+      leaveType: [leaveTypesInputs]
     ): Designation,
     deleteDesignation( id: ID!, modified: [modifiedInputs] ): Designation,
     createDepartment (
@@ -331,7 +333,12 @@ const typeDefs = `
     department_ID: String,
     created_at: ISODate,
     created_by: String,
-    modified: [modifiedTypes]
+    modified: [modifiedTypes],
+    leaveType: [LeaveType]
+  },
+  type leavetypes {
+    leavetype: String,
+    leave_ID: String,
   },
   type Department {
     _id: ID,
@@ -354,7 +361,15 @@ const typeDefs = `
     modified_by: String
     modified_at: ISODate
   },
+  input leaveTypesInputs {
+    leavetype: String,
+    leave_ID: String,
+    leavedays: String!,
+    carryforward: String,
+    status: String,
+  },
   input Pagination {
+    id: ID,
     query:String,
     argument:String
     offset: Int,
@@ -362,7 +377,8 @@ const typeDefs = `
     sortBy:String,
     descending:Int,
     search:String
-    dates:Dates
+    dates:Dates,
+    department_ID: String
   }
   input Dates{
     gte:String,

@@ -2,13 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute,Router } from '@angular/router';
 import { AppService } from '../../app.service';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {Apollo} from "apollo-angular";
+import {Apollo, Query} from "apollo-angular";
 import {
   CreateDepartmentGQL,
   DeleteDepartmentGQL,
   GET_DEPARTMENTS_QUERY,
   SetGetDepartmentsService
 } from "./department-gql.service";
+import {GET_DESIGNATIONS_QUERY} from "../designations/designation-gql.service";
+import {map} from "rxjs/operators";
+import * as _ from "lodash";
+import {GET_LEAVETYPES_QUERY} from "../../settings/settingsleave/leave-types-gql.service";
 
 declare const $:any;
 
@@ -24,9 +28,17 @@ export class DepartmentsComponent implements OnInit {
   editForm: FormGroup;
   actionParams: any;
 
+ allDesignations: any;
+ modalDesigns: any;
+ allLeaveTypes: any;
+ checkedLeaveTypes: any = [];
+ desigTemp = [];
+
   public srch = [];
   public addD:any = {};
   addDepartmentValidation:boolean = false;
+
+  desigOptions: string[] = [];
 
   constructor(
     private appService:AppService,
@@ -92,8 +104,106 @@ export class DepartmentsComponent implements OnInit {
         this.rows = response.data.getDepartments;
         this.srch = [...this.rows];
         this.setGetDepartmentsService.setDepartments(response.data.getDepartments);
+        this.getDesignations();
       }
     });
+  }
+
+  getDesignations() {
+    this.apollo.watchQuery<Query>({
+      query: GET_DESIGNATIONS_QUERY,
+      variables: {
+        "pagination": {
+          "limit": 100
+        }
+      },
+    }).valueChanges
+      .pipe(
+        map((result: any) => result.data.getDesignations)
+      ).subscribe(data => this.allDesignations = data);
+  }
+
+  getAllLeaveTypes() {
+    this.apollo.watchQuery({
+      query: GET_LEAVETYPES_QUERY,
+      variables: {
+        "pagination": {
+          "limit": 100
+        }
+      },
+    }).valueChanges.subscribe((response: any) => {
+      if(response.data.getLeaveTypes) {
+        console.log(response.data);
+        this.allLeaveTypes = response.data.getLeaveTypes;
+      }
+    });
+  }
+
+  getDesignById(id) {
+    return _.filter(this.allDesignations, p => p.department_ID === id);
+  }
+
+  leaveAssign(item) {
+    this.checkedLeaveTypes = []; // Empty everytime before Load
+    $('#leave_allocation').modal('show');
+    this.modalDesigns = this.getDesignById(item._id);
+    console.log(this.modalDesigns);
+    this.getAllLeaveTypes();
+  }
+
+  onDesigSelectionChange(event, item, i){
+    // console.log(event.option)
+    // console.log(item)
+    const obj = {
+      'index': i,
+      'department': item.department,
+      'designationID': item._id,
+      'designation': item.designation,
+      'departmentID': item.department_ID,
+      'leaveTypeID': event.option && event.option._value._id,
+      'leaveType': event.option && event.option._value.leavetype
+    }
+    if(event.option && event.option._selected) {
+      this.checkedLeaveTypes.push(obj);
+    } else {
+      _.remove(this.checkedLeaveTypes, {leaveTypeID: obj.leaveTypeID, index: i});
+    }
+    console.log(this.checkedLeaveTypes)
+  }
+
+  setAll(checked, list, item, i) {
+    if(checked) {
+      this.selectAll(list, item, i);
+    } else {
+      this.deselectAll(list, item, i);
+    }
+  }
+
+  selectAll(list, item, i) {
+    list.selectAll();
+    _.remove(this.checkedLeaveTypes, {index: i});
+    const _this = this;
+    _.forEach(list._value, function(val){
+      const obj = {
+        'index': i,
+        'department': item.department,
+        'designationID': item._id,
+        'designation': item.designation,
+        'departmentID': item.department_ID,
+        'leaveTypeID': val._id,
+        'leaveType': val.leavetype
+      }
+      _this.checkedLeaveTypes.push(obj);
+    });
+  }
+
+  deselectAll(list, item, i) {
+    list.deselectAll();
+    _.remove(this.checkedLeaveTypes, {index: i});
+  }
+
+  applyLeaveTypes() {
+
   }
 
   onEdit(item){

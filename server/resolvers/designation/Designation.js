@@ -52,7 +52,8 @@ const mutation = {
     designation,
     department,
     modified,
-    department_ID
+    department_ID,
+    leaveType
   },{me,secret}) => new Promise(async (resolve, reject) => {
     const dtype = await Designation.findById(id);
     try{
@@ -63,11 +64,35 @@ const mutation = {
           changeFields[item] = param[item];
         }
       }
-      const ltype = await Designation.findById(id);
+      const ltype = await Designation.findOne({$or:[ {_id: id}, {designation}]});
       if (!ltype) throw new Error('Designation not found!!')
       if(ltype) {
-        await Designation.findByIdAndUpdate(id,{$set:{...param}, $push: { 'modified': modified  }  },{new: true})
+        await Designation.findByIdAndUpdate(id,
+          {$set:{...param},
+            $push: { 'modified': modified, } },
+          {new: true}
+          )
           .then((result) => {
+            if(result.leaveType.length) {
+              let foundOne = false;
+              result.leaveType.forEach(l => {
+                if(l.leave_ID === leaveType[0].leave_ID) {
+                  console.log('Leave Type Exits so Update')
+                  l.leavetype = leaveType[0].leavetype;
+                  // l.leavedays = leaveType[0].leavedays // Don't overwrite from Designation
+                  foundOne = true;
+                  return true;
+                }
+              })
+              if (!foundOne) {
+                  console.log('No Leave Type Exist! Just Push the Leave Object')
+                  result.leaveType.push(leaveType[0])
+              }
+              result.save();
+            } else {
+              result.leaveType.push(leaveType[0]);
+              result.save();
+            }
 
             User.updateMany(
               {"designation": designation},

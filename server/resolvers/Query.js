@@ -16,6 +16,7 @@ const paramHandler= (qry)  => {
       param.meta.updatedAt.$lte=lt.setDate(lt.getDate()+1)
     }
   }
+  if(qry.department_ID) { param.department_ID = qry.department_ID }
   return param
 };
 

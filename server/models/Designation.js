@@ -4,7 +4,15 @@ const Schema = mongoose.Schema;
 const subSchema = mongoose.Schema({
   modified_by: String,
   modified_at: Date
-}); //,{ _id : false }
+});
+
+const leaveTypeSchema = mongoose.Schema({
+  leavetype: String,
+  leave_ID: String,
+  leavedays: String,
+  carryforward: String,
+  status: String
+}, { strict: false});
 
 const designationSchema = new Schema({
   designation: String,
@@ -12,7 +20,8 @@ const designationSchema = new Schema({
   department_ID: String,
   created_at: Date,
   created_by: String,
-  modified : [subSchema]
+  modified : [subSchema],
+  leaveType: [leaveTypeSchema]
 }, {collection:'Designation'});
 
 

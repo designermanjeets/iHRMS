@@ -1,0 +1,9 @@
+.modal-body > .mat-card >div:nth-child(1) .leavehead{ margin-top: 0 }
+.leavehead {
+  background-color: #eee; padding: 10px; margin-bottom: 5px; margin-top: 20px; border-radius: 4px;
+}
+.leavehead > span {
+  font-size: 16px;
+  margin-right: 20px;
+  display: inline-block;
+}

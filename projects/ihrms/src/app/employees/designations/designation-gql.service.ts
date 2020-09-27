@@ -74,7 +74,6 @@ export class DeleteDesignationGQL extends Mutation {
   `;
 }
 
-
 export const GET_DESIGNATIONS_QUERY = gql`
    query getDesignations(
       $pagination: Pagination!

@@ -14,10 +14,16 @@
         <table class="table table-striped custom-table" [mfData]="rows" #mf="mfDataTable" [mfRowsOnPage]="10">
           <thead>
             <tr>
-              <th style="width: 95%">
+              <th style="width: 30%">
                 <mfDefaultSorter by="department">Department</mfDefaultSorter>
               </th>
-              <th style="width: 5%;text-align: right;">
+              <th style="width: 30%">
+                <mfDefaultSorter by="department">Assigned Designations</mfDefaultSorter>
+              </th>
+              <th style="width: 30%">
+                <mfDefaultSorter by="department">Leaves Allocation</mfDefaultSorter>
+              </th>
+              <th style="width: 10%;">
                 <mfDefaultSorter by="Action">Action</mfDefaultSorter>
               </th>
 
@@ -26,7 +32,13 @@
           <tbody>
             <tr *ngFor="let item of mf.data;let i = index">
               <td>{{item.department}}</td>
-              <td class="text-right">
+              <td>
+                <div class="chipstypes" *ngFor="let item of getDesignById(item._id)">
+                  {{item.designation}}
+                </div>
+              </td>
+              <td><a (click)="leaveAssign(item)">Click to Assign</a></td>
+              <td>
                 <div class="dropdown">
                   <a href="javascript:" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i
                       class="fa fa-ellipsis-v"></i></a>
@@ -98,6 +110,38 @@
             <button class="btn btn-primary" type="submit" [disabled]="editForm.invalid">Create Department</button>
           </div>
         </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!--Leave Allocation Dialog-->
+
+<div id="leave_allocation" class="modal custom-modal fade" role="dialog">
+  <div class="modal-dialog">
+    <button type="button" class="close" data-dismiss="modal">&times;</button>
+    <div class="modal-content modal-md">
+      <div class="modal-header">
+        <h4 class="modal-title">Assign Leave Types: <span *ngIf="modalDesigns?.length">{{modalDesigns[0].department}}</span></h4>
+      </div>
+      <div class="modal-body">
+        <mat-card>
+          <div *ngFor="let item of modalDesigns;let i = index">
+            <h4 class="leavehead">
+              <span>Designation: {{item.designation}}</span>
+            </h4>
+            <mat-card>
+              <mat-checkbox color="primary" (change)="setAll($event.checked, list, item, i)">Select All</mat-checkbox>
+              <mat-selection-list color="primary" #list (selectionChange)="onDesigSelectionChange($event, item, i)">
+                <mat-list-option *ngFor="let item of allLeaveTypes" [value]="item">
+                  {{item.leavetype}}
+                </mat-list-option>
+              </mat-selection-list>
+            </mat-card>
+          </div>
+          <div class="text-center m-t-20">
+            <button type="submit" class="btn btn-primary" (click)="applyLeaveTypes()">Assign Leaves</button>
+          </div>
+        </mat-card>
       </div>
     </div>
   </div>
