@@ -162,7 +162,7 @@ const typeDefs = `
       department_ID: String,
       created_at: ISODate,
       created_by: String,
-      leaveType: [leaveTypesInputs]
+      leavetype: [leaveTypesInputs]
     ): Designation,
     updateDesignation(
       id: ID!,
@@ -170,7 +170,7 @@ const typeDefs = `
       department: String,,
       department_ID: String,
       modified: [modifiedInputs],
-      leaveType: [leaveTypesInputs]
+      leavetype: [leaveTypesInputs]
     ): Designation,
     deleteDesignation( id: ID!, modified: [modifiedInputs] ): Designation,
     createDepartment (
@@ -334,11 +334,12 @@ const typeDefs = `
     created_at: ISODate,
     created_by: String,
     modified: [modifiedTypes],
-    leaveType: [LeaveType]
+    leavetype: [leavetypes]
   },
   type leavetypes {
     leavetype: String,
     leave_ID: String,
+    leavedays: String
   },
   type Department {
     _id: ID,

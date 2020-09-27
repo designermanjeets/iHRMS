@@ -21,7 +21,7 @@ const designationSchema = new Schema({
   created_at: Date,
   created_by: String,
   modified : [subSchema],
-  leaveType: [leaveTypeSchema]
+  leavetype: [leaveTypeSchema]
 }, {collection:'Designation'});
 
 

@@ -130,11 +130,21 @@
               <span>Designation: {{item.designation}}</span>
             </h4>
             <mat-card>
+              {{item.leavetype[i]}}
               <mat-checkbox color="primary" (change)="setAll($event.checked, list, item, i)">Select All</mat-checkbox>
               <mat-selection-list color="primary" #list (selectionChange)="onDesigSelectionChange($event, item, i)">
-                <mat-list-option *ngFor="let item of allLeaveTypes" [value]="item">
-                  {{item.leavetype}}
-                </mat-list-option>
+                <ng-container *ngIf="item.leavetype?.length; else noSubLeaves">
+                  <ng-container *ngFor="let itr of item.leavetype | keyvalue">
+                    <mat-list-option *ngFor="let it of allLeaveTypes;let j = index" [value]="it" [selected]="itr.value.leave_ID === it._id">
+                      {{it.leavetype}}
+                    </mat-list-option>
+                  </ng-container>
+                </ng-container>
+                <ng-template #noSubLeaves>
+                  <mat-list-option *ngFor="let it of allLeaveTypes;let j = index" [value]="it">
+                    {{it.leavetype}}
+                  </mat-list-option>
+                </ng-template>
               </mat-selection-list>
             </mat-card>
           </div>

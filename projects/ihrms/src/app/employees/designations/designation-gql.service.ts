@@ -13,16 +13,22 @@ export class CreateDesignationGQL extends Mutation {
       $department: String
       $department_ID: String
       $created_at: ISODate
+      $leavetype: [leaveTypesInputs]
     ) {
       createDesignation(
         designation: $designation
         department: $department
         department_ID: $department_ID
         created_at: $created_at
+        leavetype: $leavetype
       ) {
         designation
         department,
         department_ID
+        leavetype {
+          leavetype
+          leavedays
+        }
       }
     }
   `;
@@ -38,17 +44,24 @@ export class UpdateDesignationGQL extends Mutation {
       $designation: String!
       $department: String
       $department_ID: String
-      $modified: [modifiedInputs]
+      $modified: [modifiedInputs],
+      $leavetype: [leaveTypesInputs]
     ) {
       updateDesignation(
         id: $id,
         designation: $designation
         department: $department
         department_ID: $department_ID
-        modified: $modified
+        modified: $modified,
+        leavetype: $leavetype
       ) {
         designation
         department
+        department_ID
+        leavetype {
+          leavetype
+          leavedays
+        }
       }
     }
   `;
@@ -84,7 +97,12 @@ export const GET_DESIGNATIONS_QUERY = gql`
         _id
         designation
         department,
-        department_ID
+        department_ID,
+        leavetype {
+          leavetype,
+          leave_ID,
+          leavedays
+        }
       }
     }
 `;

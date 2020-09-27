@@ -53,7 +53,7 @@ const mutation = {
     department,
     modified,
     department_ID,
-    leaveType
+    leavetype
   },{me,secret}) => new Promise(async (resolve, reject) => {
     const dtype = await Designation.findById(id);
     try{
@@ -73,24 +73,24 @@ const mutation = {
           {new: true}
           )
           .then((result) => {
-            if(result.leaveType.length) {
+            if(result.leavetype.length) {
               let foundOne = false;
-              result.leaveType.forEach(l => {
-                if(l.leave_ID === leaveType[0].leave_ID) {
+              result.leavetype.forEach(l => {
+                if(l.leave_ID === leavetype[0].leave_ID) {
                   console.log('Leave Type Exits so Update')
-                  l.leavetype = leaveType[0].leavetype;
-                  // l.leavedays = leaveType[0].leavedays // Don't overwrite from Designation
+                  l.leavetype = leavetype[0].leavetype;
+                  l.leavedays = leavetype[0].leavedays // Don't overwrite from Designation but still
                   foundOne = true;
                   return true;
                 }
               })
               if (!foundOne) {
                   console.log('No Leave Type Exist! Just Push the Leave Object')
-                  result.leaveType.push(leaveType[0])
+                  result.leavetype.push(leavetype[0])
               }
               result.save();
             } else {
-              result.leaveType.push(leaveType[0]);
+              result.leavetype.push(leavetype[0]);
               result.save();
             }
 

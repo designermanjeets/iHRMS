@@ -9,7 +9,7 @@ import {
   GET_DEPARTMENTS_QUERY,
   SetGetDepartmentsService
 } from "./department-gql.service";
-import {GET_DESIGNATIONS_QUERY} from "../designations/designation-gql.service";
+import {GET_DESIGNATIONS_QUERY, UpdateDesignationGQL} from "../designations/designation-gql.service";
 import {map} from "rxjs/operators";
 import * as _ from "lodash";
 import {GET_LEAVETYPES_QUERY} from "../../settings/settingsleave/leave-types-gql.service";
@@ -33,6 +33,7 @@ export class DepartmentsComponent implements OnInit {
  allLeaveTypes: any;
  checkedLeaveTypes: any = [];
  desigTemp = [];
+  checkwithleavetype: any;
 
   public srch = [];
   public addD:any = {};
@@ -49,6 +50,7 @@ export class DepartmentsComponent implements OnInit {
     private createDepartmentGQL: CreateDepartmentGQL,
     private deleteDesignationGQL: DeleteDepartmentGQL,
     private setGetDepartmentsService: SetGetDepartmentsService,
+    private updateDesignationGQL: UpdateDesignationGQL,
   ) { }
 
   ngOnInit() {
@@ -120,7 +122,10 @@ export class DepartmentsComponent implements OnInit {
     }).valueChanges
       .pipe(
         map((result: any) => result.data.getDesignations)
-      ).subscribe(data => this.allDesignations = data);
+      ).subscribe(data => {
+        this.allDesignations = data;
+        console.log(data);
+    });
   }
 
   getAllLeaveTypes() {
@@ -160,15 +165,17 @@ export class DepartmentsComponent implements OnInit {
       'designationID': item._id,
       'designation': item.designation,
       'departmentID': item.department_ID,
-      'leaveTypeID': event.option && event.option._value._id,
-      'leaveType': event.option && event.option._value.leavetype
+      'leave_ID': event.option && event.option._value._id,
+      'leavedays': event.option && event.option._value.leavedays,
+      'leavetype': event.option && event.option._value.leavetype
     }
     if(event.option && event.option._selected) {
       this.checkedLeaveTypes.push(obj);
     } else {
-      _.remove(this.checkedLeaveTypes, {leaveTypeID: obj.leaveTypeID, index: i});
+      _.remove(this.checkedLeaveTypes, {leave_ID: obj.leave_ID, index: i});
     }
     console.log(this.checkedLeaveTypes)
+
   }
 
   setAll(checked, list, item, i) {
@@ -190,8 +197,9 @@ export class DepartmentsComponent implements OnInit {
         'designationID': item._id,
         'designation': item.designation,
         'departmentID': item.department_ID,
-        'leaveTypeID': val._id,
-        'leaveType': val.leavetype
+        'leave_ID': val._id,
+        'leavedays': val.leavedays,
+        'leavetype': val.leavetype
       }
       _this.checkedLeaveTypes.push(obj);
     });
@@ -202,8 +210,36 @@ export class DepartmentsComponent implements OnInit {
     _.remove(this.checkedLeaveTypes, {index: i});
   }
 
-  applyLeaveTypes() {
+  updateDesignation(desig){
+    console.log(desig);
+    this.updateDesignationGQL
+      .mutate({
+        "id": desig.designationID,
+        "designation": desig.designation,
+        "department": desig.department,
+        "department_ID": desig.departmentID,
+        "modified": {
+          "modified_at": Date.now(),
+          "modified_by": JSON.parse(sessionStorage.getItem('user')).username
+        },
+        "leavetype": {
+          "leavetype":desig.leavetype,
+          "leavedays": desig.leavedays,
+          "leave_ID": desig.leaveTypeID
+        }
+      })
+      .subscribe( (val: any) => {
+        if(val.data) {
+          console.log(val.data);
+          $('#leave_allocation').modal('hide');
+        }
+      }, error => console.log(error));
+  }
 
+  applyLeaveTypes() {
+    this.checkedLeaveTypes.forEach(val =>{
+      this.updateDesignation(val);
+    })
   }
 
   onEdit(item){
