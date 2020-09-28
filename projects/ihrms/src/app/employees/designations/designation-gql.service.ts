@@ -61,6 +61,8 @@ export class UpdateDesignationGQL extends Mutation {
         leavetype {
           leavetype
           leavedays
+          leave_ID
+
         }
       }
     }

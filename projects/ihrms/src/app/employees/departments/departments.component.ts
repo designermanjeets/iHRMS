@@ -225,7 +225,7 @@ export class DepartmentsComponent implements OnInit {
         "leavetype": {
           "leavetype":desig.leavetype,
           "leavedays": desig.leavedays,
-          "leave_ID": desig.leaveTypeID
+          "leave_ID": desig.leave_ID
         }
       })
       .subscribe( (val: any) => {

@@ -130,7 +130,6 @@
               <span>Designation: {{item.designation}}</span>
             </h4>
             <mat-card>
-              {{item.leavetype[i]}}
               <mat-checkbox color="primary" (change)="setAll($event.checked, list, item, i)">Select All</mat-checkbox>
               <mat-selection-list color="primary" #list (selectionChange)="onDesigSelectionChange($event, item, i)">
                 <ng-container *ngIf="item.leavetype?.length; else noSubLeaves">
