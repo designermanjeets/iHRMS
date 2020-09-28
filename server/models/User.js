@@ -21,6 +21,7 @@ const userSchema = new Schema({
   department: String,
   department_ID: String,
   designation: String,
+  designation_ID: String,
   permissions:{
     employee: {
       read: Boolean,

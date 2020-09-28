@@ -34,6 +34,7 @@ const typeDefs = `
       department: String,
       department_ID: String,
       designation: String,
+      designation_ID: String,
       permissions: PermissionsInput,
       created_by: String,
       created_at: ISODate
@@ -91,6 +92,7 @@ const typeDefs = `
       department: String,
       department_ID: String,
       designation: String,
+      designation_ID: String,
       permissions: PermissionsInput,
       modified: [modifiedInputs]
       ): User,
@@ -285,6 +287,7 @@ const typeDefs = `
     department: String,
     department_ID: String,
     designation: String,
+    designation_ID: String,
     permissions: permissions,
     created_at: ISODate,
     created_by: String,
@@ -380,6 +383,7 @@ const typeDefs = `
     search:String
     dates:Dates,
     department_ID: String
+    designation_ID: String,
   }
   input Dates{
     gte:String,
@@ -399,6 +403,7 @@ const typeDefs = `
     department: String,
     department_ID: String,
     designation: String,
+    designation_ID: String,
     mobile: String,
     joiningdate: ISODate,
     permissions: PermissionsInput,

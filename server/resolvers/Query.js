@@ -17,6 +17,7 @@ const paramHandler= (qry)  => {
     }
   }
   if(qry.department_ID) { param.department_ID = qry.department_ID }
+  if(qry.designation_ID) { param.designation_ID = qry.designation_ID }
   return param
 };
 
