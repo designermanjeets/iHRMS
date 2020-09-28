@@ -272,7 +272,9 @@ export class AllEmployeesComponent implements OnInit {
         "joiningdate": data.joiningdate,
         "department": dprt.department,
         "department_ID": dprt._id,
-        "designation": desig.designation,
+        "designation": {
+          "designation": desig.designation
+        },
         "designation_ID": desig._id,
         "mobile":data.mobile,
         "permissions": {

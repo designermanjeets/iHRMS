@@ -192,7 +192,9 @@ export class EmployeeDetailsComponent implements OnInit {
         "role": f.value.role,
         "department": dprt.department,
         "department_ID": dprt._id,
-        "designation": desig.designation,
+        "designation": {
+          "designation": desig.designation
+        },
         "designation_ID": desig._id,
         "emmpid": f.value.emmpid,
         "corporateid": f.value.corporateid,

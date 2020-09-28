@@ -1,6 +1,24 @@
 const mongoose = require('mongoose');
+const ObjectId = require('mongoose').Types.ObjectId;
 
 const Schema = mongoose.Schema;
+
+const leaveTypesSchema = mongoose.Schema({
+  leavetype: String,
+  leave_ID: String,
+  leavedays: String,
+  carryforward: String,
+  status: String
+}, { strict: false});
+
+const designationSchema = new Schema({
+  designation: String,
+  department: String,
+  department_ID: String,
+  created_at: Date,
+  created_by: String,
+  leavetype: [leaveTypesSchema]
+}, { strict: false});
 
 const subSchema = mongoose.Schema({
   modified_by: String,
@@ -20,7 +38,7 @@ const userSchema = new Schema({
   joiningdate: Date,
   department: String,
   department_ID: String,
-  designation: String,
+  designation: designationSchema,
   designation_ID: String,
   permissions:{
     employee: {

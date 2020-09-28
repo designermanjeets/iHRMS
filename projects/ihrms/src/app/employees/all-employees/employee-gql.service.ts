@@ -45,7 +45,10 @@ export class EmployeeGQLService {
         joiningdate,
         department,
         department_ID,
-        designation,
+        designation {
+          _id
+          designation
+        },
         _id,
         permissions {
           holiday {
@@ -80,7 +83,10 @@ export class GET_USER_QUERY extends Query<Response> {
         joiningdate,
         department,
         department_ID,
-        designation,
+        designation {
+          _id
+          designation
+        },
         _id,
         permissions {
           holiday {
