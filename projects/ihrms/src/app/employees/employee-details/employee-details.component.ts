@@ -107,6 +107,7 @@ export class EmployeeDetailsComponent implements OnInit {
           this.editForm.patchValue(this.uptEmp);
           this.editForm.get('password2').patchValue(this.uptEmp.password);
           this.editForm.get('department').patchValue(this.uptEmp.department_ID);
+          this.editForm.get('designation').patchValue(this.uptEmp.designation._id);
           }
         } else {
         this.router.navigate(['employees/all-employees']);
