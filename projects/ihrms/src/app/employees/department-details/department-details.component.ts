@@ -50,6 +50,10 @@ export class DepartmentDetailsComponent implements OnInit {
     });
   }
 
+  cancelEdit() {
+    this.router.navigate(['employees/departments']);
+  }
+
   updateDepartment(f){
     this.updateDepartmentsGQL
       .mutate({

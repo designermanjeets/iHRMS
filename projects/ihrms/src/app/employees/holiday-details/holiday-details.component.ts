@@ -73,6 +73,10 @@ export class HolidayDetailsComponent implements OnInit {
     return isNaN(dayOfWeek) ? null : ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][dayOfWeek];
   }
 
+  cancelEdit() {
+    this.router.navigate(['employees/holidays']);
+  }
+
   updateHoliday(f){
     this.updateHolidayGQL
       .mutate({

@@ -85,7 +85,7 @@
       <div class="modal-header">
         <h4 class="modal-title">Add Designation</h4>
       </div>
-      <div class="modal-body">
+      <div class="modal-body" *ngIf="editForm">
         <form [formGroup]="editForm" (ngSubmit)="addDesignation(editForm)" novalidate>
           <div class="form-group"
                [class.has-error]="
@@ -112,6 +112,14 @@
             <span class="help-block" *ngIf="editForm.controls['department'].errors && editForm.controls['department'].touched">
                   Departments Name is invalid
               </span>
+          </div>
+          <label>Assign Leave Types</label>
+          <div formArrayName="leavetype" *ngFor="let creds of editForm.controls.leavetype?.value; let i = index">
+            <ng-container [formGroupName]="i">
+              <div>
+                <mat-checkbox formControlName="leavechecked" color="primary">{{creds.leavetype}}</mat-checkbox>
+              </div>
+            </ng-container>
           </div>
           <div class="m-t-20 text-center">
             <div *ngIf="addDesignationValidation" class="alert alert-info m-t-10">

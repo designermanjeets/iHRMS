@@ -27,17 +27,17 @@ export class LeaveDetailsComponent implements OnInit {
     inline: false,
     height: '38px'
   };
-  
+
   rows = [];
 
   public srch = [];
   public uptL:any = [];
   uptLeaveValidation:boolean = false;
 
-  constructor(private appService:AppService,private router:Router,private route:ActivatedRoute) { 
+  constructor(private appService:AppService,private router:Router,private route:ActivatedRoute) {
     this.rows = appService.leaves;
     this.srch = [...this.rows];
-    
+
   }
 
   ngOnInit() {
@@ -65,8 +65,8 @@ export class LeaveDetailsComponent implements OnInit {
       else{
         this.router.navigate(['employees/leaves']);
       }
-      
-      
+
+
     });
   }
 
@@ -87,12 +87,16 @@ export class LeaveDetailsComponent implements OnInit {
     if (index > -1) {
         this.rows.splice(index, 1);
     }
-    
+
     this.rows.unshift(f.form.value);
     this.srch.unshift(f.form.value);
     this.rows = this.rows;
     this.router.navigate(['employees/leaves']);
   }
+  }
+
+  cancelEdit() {
+    this.router.navigate(['employees/leaves']);
   }
 
 }

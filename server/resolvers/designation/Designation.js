@@ -6,7 +6,8 @@ const mutation = {
     department,
     department_ID,
     created_at,
-    created_by
+    created_by,
+    leavetype
   },{me,secret}) => new Promise(async (resolve, reject) => {
     const desig = await Designation.findOne({$or:[ {designation} ]})
     console.log(department_ID)
@@ -18,7 +19,8 @@ const mutation = {
         department,
         department_ID,
         created_at,
-        created_by
+        created_by,
+        leavetype
       })
       const nmodified = {
         newDesig_ID: newDesignation._id,

@@ -64,7 +64,6 @@ export class DesignationDetailsComponent implements OnInit {
     });
   }
 
-
   getAllLeaveTypes() {
     this.apollo.query({
       query: GET_LEAVETYPES_QUERY,
@@ -89,9 +88,7 @@ export class DesignationDetailsComponent implements OnInit {
           })
         })
 
-        _.forEach(this.allLeaveTypes, val=>{
-          this.addLeaveTtypes(val);
-        });
+        _.forEach(this.allLeaveTypes, val => this.addLeaveTtypes(val));
         this.cdRef.detectChanges();
       }
     });
@@ -114,8 +111,12 @@ export class DesignationDetailsComponent implements OnInit {
     this.leavetype().push(this.newLeaveTtypes(val));
   }
 
-  removeQuantity(i:number) {
+  removeLeaveTtypes(i:number) {
     this.leavetype().removeAt(i);
+  }
+
+  cancelEdit() {
+    this.router.navigate(['employees/designations']);
   }
 
   updateDesignation(f){

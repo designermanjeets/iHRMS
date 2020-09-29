@@ -33,7 +33,7 @@
                   Departments Name is invalid
               </span>
             </div>
-            <label>Leave Types</label>
+            <label>Assign Leave Types</label>
             <div formArrayName="leavetype" *ngFor="let creds of editForm.controls.leavetype?.value; let i = index">
               <ng-container [formGroupName]="i">
                 <div>
@@ -45,6 +45,7 @@
                 <div *ngIf="uptDesignationValidation" class="alert alert-info m-t-10">
                     <strong>Warning!</strong> Must Fill all Mandatory Fields.
                 </div>
+              <button class="btn btn-default m-r-10" type="button" (click)="cancelEdit()">Cancel</button>
               <button class="btn btn-primary" type="submit" [disabled]="editForm.invalid">Save Designation</button>
             </div>
           </form>

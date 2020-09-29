@@ -180,6 +180,10 @@ export class EmployeeDetailsComponent implements OnInit {
     }
   }
 
+  cancelEdit() {
+    this.router.navigate(['employees/all-employees']);
+  }
+
   updateSubmit(f){
     const dprt = this.setGetDesignationsService.getDepartment(f.value.department);
     const desig = this.setGetDesignationsService.getDesignations(f.value.designation);
