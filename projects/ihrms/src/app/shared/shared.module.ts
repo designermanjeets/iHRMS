@@ -11,6 +11,7 @@ import { MatInputModule } from '@angular/material/input';
 import { DatetimeComponent } from './agrid/components/datetime/datetime.component';
 import { AnchorComponent } from './agrid/components/anchor/anchor.component';
 import { StatusComponent } from './agrid/components/status/status.component';
+import { UniqueByPipe } from './_pipes/unique-by.pipe';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { StatusComponent } from './agrid/components/status/status.component';
     ActionComponent,
     DatetimeComponent,
     AnchorComponent,
-    StatusComponent
+    StatusComponent,
+    UniqueByPipe
   ],
   imports: [
     CommonModule,
@@ -34,7 +36,8 @@ import { StatusComponent } from './agrid/components/status/status.component';
   ],
   exports: [
     ActionComponent,
-    AgridComponent
+    AgridComponent,
+    UniqueByPipe
   ]
 })
 export class SharedModule { }

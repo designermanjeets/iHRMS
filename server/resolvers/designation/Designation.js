@@ -41,7 +41,7 @@ const mutation = {
               resolve(result);
             });
         }
-        resolve(result);
+        resolve(newDesignation);
       });
       resolve(newDesignation);
     }
@@ -57,7 +57,7 @@ const mutation = {
   },{me,secret}) => new Promise(async (resolve, reject) => {
     const dtype = await Designation.findById(id);
     try{
-      let param = { designation, department, department_ID }
+      let param = { designation, department, department_ID, leavetype }
       let changeFields = {};
       for ( item in param) {
         if(param[item] && param[item] !== dtype[item]) {
@@ -69,34 +69,13 @@ const mutation = {
       if(ltype) {
         await Designation.findByIdAndUpdate(id,
           {$set:{...param},
-            $push: { 'modified': modified, } },
+            $push: { 'modified': modified } },
           {new: true}
           )
           .then((result) => {
-            if(result.leavetype.length) {
-              let foundOne = false;
-              result.leavetype.forEach(l => {
-                if(l.leave_ID === leavetype[0].leave_ID) {
-                  console.log('Leave Type Exits so Update')
-                  l.leavetype = leavetype[0].leavetype;
-                  l.leavedays = leavetype[0].leavedays // Don't overwrite from Designation but still
-                  foundOne = true;
-                  return true;
-                }
-              })
-              if (!foundOne) {
-                  console.log('No Leave Type Exist! Just Push the Leave Object')
-                  result.leavetype.push(leavetype[0])
-              }
-              result.save();
-            } else {
-              result.leavetype.push(leavetype[0]);
-              result.save();
-            }
-
             User.updateMany(
-              {"designation": designation},
-              { $set: { department: department, department_ID: department_ID}  }, { new: true }).then();
+              {"designation.designation": designation},
+              { $set: { department: department, department_ID: department_ID, designation: result}  }, { new: true }).then();
 
             if(result && Object.keys(changeFields).length !== 0) {
               const nmodified = {

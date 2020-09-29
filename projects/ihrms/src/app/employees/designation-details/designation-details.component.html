@@ -33,6 +33,14 @@
                   Departments Name is invalid
               </span>
             </div>
+            <label>Leave Types</label>
+            <div formArrayName="leavetype" *ngFor="let creds of editForm.controls.leavetype?.value; let i = index">
+              <ng-container [formGroupName]="i">
+                <div>
+                  <mat-checkbox formControlName="leavechecked" color="primary">{{creds.leavetype}}</mat-checkbox>
+                </div>
+              </ng-container>
+            </div>
             <div class="m-t-20 text-center">
                 <div *ngIf="uptDesignationValidation" class="alert alert-info m-t-10">
                     <strong>Warning!</strong> Must Fill all Mandatory Fields.

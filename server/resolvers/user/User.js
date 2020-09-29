@@ -54,13 +54,21 @@ const mutation ={
               joiningdate,
               department,
               department_ID,
-              designation,
               designation_ID,
               permissions,
               created_at
             }
           )
         await createToken({ id: newUser.id,role:newUser.role,username:newUser.username, emmpid},secret,'1d')
+
+        if(newUser) {
+          Designation.findById({_id: designation_ID}).then( val =>{
+            result.designation = {}; // Because only one Designation
+            result.designation = val;
+            result.save();
+            resolve(result);
+          });
+        }
 
         const nmodified = {
           newuser_ID: newUser._id,

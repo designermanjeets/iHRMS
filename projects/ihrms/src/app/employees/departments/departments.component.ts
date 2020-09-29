@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute,Router } from '@angular/router';
-import { AppService } from '../../app.service';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {AppService} from '../../app.service';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Apollo, Query} from "apollo-angular";
 import {
@@ -19,7 +19,8 @@ declare const $:any;
 @Component({
   selector: 'app-departments',
   templateUrl: './departments.component.html',
-  styleUrls: ['./departments.component.css']
+  styleUrls: ['./departments.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DepartmentsComponent implements OnInit {
 
@@ -51,6 +52,7 @@ export class DepartmentsComponent implements OnInit {
     private deleteDesignationGQL: DeleteDepartmentGQL,
     private setGetDepartmentsService: SetGetDepartmentsService,
     private updateDesignationGQL: UpdateDesignationGQL,
+    private cdRef: ChangeDetectorRef
   ) { }
 
   ngOnInit() {
@@ -102,11 +104,11 @@ export class DepartmentsComponent implements OnInit {
       },
     }).valueChanges.subscribe((response: any) => {
       if(response.data) {
-        console.log(response.data);
         this.rows = response.data.getDepartments;
         this.srch = [...this.rows];
         this.setGetDepartmentsService.setDepartments(response.data.getDepartments);
         this.getDesignations();
+        this.cdRef.detectChanges();
       }
     });
   }
@@ -124,8 +126,12 @@ export class DepartmentsComponent implements OnInit {
         map((result: any) => result.data.getDesignations)
       ).subscribe(data => {
         this.allDesignations = data;
-        console.log(data);
+        this.cdRef.detectChanges();
     });
+  }
+
+  designationdetail(item) {
+    this.router.navigate(['employees/designations/edit'], { queryParams: { 'id': item._id } });
   }
 
   getAllLeaveTypes() {
@@ -138,8 +144,8 @@ export class DepartmentsComponent implements OnInit {
       },
     }).valueChanges.subscribe((response: any) => {
       if(response.data.getLeaveTypes) {
-        console.log(response.data);
         this.allLeaveTypes = response.data.getLeaveTypes;
+        this.cdRef.detectChanges();
       }
     });
   }
@@ -148,12 +154,21 @@ export class DepartmentsComponent implements OnInit {
     return _.filter(this.allDesignations, p => p.department_ID === id);
   }
 
+  isLeaveAllocated(item, it) {
+    console.log(item)
+    console.log(it)
+  }
+
+  getSel(item, list) {
+    console.log(list)
+    // return item[i]
+  }
+
   leaveAssign(item) {
     this.checkedLeaveTypes = []; // Empty everytime before Load
     $('#leave_allocation').modal('show');
     this.modalDesigns = this.getDesignById(item._id);
-    console.log(this.modalDesigns);
-    this.getAllLeaveTypes();
+    // this.getAllLeaveTypes();
   }
 
   onDesigSelectionChange(event, item, i){
@@ -230,15 +245,15 @@ export class DepartmentsComponent implements OnInit {
       })
       .subscribe( (val: any) => {
         if(val.data) {
-          console.log(val.data);
           $('#leave_allocation').modal('hide');
+          this.cdRef.detectChanges();
         }
       }, error => console.log(error));
   }
 
   applyLeaveTypes() {
     this.checkedLeaveTypes.forEach(val =>{
-      this.updateDesignation(val);
+      // this.updateDesignation(val);
     })
   }
 
@@ -258,6 +273,7 @@ export class DepartmentsComponent implements OnInit {
       .subscribe( (val: any) => {
         if(val.data) {
           this.getDepartments();
+          this.cdRef.detectChanges();
         }
       }, error => console.log(error));
   }
