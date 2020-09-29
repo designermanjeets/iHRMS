@@ -34,7 +34,8 @@
               "./node_modules/fullcalendar/dist/fullcalendar.min.css",
               "./node_modules/morris.js/morris.css",
               "./node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css",
-              "projects/ihrms/src/styles.scss"
+              "projects/ihrms/src/styles.scss",
+              "projects/ihrms/src/style/style.css"
             ],
             "scripts": [
               "./node_modules/jquery/dist/jquery.min.js",

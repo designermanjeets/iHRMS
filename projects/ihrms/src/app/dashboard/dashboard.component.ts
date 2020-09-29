@@ -62,15 +62,15 @@ export class DashboardComponent implements OnInit, AfterContentInit {
     Morris.Area({
       element: 'area-charts',
       data: [
-        { y: '2006', a: 100, b: 90 },
-        { y: '2007', a: 75,  b: 65 },
-        { y: '2008', a: 50,  b: 40 },
-        { y: '2009', a: 75,  b: 65 },
-        { y: '2010', a: 50,  b: 40 },
-        { y: '2011', a: 75,  b: 65 },
-        { y: '2012', a: 100, b: 90 }
+        { period: '2020-05-10', a: 51, b: 70 },
+        { period: '2020-05-11', a: 23, b: 90 },
+        { period: '2020-05-12', a: 44, b: 63 },
+        { period: '2020-05-13', a: 52, b: 76 },
+        { period: '2020-05-14', a: 33, b: 77 },
+        { period: '2020-05-15', a: 76, b: 33 },
+        { period: '2020-05-16', a: 28, b: 88 },
       ],
-      xkey: 'y',
+      xkey: 'period',
       ykeys: ['a', 'b'],
       labels: ['Pending Leaves', 'Total Leaves'],
       lineColors: ['#8d88b2','#f43b48'],
@@ -85,21 +85,22 @@ export class DashboardComponent implements OnInit, AfterContentInit {
       element: 'bar-charts',
       data: [
         { y: '2006', a: 100, b: 90 },
-        { y: '2007', a: 75,  b: 65 },
+        { y: '2007', a: 84,  b: 65 },
         { y: '2008', a: 50,  b: 40 },
         { y: '2009', a: 75,  b: 65 },
         { y: '2010', a: 50,  b: 40 },
-        { y: '2011', a: 75,  b: 65 },
+        { y: '2011', a: 75,  b: 64 },
         { y: '2012', a: 100, b: 90 }
       ],
       xkey: 'y',
-      ykeys: ['a', 'b'],
+      ykeys: ['b', 'a'],
       labels: ['Previous Employees', 'New Employees'],
       lineColors: ['#f8878e','#08e4ec'],
       lineWidth: '3px',
       barColors: ['#FF9900','#08e4ec'],
       resize: true,
-      redraw: true
+      redraw: true,
+      parseTime: false
     });
 
     // Line Chart
@@ -107,21 +108,24 @@ export class DashboardComponent implements OnInit, AfterContentInit {
     Morris.Line({
       element: 'line-charts',
       data: [
-        { y: '2006', a: 50, b: 90 },
-        { y: '2007', a: 75,  b: 65 },
-        { y: '2008', a: 50,  b: 40 },
-        { y: '2009', a: 75,  b: 65 },
-        { y: '2010', a: 50,  b: 40 },
-        { y: '2011', a: 75,  b: 65 },
-        { y: '2012', a: 100, b: 50 }
+        { m: 'Jan', a: 50 },
+        { m: 'Feb', a: 75 },
+        { m: 'Mar', a: 70 },
+        { m: 'Apr', a: 72 },
+        { m: 'May', a: 80 },
+        { m: 'Jun', a: 75 },
+        { m: 'Jul', a: 72 },
+        { m: 'Aug', a: 82 },
+        { m: 'Sep', a: 85 },
       ],
-      xkey: 'y',
-      ykeys: ['a', 'b'],
-      labels: ['Total Sales', 'Total Revenue'],
+      xkey: 'm',
+      ykeys: ['a'],
+      labels: ['Salary(In Lakhs)'],
       lineColors: ['#FF9900','#08e4ec'],
       lineWidth: '3px',
       resize: true,
-      redraw: true
+      redraw: true,
+      parseTime: false
     });
 
     // Donut Chart
